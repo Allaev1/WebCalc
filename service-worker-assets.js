@@ -33,7 +33,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-GAC7MJ5otH7nG4bTvL5\/3NDKPd2KnGIxkDTR4FmMYCg=",
+      "hash": "sha256-TnSNweT5hVMUDaF02ceWt8td47DHOoj3Uk1mzriwV0c=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -149,12 +149,32 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-DXyKs1dURj4JpkZmedwIKexppo7LPIn0prkmQYHN+8g=",
+      "hash": "sha256-JUSqlySpcmu9hws\/USs1gG8ljuKgi7AzGoeQF1n02pM=",
       "url": "_framework\/WebCalc.dll"
     },
     {
       "hash": "sha256-\/Nvd51BDHHAImVKtFL74K5KCRZvaGCxVZs8QmXMYMk0=",
       "url": "WebCalc.styles.css"
+    },
+    {
+      "hash": "sha256-EKs2K\/9R7tttPUsE2NUeg4r77tKjq27TGdigrskzm4w=",
+      "url": "assets\/images\/screen1.jpg"
+    },
+    {
+      "hash": "sha256-xEcfamAh0UJgHvJe5QXEvKZKlu9ckFtwMEmhBRnn8gc=",
+      "url": "assets\/images\/screen2.jpg"
+    },
+    {
+      "hash": "sha256-xEcfamAh0UJgHvJe5QXEvKZKlu9ckFtwMEmhBRnn8gc=",
+      "url": "assets\/images\/screen3.jpg"
+    },
+    {
+      "hash": "sha256-bKMOODVrM\/Sb0IYLRQET1hBayLVy\/gwG1n3lFkHHkB4=",
+      "url": "assets\/images\/screen4.jpg"
+    },
+    {
+      "hash": "sha256-tXHEbvWwyLGYonb\/u5HPjeAwAIbJnqDqQZeFHAELtX0=",
+      "url": "assets\/images\/screen5.jpg"
     },
     {
       "hash": "sha256-kfXT+\/7PwnK7UBTMq8\/AX20+soj7u1sV\/U1lCtnmSZI=",
@@ -229,5 +249,5 @@
       "url": "sample-data\/weather.json"
     }
   ],
-  "version": "rBb1F3fj"
+  "version": "XU4Zx8iJ"
 };
