@@ -1,2 +1,2 @@
 # WebCalc
-<img src="assets/images/screen1.png"/>
+<img src="https://github.com/SergeyDavidovich/WebCalc/assets/images/screen1.png"/>
