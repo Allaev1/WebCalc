@@ -1,4 +1,4 @@
-# WebCalc
+# WebCalc - screens
 <img width=400 src="https://github.com/SergeyDavidovich/WebCalc/blob/master/WebCalc/wwwroot/assets/images/screen1.jpg">
 <img width=400 src="https://github.com/SergeyDavidovich/WebCalc/blob/master/WebCalc/wwwroot/assets/images/screen2.jpg">
 <img width=400 src="https://github.com/SergeyDavidovich/WebCalc/blob/master/WebCalc/wwwroot/assets/images/screen3.jpg">
