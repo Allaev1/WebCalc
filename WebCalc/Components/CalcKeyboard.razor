@@ -1,25 +1,110 @@
 ﻿<div class="keyboard">
-    <div class="keyboard-keys">
-
+    <div class="keyboard-keys row row-cols-4 g-1">
+        <div class="child col">
+            <button style="background-color: var(--color-button-memory);">M+</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-memory);">MC</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-back);">C</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-back);">BACK</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-memory);">MR</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-off);">%OFF</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-operator);">&plusmn;</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-operator);">&divide;</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">7</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">8</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">9</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-operator);">&times;</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">4</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">5</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">6</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-operator);">&minus;</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">1</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">2</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">3</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-operator);">&plus;</button>
+        </div>
+        <div class="child col">
+            <button id="const" style="background-color: var(--color-button-const);">CONST</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">0</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-figure);">&sbquo;</button>
+        </div>
+        <div class="child col">
+            <button style="background-color: var(--color-button-operator);">&equals;</button>
+        </div>
     </div>
 </div>
 
 <style>
-    .keyboard{
-        background-color:lightgrey;
-        height:75vh;
-        width:100%;
-        padding:20px;
+    * {
+        --color-button-memory: green;
+        --color-button-back: orange;
+        --color-button-figure: rgb(0, 102, 255);
+        --color-button-off: red;
+        --color-button-const: black;
+        --color-button-operator: rgb(0, 49, 139);
+        --color-button-fore: white;
+        --color-display-back: black;
+        --color-display-fore: rgb(208, 255, 0);
+        --color-calc-back: lightgrey;
+        --color-body: rgb(173, 196, 238);
     }
-    .keyboard-keys{
-        background:grey;
-        padding:10px;
-        height:100%;
-        width:100%;
-        border-radius:6px;
+
+    .keyboard {
+        height: 100vh;
+    }
+
+    .keyboard-keys {
+        height: 100%;
+        width: 100%;
+    }
+
+    .child > button {
+        background-color: rgb(14, 119, 180);
+        color: aliceblue;
+        height: 100%;
+        width: 100%;
+        border: none;
+        border-radius: 8px;
     }
 </style>
-
-@code {
-
-}
