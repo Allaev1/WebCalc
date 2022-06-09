@@ -18,36 +18,47 @@
 
     .memory {
         color: green;
-        font-size: 1.25rem;
     }
 
     .result {
         text-align: right;
-        font-size: 2.5rem;
         color: black;
     }
 
     .equation {
         text-align: right;
         color: red;
-        font-size: 1.25rem;
     }
 
     .display-child > p {
         margin: 0px;
     }
 
-    @@media (max-width:280px) {
+    @@media (min-width:280px) {
         .memory {
-            font-size: 1rem;
+            font-size: 16px;
         }
 
         .result {
-            font-size: 1.7rem;
+            font-size: 22px;
         }
 
-        .equation {
-            font-size: 1rem;
+        .display {
+            font-size: 16px;
+        }
+    }
+
+    @@media(min-width:281px){
+        .memory {
+            font-size: 22px;
+        }
+
+        .result {
+            font-size: 36px;
+        }
+
+        .display {
+            font-size: 22px;
         }
     }
 </style>
