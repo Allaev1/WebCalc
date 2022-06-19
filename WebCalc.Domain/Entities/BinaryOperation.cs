@@ -13,7 +13,7 @@ namespace WebCalc.Domain.Entities
 
         public double? SecondOperand { get; private set; }
 
-        public Operator? Operator { get; private set; }
+        public Operation? Operator { get; private set; }
 
         public double? Result { get; private set; }
 
@@ -27,7 +27,7 @@ namespace WebCalc.Domain.Entities
             SecondOperand = operand;
         }
 
-        public void SetOperator(Operator op)
+        public void SetOperator(Operation op)
         {
             if (FirstOperand is null)
                 throw new FirstOperandNotSetException(SET_FIRST_OPERAND_MESSAGE);
@@ -54,10 +54,10 @@ namespace WebCalc.Domain.Entities
 
         private double? GetResult() => Operator switch
         {
-            Enums.Operator.Addition => FirstOperand + SecondOperand,
-            Enums.Operator.Subtraction => FirstOperand - SecondOperand,
-            Enums.Operator.Division => FirstOperand / SecondOperand,
-            Enums.Operator.Multiplication => FirstOperand * SecondOperand,
+            Enums.Operation.Addition => FirstOperand + SecondOperand,
+            Enums.Operation.Subtraction => FirstOperand - SecondOperand,
+            Enums.Operation.Division => FirstOperand / SecondOperand,
+            Enums.Operation.Multiplication => FirstOperand * SecondOperand,
             _ => throw new NotImplementedException()
         };
     }
