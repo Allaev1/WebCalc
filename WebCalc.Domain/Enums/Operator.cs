@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.Enums
 {
-    public enum Operators
+    public enum Operator
     {
         Addition,
         Subtraction,
