@@ -27,12 +27,12 @@ namespace WebCalc.Domain.Entities
             SecondOperand = operand;
         }
 
-        public void SetOperator(Operation op)
+        public void SetOperator(Operation operation)
         {
             if (FirstOperand is null)
                 throw new FirstOperandNotSetException(SET_FIRST_OPERAND_MESSAGE);
 
-            Operation = op;
+            Operation = operation;
         }
 
         public void CalculateResult()
