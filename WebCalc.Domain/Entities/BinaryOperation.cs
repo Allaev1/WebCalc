@@ -1,14 +1,11 @@
-﻿using WebCalc.Domain.Enums;
+﻿using WebCalc.Domain.Constants;
+using WebCalc.Domain.Enums;
 using WebCalc.Domain.Exceptions;
 
 namespace WebCalc.Domain.Entities
 {
     public class BinaryOperation
     {
-        private const string SET_FIRST_OPERAND_MESSAGE = "Please set first operand";
-        private const string SET_SECOND_OPERAND_MESSAGE = "Please set second operand";
-        private const string SET_OPERATOR_MESSAGE = "Please set operator first";
-
         public double? FirstOperand { get; set; }
 
         public double? SecondOperand { get; private set; }
@@ -22,15 +19,15 @@ namespace WebCalc.Domain.Entities
         public void SetSecondOperand(double operand)
         {
             if (Operation is null)
-                throw new OperatorNotSetException(SET_OPERATOR_MESSAGE);
+                throw new OperatorNotSetException(ExceptionMessageConstants.SET_OPERATOR_MESSAGE);
 
             SecondOperand = operand;
         }
 
-        public void SetOperator(Operation operation)
+        public void SetOperation(Operation operation)
         {
             if (FirstOperand is null)
-                throw new FirstOperandNotSetException(SET_FIRST_OPERAND_MESSAGE);
+                throw new FirstOperandNotSetException(ExceptionMessageConstants.SET_FIRST_OPERAND_MESSAGE);
 
             Operation = operation;
         }
@@ -45,11 +42,11 @@ namespace WebCalc.Domain.Entities
         private void ValidateOperation()
         {
             if (FirstOperand is null)
-                throw new FirstOperandNotSetException(SET_FIRST_OPERAND_MESSAGE);
+                throw new FirstOperandNotSetException(ExceptionMessageConstants.SET_FIRST_OPERAND_MESSAGE);
             if (Operation is null)
-                throw new OperatorNotSetException(SET_OPERATOR_MESSAGE);
+                throw new OperatorNotSetException(ExceptionMessageConstants.SET_OPERATOR_MESSAGE);
             if (SecondOperand is null)
-                throw new SecondOperandNotSetException(SET_SECOND_OPERAND_MESSAGE);
+                throw new SecondOperandNotSetException(ExceptionMessageConstants.SET_SECOND_OPERAND_MESSAGE);
         }
 
         private double? GetResult() => Operation switch
