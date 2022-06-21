@@ -6,9 +6,9 @@ namespace WebCalc.Domain.Entities
 {
     public class BinaryOperation
     {
-        public double? FirstOperand { get; set; }
+        public Operand FirstOperand { get; private set; } = null!;
 
-        public double? SecondOperand { get; private set; }
+        public Operand SecondOperand { get; private set; } = null!;
 
         public Operation? Operation { get; private set; }
 
@@ -16,12 +16,23 @@ namespace WebCalc.Domain.Entities
 
         internal BinaryOperation() { }
 
-        public void SetSecondOperand(double operand)
+        public void SetFirstOperand(string value)
+        {
+            if (FirstOperand is null)
+                FirstOperand = new();
+
+            FirstOperand.SetValue(value);
+        }
+
+        public void SetSecondOperand(string value)
         {
             if (Operation is null)
                 throw new OperatorNotSetException(ExceptionMessageConstants.SET_OPERATOR_MESSAGE);
 
-            SecondOperand = operand;
+            if(SecondOperand is null)
+                SecondOperand = new();
+
+            SecondOperand.SetValue(value);
         }
 
         public void SetOperation(Operation operation)
@@ -51,10 +62,10 @@ namespace WebCalc.Domain.Entities
 
         private double? GetResult() => Operation switch
         {
-            Enums.Operation.Addition => FirstOperand + SecondOperand,
-            Enums.Operation.Subtraction => FirstOperand - SecondOperand,
-            Enums.Operation.Division => FirstOperand / SecondOperand,
-            Enums.Operation.Multiplication => FirstOperand * SecondOperand,
+            Enums.Operation.Addition => FirstOperand.Value + SecondOperand.Value,
+            Enums.Operation.Subtraction => FirstOperand.Value - SecondOperand.Value,
+            Enums.Operation.Division => FirstOperand.Value / SecondOperand.Value,
+            Enums.Operation.Multiplication => FirstOperand.Value * SecondOperand.Value,
             _ => throw new NotImplementedException()
         };
     }
