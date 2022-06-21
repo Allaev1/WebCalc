@@ -17,7 +17,7 @@ namespace WebCalc.Domain.DomainServices
             var result = new BinaryOperation();
 
             operation.CalculateResult();
-            result.FirstOperand = operation.Result;
+            result.FirstOperand.SetValue(operation.Result);
 
             return operation;
         }
