@@ -14,7 +14,10 @@ namespace WebCalc.Domain.Entities
 
         public int Precision { get; private set; }
 
-        internal Operand() { }
+        internal Operand() 
+        {
+            Precision = ConfigurationConstants.Precision;
+        }
 
         public void SetValue(string value)
         {
@@ -25,7 +28,7 @@ namespace WebCalc.Domain.Entities
             else if (value.Where(x => x == SignConstants.FLOATING_POINT).Count() > 1)
                 throw new OperandWrongFormatException(ExceptionMessageConstants.TWO_FLOATING_POINT_MESSAGE);
 
-            Value = double.Parse(value);
+            Value = Math.Round(double.Parse(value), Precision);
         }
 
         public void SetValue(double? value)
