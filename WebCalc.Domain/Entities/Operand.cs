@@ -12,14 +12,14 @@ namespace WebCalc.Domain.Entities
 
         public int Precision { get; private set; }
 
-        internal Operand(int precision) 
+        internal Operand(int precision)
         {
             Precision = precision;
         }
 
         public void SetValue(string stringValue)
         {
-            if ((stringValue.Length > 1 && stringValue.First() == '0') || stringValue.Where(x => x == ',').Count() > 1)
+            if ((stringValue.Length > 1 && (stringValue.First() == '0' || stringValue.Substring(0, 2) == "--")) || stringValue.Where(x => x == ',').Count() > 1)
                 throw new Exception();
             Value = double.Parse(stringValue);
         }
