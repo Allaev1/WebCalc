@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Domain.Entities;
+using WebCalc.Domain.Interfaces;
 
 namespace WebCalc.Domain.DomainServices
 {
-    public class BinaryOperationManager
+    public class BinaryOperationManager : IBinaryOperationManager
     {
         public BinaryOperation GetBinaryOperation() => new BinaryOperation();
 
