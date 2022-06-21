@@ -14,10 +14,7 @@ namespace WebCalc.Domain.Entities
 
         public int Precision { get; private set; }
 
-        internal Operand(int precision)
-        {
-            Precision = precision;
-        }
+        internal Operand() { }
 
         public void SetValue(string stringValue)
         {
@@ -25,7 +22,7 @@ namespace WebCalc.Domain.Entities
                 throw new OperandWrongFormatException(ExceptionMessageConstants.FIRST_ZERO_MESSAGE);
             else if (stringValue.Length > 1 && stringValue.Substring(0, 2) == "--")
                 throw new OperandWrongFormatException(ExceptionMessageConstants.TWO_MINUS_SIGN_MESSAGE);
-            else if (stringValue.Where(x => x == ',').Count() > 1)
+            else if (stringValue.Where(x => x == SignConstants.FLOATING_POINT).Count() > 1)
                 throw new OperandWrongFormatException(ExceptionMessageConstants.TWO_FLOATING_POINT_MESSAGE);
 
             Value = double.Parse(stringValue);
