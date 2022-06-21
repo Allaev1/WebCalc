@@ -12,7 +12,10 @@ namespace WebCalc.Domain.Entities
 
         public int Precision { get; private set; }
 
-        internal Operand() { }
+        internal Operand(int precision) 
+        {
+            Precision = precision;
+        }
 
         public void SetValue(string stringValue)
         {
