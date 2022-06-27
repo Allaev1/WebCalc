@@ -11,6 +11,7 @@ namespace WebCalc.Domain.BinaryOperation
         Addition,
         Subtraction,
         Multiplication,
-        Division
+        Division,
+        NotSet
     }
 }
