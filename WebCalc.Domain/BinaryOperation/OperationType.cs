@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.BinaryOperation
 {
-    public enum Operation
+    public enum OperationType
     {
         Addition,
         Subtraction,
