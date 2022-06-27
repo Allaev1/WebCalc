@@ -1,6 +1,6 @@
 ﻿using WebCalc.Domain.BinaryOperation;
 
-namespace WebCalc.Domain.Entities
+namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperation
     {
@@ -22,12 +22,13 @@ namespace WebCalc.Domain.Entities
 
         public OperationType OperationType { get; private set; }
 
-        public double? Result { get; private set; }
+        public float Result { get; private set; }
 
         public void SetOperand1(float value)
         {
             Operand1 = value;
             operationState = OperationState.Operand1Set;
+            Result = 0;
         }
 
         public void SetOperand2(float value)
@@ -64,7 +65,7 @@ namespace WebCalc.Domain.Entities
             operationState = OperationState.Operand1NotSet;
         }
 
-        private double? GetResult() => OperationType switch
+        private float GetResult() => OperationType switch
         {
             OperationType.Addition => Operand1 + Operand2,
             OperationType.Subtraction => Operand1 - Operand2,
