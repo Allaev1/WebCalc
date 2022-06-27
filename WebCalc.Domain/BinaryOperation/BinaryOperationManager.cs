@@ -17,7 +17,9 @@ namespace WebCalc.Domain.BinaryOperation
             BinaryOperation = new
                 (stringLocalizer["Operand1NotSetExceptionMessage"], 
                 stringLocalizer["OperationTypeNotSetExceptionMessage"], 
-                stringLocalizer["Operand2NotSetExceptionMessage"]);
+                stringLocalizer["Operand2NotSetExceptionMessage"],
+                stringLocalizer["OperationTypeSettedExceptionMessage"],
+                stringLocalizer["Operand1SettedExceptionMessage"]);
         }
     }
 }

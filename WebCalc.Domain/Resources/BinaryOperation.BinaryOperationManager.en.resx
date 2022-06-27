@@ -120,10 +120,16 @@
   <data name="Operand1NotSetExceptionMessage" xml:space="preserve">
     <value>Operand 1 not set</value>
   </data>
+  <data name="Operand1SettedExceptionMessage" xml:space="preserve">
+    <value>You cannot change operand 1 when operation type set</value>
+  </data>
   <data name="Operand2NotSetExceptionMessage" xml:space="preserve">
     <value>Operand 2 not set</value>
   </data>
   <data name="OperationTypeNotSetExceptionMessage" xml:space="preserve">
     <value>Operation type not set </value>
+  </data>
+  <data name="OperationTypeSettedExceptionMessage" xml:space="preserve">
+    <value>You cannot change operation type when operand 2 set</value>
   </data>
 </root>
