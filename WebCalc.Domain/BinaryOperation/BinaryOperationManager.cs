@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Domain.Entities;
-using WebCalc.Domain.Interfaces;
 
-namespace WebCalc.Domain.DomainServices
+namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperationManager : IBinaryOperationManager
     {

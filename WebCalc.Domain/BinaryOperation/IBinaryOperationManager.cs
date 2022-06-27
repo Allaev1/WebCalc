@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Domain.Entities;
 
-namespace WebCalc.Domain.Interfaces
+namespace WebCalc.Domain.BinaryOperation
 {
     public interface IBinaryOperationManager
     {

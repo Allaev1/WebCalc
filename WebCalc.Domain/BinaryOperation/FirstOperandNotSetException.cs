@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebCalc.Domain.Exceptions
+namespace WebCalc.Domain.BinaryOperation
 {
-    public class OperatorNotSetException : Exception
+    public class FirstOperandNotSetException : Exception
     {
-        public OperatorNotSetException(string message)
+        public FirstOperandNotSetException(string message)
             : base(message) { }
     }
 }

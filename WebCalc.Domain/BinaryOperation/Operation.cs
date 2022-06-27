@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebCalc.Domain.Enums
+namespace WebCalc.Domain.BinaryOperation
 {
     public enum Operation
     {
