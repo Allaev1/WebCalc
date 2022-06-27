@@ -8,6 +8,7 @@ namespace WebCalc.Domain.BinaryOperation
 {
     public enum OperationState
     {
+        Operand1NotSet,
         Operand1Set,
         Operand2Set,
         OperationTypeSet
