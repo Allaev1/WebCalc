@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.BinaryOperation
 {
-    public class FirstOperandNotSetException : Exception
+    public class Operand1NotSetException : Exception
     {
-        public FirstOperandNotSetException(string message)
+        public Operand1NotSetException(string message)
             : base(message) { }
     }
 }
