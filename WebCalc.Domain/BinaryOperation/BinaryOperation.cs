@@ -1,71 +1,75 @@
-﻿using WebCalc.Domain.Constants;
-using WebCalc.Domain.Enums;
-using WebCalc.Domain.Exceptions;
+﻿using WebCalc.Domain.BinaryOperation;
 
 namespace WebCalc.Domain.Entities
 {
     public class BinaryOperation
     {
-        public Operand FirstOperand { get; private set; } = null!;
+        private OperationState operationState;
+        private readonly string operand1NotSetExceptionMessage;
+        private readonly string operationTypeNotSetExceptionMessage;
+        private readonly string operand2NotSetExceptionMessage;
 
-        public Operand SecondOperand { get; private set; } = null!;
+        internal BinaryOperation(string operand1NotSetExceptionMessage, string operationTypeNotSetExceptionMessage, string operand2NotSetExceptionMessage)
+        {
+            this.operand1NotSetExceptionMessage = operand1NotSetExceptionMessage;
+            this.operationTypeNotSetExceptionMessage = operationTypeNotSetExceptionMessage;
+            this.operand2NotSetExceptionMessage = operand2NotSetExceptionMessage;
+        }
 
-        public Operation? Operation { get; private set; }
+        public float Operand1 { get; private set; }
+
+        public float Operand2 { get; private set; }
+
+        public OperationType OperationType { get; private set; }
 
         public double? Result { get; private set; }
 
-        internal BinaryOperation() { }
-
-        public void SetFirstOperand(string value)
+        public void SetOperand1(float value)
         {
-            if (FirstOperand is null)
-                FirstOperand = new();
-
-            FirstOperand.SetValue(value);
+            Operand1 = value;
+            operationState = OperationState.Operand1Set;
         }
 
-        public void SetSecondOperand(string value)
+        public void SetOperand2(float value)
         {
-            if (Operation is null)
-                throw new OperatorNotSetException(ExceptionMessageConstants.SET_OPERATOR_MESSAGE);
+            if (operationState != OperationState.OperationTypeSet)
+                throw new OperationTypeNotSetException(operationTypeNotSetExceptionMessage);
 
-            if(SecondOperand is null)
-                SecondOperand = new();
-
-            SecondOperand.SetValue(value);
+            Operand2 = value;
+            operationState = OperationState.Operand2Set;
         }
 
-        public void SetOperation(Operation operation)
+        public void SetOperationType(OperationType operationType)
         {
-            if (FirstOperand is null)
-                throw new FirstOperandNotSetException(ExceptionMessageConstants.SET_FIRST_OPERAND_MESSAGE);
+            if (operationState != OperationState.Operand1Set)
+                throw new Operand1NotSetException(operand1NotSetExceptionMessage);
 
-            Operation = operation;
+            OperationType = operationType;
+            operationState = OperationState.OperationTypeSet;
         }
 
         public void CalculateResult()
         {
-            ValidateOperation();
-
+            if (operationState != OperationState.Operand2Set)
+                throw new Operand2NotSetException(operand2NotSetExceptionMessage);
             Result = GetResult();
+            StartNewOperation();
         }
 
-        private void ValidateOperation()
+        private void StartNewOperation()
         {
-            if (FirstOperand is null)
-                throw new FirstOperandNotSetException(ExceptionMessageConstants.SET_FIRST_OPERAND_MESSAGE);
-            if (Operation is null)
-                throw new OperatorNotSetException(ExceptionMessageConstants.SET_OPERATOR_MESSAGE);
-            if (SecondOperand is null)
-                throw new SecondOperandNotSetException(ExceptionMessageConstants.SET_SECOND_OPERAND_MESSAGE);
+            Operand1 = 0;
+            Operand2 = 0;
+            OperationType = OperationType.NotSet;
+            operationState = OperationState.Operand1NotSet;
         }
 
-        private double? GetResult() => Operation switch
+        private double? GetResult() => OperationType switch
         {
-            Enums.Operation.Addition => FirstOperand.Value + SecondOperand.Value,
-            Enums.Operation.Subtraction => FirstOperand.Value - SecondOperand.Value,
-            Enums.Operation.Division => FirstOperand.Value / SecondOperand.Value,
-            Enums.Operation.Multiplication => FirstOperand.Value * SecondOperand.Value,
+            OperationType.Addition => Operand1 + Operand2,
+            OperationType.Subtraction => Operand1 - Operand2,
+            OperationType.Division => Operand1 / Operand2,
+            OperationType.Multiplication => Operand1 * Operand2,
             _ => throw new NotImplementedException()
         };
     }
