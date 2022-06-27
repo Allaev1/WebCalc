@@ -1,6 +1,4 @@
-﻿using WebCalc.Domain.BinaryOperation;
-
-namespace WebCalc.Domain.BinaryOperation
+﻿namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperation
     {
@@ -8,12 +6,22 @@ namespace WebCalc.Domain.BinaryOperation
         private readonly string operand1NotSetExceptionMessage;
         private readonly string operationTypeNotSetExceptionMessage;
         private readonly string operand2NotSetExceptionMessage;
+        private readonly string operationTypeSettedExceptionMessage;
+        private readonly string operand1SettedExceptionMessage;
 
-        internal BinaryOperation(string operand1NotSetExceptionMessage, string operationTypeNotSetExceptionMessage, string operand2NotSetExceptionMessage)
+        internal BinaryOperation(
+            string operand1NotSetExceptionMessage, 
+            string operationTypeNotSetExceptionMessage,
+            string operand2NotSetExceptionMessage,
+            string operationTypeSettedExceptionMessage,
+            string operand1SettedExceptionMessage)
         {
+            operationState = OperationState.Operand1NotSet;
             this.operand1NotSetExceptionMessage = operand1NotSetExceptionMessage;
             this.operationTypeNotSetExceptionMessage = operationTypeNotSetExceptionMessage;
             this.operand2NotSetExceptionMessage = operand2NotSetExceptionMessage;
+            this.operationTypeSettedExceptionMessage = operationTypeSettedExceptionMessage;
+            this.operand1SettedExceptionMessage = operand1SettedExceptionMessage;
         }
 
         public float Operand1 { get; private set; }
@@ -26,6 +34,8 @@ namespace WebCalc.Domain.BinaryOperation
 
         public void SetOperand1(float value)
         {
+            if (operationState == OperationState.OperationTypeSet)
+                throw new Operand1SettedException(operand1SettedExceptionMessage);
             Operand1 = value;
             operationState = OperationState.Operand1Set;
             Result = 0;
@@ -44,6 +54,8 @@ namespace WebCalc.Domain.BinaryOperation
         {
             if (operationState != OperationState.Operand1Set)
                 throw new Operand1NotSetException(operand1NotSetExceptionMessage);
+            if (operationState == OperationState.Operand2Set)
+                throw new OperationTypeSettedException(operationTypeSettedExceptionMessage);
 
             OperationType = operationType;
             operationState = OperationState.OperationTypeSet;
