@@ -1,4 +1,6 @@
-﻿namespace WebCalc.Domain.BinaryOperation
+﻿using WebCalc.Domain.BinaryOperation.Exceptions;
+
+namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperation
     {
