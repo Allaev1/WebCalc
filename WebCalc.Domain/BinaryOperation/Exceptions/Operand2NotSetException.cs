@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.BinaryOperation.Exceptions
 {
-    public enum OperationState
+    public class Operand2NotSetException : Exception
     {
-        Start,
-        Operand1Setted,
-        Operand2Setted,
-        OperationTypeSetted,
-        ResultSetted
+        public Operand2NotSetException(string message)
+            : base(message) { }
     }
 }

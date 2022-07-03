@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.BinaryOperation.Exceptions
 {
-    public enum OperationState
+    public class OperandWrongFormatException : Exception
     {
-        Start,
-        Operand1Setted,
-        Operand2Setted,
-        OperationTypeSetted,
-        ResultSetted
+        public OperandWrongFormatException(string message)
+            : base(message) { }
     }
 }
