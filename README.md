@@ -1,3 +1,5 @@
+# Link to Model
+https://sergeydavidovich.github.io/Model/
 # WebCalc - screens
 <table>
 <tr>
