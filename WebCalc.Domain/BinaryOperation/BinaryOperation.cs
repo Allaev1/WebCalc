@@ -1,27 +1,9 @@
-﻿using WebCalc.Domain.BinaryOperation.Exceptions;
-
-namespace WebCalc.Domain.BinaryOperation
+﻿namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperation
     {
-        private readonly string operand1NotSetExceptionMessage;
-        private readonly string operationTypeNotSetExceptionMessage;
-        private readonly string operand2NotSetExceptionMessage;
-        private readonly string operationTypeSettedExceptionMessage;
-        private readonly string operand1SettedExceptionMessage;
-
-        internal BinaryOperation(
-            string operand1NotSetExceptionMessage, 
-            string operationTypeNotSetExceptionMessage,
-            string operand2NotSetExceptionMessage,
-            string operationTypeSettedExceptionMessage,
-            string operand1SettedExceptionMessage)
+        internal BinaryOperation()
         {
-            this.operand1NotSetExceptionMessage = operand1NotSetExceptionMessage;
-            this.operationTypeNotSetExceptionMessage = operationTypeNotSetExceptionMessage;
-            this.operand2NotSetExceptionMessage = operand2NotSetExceptionMessage;
-            this.operationTypeSettedExceptionMessage = operationTypeSettedExceptionMessage;
-            this.operand1SettedExceptionMessage = operand1SettedExceptionMessage;
         }
 
         public float? Operand1 { get; private set; }
@@ -34,33 +16,18 @@ namespace WebCalc.Domain.BinaryOperation
 
         public void SetOperand1(float value)
         {
-            if(Operand1.HasValue)
-                throw new Operand1SettedException(operand1SettedExceptionMessage);
-            Operand1 = value;
         }
 
         public void SetOperand2(float value)
         {
-            if(!OperationType.HasValue)
-                throw new OperationTypeNotSetException(operationTypeNotSetExceptionMessage);
-            Operand2 = value;
         }
 
         public void SetOperationType(OperationType operationType)
         {
-            if (!Operand1.HasValue)
-                throw new Operand1NotSetException(operand1NotSetExceptionMessage);
-            if (Operand2.HasValue)
-                throw new OperationTypeSettedException(operationTypeSettedExceptionMessage);
-            OperationType = operationType;
         }
 
         public void CalculateResult()
         {
-            if (!Operand2.HasValue)
-                throw new Operand2NotSetException(operand2NotSetExceptionMessage);
-            Result = GetResult();
-            StartNewOperation();
         }
 
         private void StartNewOperation()

@@ -12,14 +12,9 @@ namespace WebCalc.Domain.BinaryOperation
     {
         public BinaryOperation BinaryOperation { get; }
 
-        public BinaryOperationManager(IStringLocalizer<BinaryOperationManager> stringLocalizer)
+        public BinaryOperationManager()
         {
-            BinaryOperation = new
-                (stringLocalizer["Operand1NotSetExceptionMessage"], 
-                stringLocalizer["OperationTypeNotSetExceptionMessage"], 
-                stringLocalizer["Operand2NotSetExceptionMessage"],
-                stringLocalizer["OperationTypeSettedExceptionMessage"],
-                stringLocalizer["Operand1SettedExceptionMessage"]);
+            BinaryOperation = new();
         }
     }
 }
