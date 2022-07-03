@@ -18,14 +18,14 @@ namespace WebCalc.Domain.BinaryOperation
 
         public float? Result { get; private set; }
 
-        public void SetOperand(float value)
+        public void SetOperand(float? value)
         {
-            SetState(value);
+            SetState(value!);
         }
 
-        public void SetOperationType(OperationType operationType)
+        public void SetOperationType(OperationType? operationType)
         {
-            SetState(operationType);
+            SetState(operationType!);
         }
 
         public void SetResult()
@@ -38,26 +38,26 @@ namespace WebCalc.Domain.BinaryOperation
             switch (operationState)
             {
                 case OperationState.Start:
-                    Operand1 = (float)value;
+                    Operand1 = (float?)value;
                     operationState = OperationState.Operand1Setted;
                     break;
                 case OperationState.Operand1Setted:
-                    OperationType = (OperationType)value;
+                    OperationType = (OperationType?)value;
                     operationState = OperationState.OperationTypeSetted;
                     break;
                 case OperationState.OperationTypeSetted:
-                    Operand2 = (float)value;
+                    Operand2 = (float?)value;
                     operationState = OperationState.Operand2Setted;
                     break;
                 case OperationState.Operand2Setted:
-                    Result = (float)value;
+                    Result = (float?)value;
                     Operand1 = null;
                     Operand2 = null;
                     OperationType = null;
                     operationState = OperationState.ResultSetted;
                     break;
                 case OperationState.ResultSetted:
-                    Operand1 = (float)value;
+                    Operand1 = (float?)value;
                     Result = null;
                     operationState = OperationState.Operand1Setted;
                     break;
