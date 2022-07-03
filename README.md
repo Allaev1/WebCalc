@@ -1,5 +1,3 @@
-## WebCalc model
-https://sergeydavidovich.github.io/Model/
 ## WebCalc - screens
 <table>
 <tr>
