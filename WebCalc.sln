@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Domain", "WebCalc.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.Application", "WebCalc.Application\WebCalc.Application.csproj", "{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.Application.Contracts", "WebCalc.Application.Contracts\WebCalc.Application.Contracts.csproj", "{754038BC-9477-4B0E-8345-0032B5A6DD76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{754038BC-9477-4B0E-8345-0032B5A6DD76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{754038BC-9477-4B0E-8345-0032B5A6DD76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{754038BC-9477-4B0E-8345-0032B5A6DD76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{754038BC-9477-4B0E-8345-0032B5A6DD76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
