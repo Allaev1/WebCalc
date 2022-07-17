@@ -6,12 +6,10 @@ namespace WebCalc.Application.Contracts.BinaryOperation
     {
         public event EventHandler<string> DisplayValueChanged;
 
-        public void SetDisplayValue(char value);
+        public event EventHandler<string> ExpressionValueChanged;
 
-        public void SetOperand(string value);
+        public void EditDisplayValue(char value);
 
-        public void SetOperationType(OperationType operationType);
-
-        public string GetResult();
+        public void EditExpressionValue(char value);   
     }
 }

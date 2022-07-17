@@ -25,55 +25,55 @@
             <button style="background-color: var(--color-button-operator);">&plusmn;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);">&divide;</button>
+            <button style="background-color: var(--color-button-operator);" @onclick="()=>binaryOperationAppService.EditExpressionValue('/') ">&divide;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('7')">7</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('7')">7</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('8')">8</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('8')">8</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('9')">9</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('9')">9</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);">&times;</button>
+            <button style="background-color: var(--color-button-operator);" @onclick="()=>binaryOperationAppService.EditExpressionValue('*')">&times;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('4')">4</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('4')">4</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('5')">5</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('5')">5</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('6')">6</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('6')">6</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);">&minus;</button>
+            <button style="background-color: var(--color-button-operator);" @onclick="()=>binaryOperationAppService.EditExpressionValue('-')">&minus;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('1')">1</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('1')">1</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('2')">2</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('2')">2</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('3')">3</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('3')">3</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);">&plus;</button>
+            <button style="background-color: var(--color-button-operator);" @onclick="()=>binaryOperationAppService.EditExpressionValue('+')">&plus;</button>
         </div>
         <div class="child col">
             <button id="const" style="background-color: var(--color-button-const);">CONST</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('0')">0</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('0')">0</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('.')">&sbquo;</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.EditDisplayValue('.')">&sbquo;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);">&equals;</button>
+            <button style="background-color: var(--color-button-operator);" @onclick="()=>binaryOperationAppService.EditDisplayValue('=')">&equals;</button>
         </div>
     </div>
 </div>
@@ -121,10 +121,3 @@
         }
     }
 </style>
-
-@code{
-    public void EditDisplayValue(char value)
-    {
-        binaryOperationAppService.SetDisplayValue(value);
-    }
-}

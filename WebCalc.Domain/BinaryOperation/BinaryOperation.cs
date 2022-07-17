@@ -4,8 +4,6 @@ namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperation
     {
-        private OperationState operationState;
-
         internal BinaryOperation()
         {
         }
@@ -17,6 +15,8 @@ namespace WebCalc.Domain.BinaryOperation
         public OperationType? OperationType { get; private set; }
 
         public float? Result { get; private set; }
+
+        public OperationState OperationState { get; private set; }
 
         public void SetOperand(float? value)
         {
@@ -30,36 +30,40 @@ namespace WebCalc.Domain.BinaryOperation
 
         public void SetResult()
         {
-            SetState(GetResult());
+            SetState(null!);
         }
 
         private void SetState(object value)
         {
-            switch (operationState)
+            if (value is OperationType)
+                OperationState = OperationState.Operand1Setted;
+            else if (value is float && OperationState is OperationState.Operand1Setted)
+                OperationState = OperationState.OperationTypeSetted;
+            else if (value is null)
+                OperationState = OperationState.Operand2Setted;
+
+            switch (OperationState)
             {
                 case OperationState.Start:
                     Operand1 = (float?)value;
-                    operationState = OperationState.Operand1Setted;
                     break;
                 case OperationState.Operand1Setted:
                     OperationType = (OperationType?)value;
-                    operationState = OperationState.OperationTypeSetted;
                     break;
                 case OperationState.OperationTypeSetted:
                     Operand2 = (float?)value;
-                    operationState = OperationState.Operand2Setted;
                     break;
                 case OperationState.Operand2Setted:
-                    Result = (float?)value;
+                    Result = GetResult();
                     Operand1 = null;
                     Operand2 = null;
                     OperationType = null;
-                    operationState = OperationState.ResultSetted;
+                    OperationState = OperationState.ResultSetted;
                     break;
                 case OperationState.ResultSetted:
                     Operand1 = (float?)value;
                     Result = null;
-                    operationState = OperationState.Operand1Setted;
+                    OperationState = OperationState.Operand1Setted;
                     break;
             }
         }
