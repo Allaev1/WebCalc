@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32519.379
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc", "WebCalc\WebCalc.csproj", "{BFDDE594-CBB7-4D84-A2BB-EBD1AE7CC57B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.Domain", "WebCalc.Domain\WebCalc.Domain.csproj", "{D57E61F4-A118-400E-B0C5-6A0D5C44A6C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Domain", "WebCalc.Domain\WebCalc.Domain.csproj", "{D57E61F4-A118-400E-B0C5-6A0D5C44A6C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.Application", "WebCalc.Application\WebCalc.Application.csproj", "{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D57E61F4-A118-400E-B0C5-6A0D5C44A6C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D57E61F4-A118-400E-B0C5-6A0D5C44A6C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D57E61F4-A118-400E-B0C5-6A0D5C44A6C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3CB915E-1457-4C0A-A41D-D25B4AEFDFCC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
