@@ -13,6 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebCalc.Application.Contracts\WebCalc.Application.Contracts.csproj" />
+    <ProjectReference Include="..\WebCalc.Application\WebCalc.Application.csproj" />
     <ProjectReference Include="..\WebCalc.Domain\WebCalc.Domain.csproj" />
   </ItemGroup>
 

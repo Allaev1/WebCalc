@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WebCalc.Application.Contracts\WebCalc.Application.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

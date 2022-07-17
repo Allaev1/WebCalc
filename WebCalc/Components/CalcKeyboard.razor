@@ -1,4 +1,7 @@
-﻿<div class="keyboard">
+﻿@using WebCalc.Application.Contracts.BinaryOperation
+@inject IBinaryOperationAppService binaryOperationAppService;
+
+<div class="keyboard">
     <div class="keyboard-keys row row-cols-4 g-1">
         <div class="child col">
             <button style="background-color: var(--color-button-memory);">M+</button>
@@ -25,37 +28,37 @@
             <button style="background-color: var(--color-button-operator);">&divide;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">7</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('7')">7</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">8</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('8')">8</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">9</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('9')">9</button>
         </div>
         <div class="child col">
             <button style="background-color: var(--color-button-operator);">&times;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">4</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('4')">4</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">5</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('5')">5</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">6</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('6')">6</button>
         </div>
         <div class="child col">
             <button style="background-color: var(--color-button-operator);">&minus;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">1</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('1')">1</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">2</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('2')">2</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">3</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('3')">3</button>
         </div>
         <div class="child col">
             <button style="background-color: var(--color-button-operator);">&plus;</button>
@@ -64,10 +67,10 @@
             <button id="const" style="background-color: var(--color-button-const);">CONST</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">0</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('0')">0</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);">&sbquo;</button>
+            <button style="background-color: var(--color-button-figure);" @onclick="()=>binaryOperationAppService.SetDisplayValue('.')">&sbquo;</button>
         </div>
         <div class="child col">
             <button style="background-color: var(--color-button-operator);">&equals;</button>
@@ -113,8 +116,15 @@
             font-size: 12px;
         }
 
-        #const{
-            font-size:10px;
+        #const {
+            font-size: 10px;
         }
     }
 </style>
+
+@code{
+    public void EditDisplayValue(char value)
+    {
+        binaryOperationAppService.SetDisplayValue(value);
+    }
+}
