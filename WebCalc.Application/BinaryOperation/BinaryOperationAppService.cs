@@ -47,7 +47,8 @@ namespace WebCalc.Application.BinaryOperation
         {
             if (expressionValue[0] == '0')
                 expressionValue = String.Empty;
-
+            if (value != '=' && binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted)
+                expressionValue = binaryOperationManager.BinaryOperation.Operand1.ToString()!;
             if (binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
                 expressionValue = expressionValue.Substring(0, expressionValue.Length - 1);
 

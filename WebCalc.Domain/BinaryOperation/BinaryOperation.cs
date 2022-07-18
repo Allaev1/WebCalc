@@ -63,7 +63,7 @@ namespace WebCalc.Domain.BinaryOperation
                 case OperationState.ResultSetted:
                     Operand1 = (float?)value;
                     Result = null;
-                    OperationState = OperationState.Operand1Setted;
+                    //OperationState = OperationState.Operand1Setted;
                     break;
             }
         }
