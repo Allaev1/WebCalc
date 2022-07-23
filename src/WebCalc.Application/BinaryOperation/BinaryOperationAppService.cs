@@ -26,11 +26,12 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditDisplayValue(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value == '0')
+            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value == '0' ||
+                value == ',' && displayValue.Contains(','))
                 return;
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start || 
+            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value != ',' ||
                 binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted && char.IsDigit(value))
-                displayValue = String.Empty;
+                displayValue = string.Empty;
             if (value == '=')
             {
                 binaryOperationManager.BinaryOperation.SetResult();
@@ -39,16 +40,24 @@ namespace WebCalc.Application.BinaryOperation
             else
                 displayValue += value;
 
-            binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue));
+            if (displayValue == "0,")
+            {
+                binaryOperationManager.BinaryOperation.SetOperand(0.0f);
+                expressionValue = displayValue;
+            }
+            else
+            {
+                binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue));
+                EditExpressionValue(value);
+            }
 
             if (DisplayValueChanged is not null)
                 DisplayValueChanged.Invoke(this, displayValue);
-            EditExpressionValue(value);
         }
 
         public void EditExpressionValue(char value)
         {
-            if (expressionValue[0] == '0')
+            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value != ',')
                 expressionValue = String.Empty;
             if (value != '=' && binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted)
                 expressionValue = binaryOperationManager.BinaryOperation.Operand1.ToString()!;
