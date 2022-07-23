@@ -26,7 +26,10 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditDisplayValue(char value)
         {
-            if (displayValue[0] == '0' || binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
+            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value == '0')
+                return;
+            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start || 
+                binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted && char.IsDigit(value))
                 displayValue = String.Empty;
             if (value == '=')
             {

@@ -9,6 +9,7 @@ namespace WebCalc.Domain.BinaryOperation.Exceptions
     public enum OperationState
     {
         Start,
+        SettingOperand1,
         Operand1Setted,
         Operand2Setted,
         OperationTypeSetted,

@@ -41,10 +41,12 @@ namespace WebCalc.Domain.BinaryOperation
                 OperationState = OperationState.OperationTypeSetted;
             else if (value is null)
                 OperationState = OperationState.Operand2Setted;
+            else if (OperationState is OperationState.Start && value is float)
+                OperationState = OperationState.SettingOperand1;
 
             switch (OperationState)
             {
-                case OperationState.Start:
+                case OperationState.SettingOperand1:
                     Operand1 = (float?)value;
                     break;
                 case OperationState.Operand1Setted:
