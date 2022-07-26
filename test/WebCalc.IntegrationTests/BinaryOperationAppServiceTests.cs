@@ -41,7 +41,7 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', ',', ',', '0' }, "1,0")]
         [InlineData(new char[] { ',', ',', '0' }, "0,0")]
         [InlineData(new char[] { '0', ',', ',', '0', '1', '2', ',', '0' }, "0,0120")]
-        [InlineData(new char[] {'0','0','1','2',',',',','3','0',',','4','0'}, "12,3040")]
+        [InlineData(new char[] { '0', '0', '1', '2', ',', ',', '3', '0', ',', '4', '0' }, "12,3040")]
         public void TestDisplayValue(char[] values, string expected)
         {
             foreach (var value in values)
