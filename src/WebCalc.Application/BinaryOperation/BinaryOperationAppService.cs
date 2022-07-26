@@ -36,7 +36,7 @@ namespace WebCalc.Application.BinaryOperation
                 binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
         }
 
-        public void EditDisplayValue(char value)
+        private void EditDisplayValue(char value)
         {
             displayValue = GetValidValue(displayValue, value);
 
@@ -44,7 +44,7 @@ namespace WebCalc.Application.BinaryOperation
                 DisplayValueChanged.Invoke(this, displayValue);
         }
 
-        public void EditExpressionValue(char value)
+        private void EditExpressionValue(char value)
         {
             expressionValue = GetValidValue(expressionValue, value);
 
