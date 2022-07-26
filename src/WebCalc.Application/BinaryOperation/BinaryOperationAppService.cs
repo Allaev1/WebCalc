@@ -38,7 +38,7 @@ namespace WebCalc.Application.BinaryOperation
 
         private void EditDisplayValue(char value)
         {
-            displayValue = GetValidValue(displayValue, value);
+            displayValue = GetValidOperandString(displayValue, value);
 
             if (DisplayValueChanged is not null)
                 DisplayValueChanged.Invoke(this, displayValue);
@@ -46,13 +46,39 @@ namespace WebCalc.Application.BinaryOperation
 
         private void EditExpressionValue(char value)
         {
-            expressionValue = GetValidValue(expressionValue, value);
+            if (value == '+' ||
+                value == '-' ||
+                value == '*' ||
+                value == '/')
+            {
+                if (binaryOperationManager.BinaryOperation.OperationType is not null)
+                    expressionValue = expressionValue.Replace(expressionValue.Last(), value);
+                else
+                    expressionValue += value;
+
+                switch (value)
+                {
+                    case '+':
+                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Addition);
+                        break;
+                    case '-':
+                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Subtraction);
+                        break;
+                    case '*':
+                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Multiplication);
+                        break;
+                    case '/':
+                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Division);
+                        break;
+                }
+            }
+            else expressionValue = GetValidOperandString(expressionValue, value);
 
             if (ExpressionValueChanged is not null)
                 ExpressionValueChanged.Invoke(this, expressionValue);
         }
 
-        private string GetValidValue(string source, char value)
+        private string GetValidOperandString(string source, char value)
         {
             string temp = string.Empty;
 
