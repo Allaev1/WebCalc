@@ -14,6 +14,7 @@ namespace WebCalc.Application.BinaryOperation
         private readonly IBinaryOperationManager binaryOperationManager;
         private string displayValue = "0";
         private string expressionValue = "0";
+        private const char FLOATING_POINT = ',';
 
         public BinaryOperationAppService(IBinaryOperationManager binaryOperationManager)
         {
@@ -24,32 +25,20 @@ namespace WebCalc.Application.BinaryOperation
 
         public event EventHandler<string> ExpressionValueChanged = null!;
 
+        public void EditValues(char value)
+        {
+            if (char.IsDigit(value) || value == FLOATING_POINT)
+                EditDisplayValue(value);
+
+            EditExpressionValue(value);
+
+            if (char.IsDigit(value) || value == FLOATING_POINT)
+                binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
+        }
+
         public void EditDisplayValue(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value == '0' ||
-                value == ',' && displayValue.Contains(','))
-                return;
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value != ',' ||
-                binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted && char.IsDigit(value))
-                displayValue = string.Empty;
-            if (value == '=')
-            {
-                binaryOperationManager.BinaryOperation.SetResult();
-                displayValue = binaryOperationManager.BinaryOperation.Result.ToString()!;
-            }
-            else
-                displayValue += value;
-
-            if (displayValue == "0,")
-            {
-                binaryOperationManager.BinaryOperation.SetOperand(0.0f);
-                expressionValue = displayValue;
-            }
-            else
-            {
-                binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue));
-                EditExpressionValue(value);
-            }
+            displayValue = GetValidValue(displayValue, value);
 
             if (DisplayValueChanged is not null)
                 DisplayValueChanged.Invoke(this, displayValue);
@@ -57,33 +46,25 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditExpressionValue(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.Start && value != ',')
-                expressionValue = String.Empty;
-            if (value != '=' && binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted)
-                expressionValue = binaryOperationManager.BinaryOperation.Operand1.ToString()!;
-            if (binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
-                expressionValue = expressionValue.Substring(0, expressionValue.Length - 1);
-
-            switch (value)
-            {
-                case '+':
-                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Addition);
-                    break;
-                case '/':
-                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Division);
-                    break;
-                case '*':
-                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Multiplication);
-                    break;
-                case '-':
-                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Subtraction);
-                    break;
-            }
-
-            expressionValue += value;
+            expressionValue = GetValidValue(expressionValue, value);
 
             if (ExpressionValueChanged is not null)
                 ExpressionValueChanged.Invoke(this, expressionValue);
+        }
+
+        private string GetValidValue(string source, char value)
+        {
+            string temp = string.Empty;
+
+            if (source == "0" && value != FLOATING_POINT)
+                temp += value;
+            else
+                temp = source + value;
+
+            if (float.TryParse(temp, out float res))
+                return temp;
+            else
+                return source;
         }
     }
 }

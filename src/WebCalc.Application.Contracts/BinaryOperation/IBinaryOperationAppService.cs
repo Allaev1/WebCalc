@@ -8,8 +8,10 @@ namespace WebCalc.Application.Contracts.BinaryOperation
 
         public event EventHandler<string> ExpressionValueChanged;
 
-        public void EditDisplayValue(char value);
-
-        public void EditExpressionValue(char value);   
+        /// <summary>
+        /// Edit display and expression values
+        /// </summary>
+        /// <param name="value"></param>
+        public void EditValues(char value);
     }
 }
