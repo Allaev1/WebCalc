@@ -38,13 +38,24 @@ namespace WebCalc.Application.BinaryOperation
 
         private void EditDisplayValue(char value)
         {
-            displayValue = GetValidOperandString(displayValue, value);
+            if (binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
+                displayValue = GetValidOperandString(string.Empty, value);
+            else
+                displayValue = GetValidOperandString(displayValue, value);
 
             if (DisplayValueChanged is not null)
                 DisplayValueChanged.Invoke(this, displayValue);
         }
 
         private void EditExpressionValue(char value)
+        {
+            SetValidExpressionString(value);
+
+            if (ExpressionValueChanged is not null)
+                ExpressionValueChanged.Invoke(this, expressionValue);
+        }
+
+        private void SetValidExpressionString(char value)
         {
             if (value == '+' ||
                 value == '-' ||
@@ -56,26 +67,66 @@ namespace WebCalc.Application.BinaryOperation
                 else
                     expressionValue += value;
 
-                switch (value)
-                {
-                    case '+':
-                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Addition);
-                        break;
-                    case '-':
-                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Subtraction);
-                        break;
-                    case '*':
-                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Multiplication);
-                        break;
-                    case '/':
-                        binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Division);
-                        break;
-                }
+                SetOperationType(value);
+            }
+            else if (binaryOperationManager.BinaryOperation.OperationType is not null &&
+                value != '+' &&
+                value != '*' &&
+                value != '-' &&
+                value != '/')
+            {
+                int? operationTypeIndex = GetOperationTypeIndex(binaryOperationManager.BinaryOperation.OperationType);
+
+                if (operationTypeIndex is null)
+                    throw new ArgumentNullException();
+
+                var secondOperandString = expressionValue.Substring(operationTypeIndex.Value + 1, expressionValue.LastIndexOf(expressionValue.Last()) - operationTypeIndex.Value);
+
+                var validSecondOperandString = GetValidOperandString(secondOperandString, value);
+
+                expressionValue = expressionValue.Replace(
+                    $"{expressionValue[operationTypeIndex.Value]}{secondOperandString}",
+                    $"{expressionValue[operationTypeIndex.Value]}{validSecondOperandString}");
             }
             else expressionValue = GetValidOperandString(expressionValue, value);
+        }
 
-            if (ExpressionValueChanged is not null)
-                ExpressionValueChanged.Invoke(this, expressionValue);
+        private int? GetOperationTypeIndex(OperationType? operationType)
+        {
+            switch (operationType)
+            {
+                case OperationType.Addition:
+                    return expressionValue.IndexOf('+');
+                case OperationType.Division:
+                    return expressionValue.IndexOf('/');
+                case OperationType.Multiplication:
+                    return expressionValue.IndexOf('*');
+                case OperationType.Subtraction:
+                    return expressionValue.IndexOf('-');
+                default:
+                    return null;
+            }
+        }
+
+        private void SetOperationType(char value)
+        {
+            switch (value)
+            {
+                case '+':
+                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Addition);
+                    break;
+                case '-':
+                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Subtraction);
+                    break;
+                case '*':
+                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Multiplication);
+                    break;
+                case '/':
+                    binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Division);
+                    break;
+                default:
+                    throw new ArgumentException();
+            }
         }
 
         private string GetValidOperandString(string source, char value)

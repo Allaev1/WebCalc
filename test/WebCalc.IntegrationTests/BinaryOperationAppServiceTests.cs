@@ -44,6 +44,9 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '0', '0', '1', '2', ',', ',', '3', '0', ',', '4', '0' }, "12,3040")]
         [InlineData(new char[] { '1', '2', '3', '+' }, "123")]
         [InlineData(new char[] { '1', '2', '3', '+', '-', '/' }, "123")]
+        [InlineData(new char[] { '1', '2', '3', '+', '1', '2' }, "12")]
+        [InlineData(new char[] { '1', '2', '3', '+', '-', '/', '0', ',', '1', '2' }, "0,12")]
+        [InlineData(new char[] { '1', '2', '3', '+', '-', '/', '0', '0', '1', '2', ',', ',', '3', '0', ',', '4', '0' }, "12,3040")]
         public void TestDisplayValue(char[] values, string expected)
         {
             foreach (var value in values)
@@ -64,6 +67,9 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '2', '3', '+' }, "123+")]
         [InlineData(new char[] { '1', '2', '3', '+', '-', '/' }, "123/")]
         [InlineData(new char[] { '1', '2', '3', '+', '-', '-' }, "123-")]
+        [InlineData(new char[] { '1', '2', '3', '+', '1', '2' }, "123+12")]
+        [InlineData(new char[] { '1', '2', '3', '+', '-', '/', '0', ',', '1', '2' }, "123/0,12")]
+        [InlineData(new char[] { '1', '2', '3', '+', '-', '/', '0', '0', '1', '2', ',', ',', '3', '0', ',', '4', '0' }, "123/12,3040")]
         public void TestExpressionValue(char[] values, string expected)
         {
             foreach (var value in values)
