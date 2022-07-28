@@ -13,6 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WebCalc.Application.Contracts\WebCalc.Application.Contracts.csproj" />
+    <ProjectReference Include="..\WebCalc.Application\WebCalc.Application.csproj" />
+    <ProjectReference Include="..\WebCalc.Domain\WebCalc.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 

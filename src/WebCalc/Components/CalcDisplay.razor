@@ -1,0 +1,90 @@
+﻿@using WebCalc.Application.Contracts.BinaryOperation
+@inject IBinaryOperationAppService binaryOperationAppService;
+
+<div class="display">
+    <div class="memory display-child mx-1 my-1">
+        <p><span style="background:green; color:white">Memory:</span>-0.0123456</p>
+    </div>
+    <div class="result display-child mx-1 my-1">
+        <p>@displayValue</p>
+    </div>
+    <div class="equation display-child mx-1 my-1">
+        <p>@expressionValue</p>
+    </div>
+</div>
+
+<style>
+    .display {
+        background: white;
+        margin-bottom: 10px;
+    }
+
+    .memory {
+        color: green;
+    }
+
+    .result {
+        text-align: right;
+        color: black;
+    }
+
+    .equation {
+        text-align: right;
+        color: red;
+    }
+
+    .display-child > p {
+        margin: 0px;
+    }
+
+    @@media (max-width:280px) {
+        .memory {
+            font-size: 16px;
+        }
+
+        .result {
+            font-size: 22px;
+        }
+
+        .display {
+            font-size: 16px;
+        }
+    }
+
+    @@media (min-width:281px) {
+        .memory {
+            font-size: 22px;
+        }
+
+        .result {
+            font-size: 32px;
+        }
+
+        .display {
+            font-size: 22px;
+        }
+    }
+</style>
+
+@code {
+    private string displayValue = "0";
+    private string expressionValue = "0";
+
+    protected override void OnInitialized()
+    {
+        binaryOperationAppService.DisplayValueChanged += OnDisplayValueChanged;
+        binaryOperationAppService.ExpressionValueChanged += OnExpressionValueChanged;
+    }
+
+    private void OnDisplayValueChanged(object? sender, string e)
+    {
+        displayValue = e;
+        StateHasChanged();
+    }
+
+    private void OnExpressionValueChanged(object? sender, string e)
+    {
+        expressionValue = e;
+        StateHasChanged();
+    }
+}
