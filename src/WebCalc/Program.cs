@@ -1,5 +1,6 @@
 using WebCalc;
 using Microsoft.AspNetCore.Components.Web;
+using System.Buffers;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using WebCalc.Domain.BinaryOperation;
 using WebCalc.Application.Contracts.BinaryOperation;
@@ -13,4 +14,4 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 
-await builder.Build().RunAsync();
+await builder.Build().RunAsync(); 
