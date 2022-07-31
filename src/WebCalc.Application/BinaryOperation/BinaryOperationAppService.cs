@@ -27,7 +27,7 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (char.IsDigit(value) || value == FLOATING_POINT)
+            if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
                 EditDisplayValue(value);
 
             EditExpressionValue(value);
@@ -38,7 +38,12 @@ namespace WebCalc.Application.BinaryOperation
 
         private void EditDisplayValue(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
+            if (value == '=')
+            {
+                binaryOperationManager.BinaryOperation.SetResult();
+                displayValue = binaryOperationManager.BinaryOperation.Result!.ToString()!;
+            }
+            else if (binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
                 displayValue = GetValidOperandString(string.Empty, value);
             else
                 displayValue = GetValidOperandString(displayValue, value);
@@ -88,6 +93,7 @@ namespace WebCalc.Application.BinaryOperation
                     $"{expressionValue[operationTypeIndex.Value]}{secondOperandString}",
                     $"{expressionValue[operationTypeIndex.Value]}{validSecondOperandString}");
             }
+            else if (value == '=') expressionValue += value;
             else expressionValue = GetValidOperandString(expressionValue, value);
         }
 
