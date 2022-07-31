@@ -32,7 +32,7 @@ namespace WebCalc.Application.BinaryOperation
 
             EditExpressionValue(value);
 
-            if (char.IsDigit(value) || value == FLOATING_POINT)
+            if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
                 binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
         }
 
@@ -69,6 +69,8 @@ namespace WebCalc.Application.BinaryOperation
             {
                 if (binaryOperationManager.BinaryOperation.OperationType is not null)
                     expressionValue = expressionValue.Replace(expressionValue.Last(), value);
+                else if (expressionValue.Last() == '=')
+                    expressionValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()! + value;
                 else
                     expressionValue += value;
 
