@@ -27,13 +27,30 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
-                EditDisplayValue(value);
+            if (IsChainingOperation(value))
+            {
+                binaryOperationManager.BinaryOperation.SetResult();
+                binaryOperationManager.BinaryOperation.SetOperand(binaryOperationManager.BinaryOperation.Result);
+                SetOperationType(value);
+                displayValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()!;
+                expressionValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()! + value;
 
-            EditExpressionValue(value);
+                if (DisplayValueChanged is not null && ExpressionValueChanged is not null)
+                {
+                    DisplayValueChanged.Invoke(this, displayValue);
+                    ExpressionValueChanged.Invoke(this, expressionValue);
+                }
+            }
+            else
+            {
+                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
+                    EditDisplayValue(value);
 
-            if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
-                binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
+                EditExpressionValue(value);
+
+                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
+                    binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
+            }
         }
 
         private void EditDisplayValue(char value)
@@ -151,5 +168,13 @@ namespace WebCalc.Application.BinaryOperation
             else
                 return source;
         }
+
+        private bool IsChainingOperation(char value) =>
+            (value == '+' ||
+            value == '-' ||
+            value == '*' ||
+            value == '/') &&
+            binaryOperationManager.BinaryOperation.Operand2 is not null;
+
     }
 }
