@@ -27,11 +27,13 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (IsChainingOperation(value))
+            if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
+            else if (IsChainingOperation(value))
             {
                 binaryOperationManager.BinaryOperation.SetResult();
                 binaryOperationManager.BinaryOperation.SetOperand(binaryOperationManager.BinaryOperation.Result);
                 SetOperationType(value);
+
                 displayValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()!;
                 expressionValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()! + value;
 
@@ -43,19 +45,23 @@ namespace WebCalc.Application.BinaryOperation
             }
             else
             {
-                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
+                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
                     EditDisplayValue(value);
 
                 EditExpressionValue(value);
 
-                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=')
+                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
                     binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
             }
         }
 
         private void EditDisplayValue(char value)
         {
-            if (value == '=')
+            if (value == Constants.BACKSPACE && displayValue.Count() == 1)
+                displayValue = "0";
+            else if (value == Constants.BACKSPACE)
+                displayValue = displayValue.Substring(0, displayValue.Length - 1);
+            else if (value == '=')
             {
                 binaryOperationManager.BinaryOperation.SetResult();
                 displayValue = binaryOperationManager.BinaryOperation.Result!.ToString()!;
@@ -93,6 +99,8 @@ namespace WebCalc.Application.BinaryOperation
 
                 SetOperationType(value);
             }
+            else if (value == Constants.BACKSPACE && expressionValue.Count() == 1) expressionValue = "0";
+            else if (value == Constants.BACKSPACE) expressionValue = expressionValue.Substring(0, expressionValue.Length - 1);
             else if (binaryOperationManager.BinaryOperation.OperationType is not null &&
                 value != '+' &&
                 value != '*' &&
