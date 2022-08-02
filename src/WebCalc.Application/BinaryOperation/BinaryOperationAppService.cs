@@ -28,6 +28,18 @@ namespace WebCalc.Application.BinaryOperation
         public void EditValues(char value)
         {
             if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
+            else if (value == 'C')
+            {
+                displayValue = "0";
+                expressionValue = "0";
+                binaryOperationManager.BinaryOperation.ClearOperation();
+
+                if (DisplayValueChanged is not null && ExpressionValueChanged is not null)
+                {
+                    DisplayValueChanged.Invoke(this, displayValue);
+                    ExpressionValueChanged.Invoke(this, expressionValue);
+                }
+            }
             else if (IsChainingOperation(value))
             {
                 binaryOperationManager.BinaryOperation.SetResult();
