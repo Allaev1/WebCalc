@@ -33,6 +33,15 @@ namespace WebCalc.Domain.BinaryOperation
             SetState(null!);
         }
 
+        public void ClearOperation()
+        {
+            Operand1 = null;
+            Operand2 = null;
+            OperationType = null;
+            Result = null;
+            OperationState = OperationState.SettingOperand1;
+        }
+
         private void SetState(object value)
         {
             if (value is OperationType)

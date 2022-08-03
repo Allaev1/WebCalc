@@ -1,4 +1,5 @@
 ﻿@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Domain.BinaryOperation
 @inject IBinaryOperationAppService binaryOperationAppService;
 
 <div class="keyboard">
@@ -10,10 +11,10 @@
             <button style="background-color: var(--color-button-memory);">MC</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-back);">C</button>
+            <button style="background-color: var(--color-button-back);" @onclick="()=>binaryOperationAppService.EditValues(Constants.CLEAR)">C</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-back);">BACK</button>
+            <button style="background-color: var(--color-button-back);" @onclick="()=>binaryOperationAppService.EditValues(Constants.BACKSPACE)">BACK</button>
         </div>
         <div class="child col">
             <button style="background-color: var(--color-button-memory);">MR</button>
@@ -94,7 +95,7 @@
     }
 
     .keyboard {
-        height: 100vh;
+        height: 100%;
     }
 
     .keyboard-keys {

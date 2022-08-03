@@ -27,18 +27,58 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (char.IsDigit(value) || value == FLOATING_POINT)
-                EditDisplayValue(value);
+            if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
+            else if (value == 'C')
+            {
+                displayValue = "0";
+                expressionValue = "0";
+                binaryOperationManager.BinaryOperation.ClearOperation();
 
-            EditExpressionValue(value);
+                if (DisplayValueChanged is not null && ExpressionValueChanged is not null)
+                {
+                    DisplayValueChanged.Invoke(this, displayValue);
+                    ExpressionValueChanged.Invoke(this, expressionValue);
+                }
+            }
+            else if (IsChainingOperation(value))
+            {
+                binaryOperationManager.BinaryOperation.SetResult();
+                binaryOperationManager.BinaryOperation.SetOperand(binaryOperationManager.BinaryOperation.Result);
+                SetOperationType(value);
 
-            if (char.IsDigit(value) || value == FLOATING_POINT)
-                binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
+                displayValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()!;
+                expressionValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()! + value;
+
+                if (DisplayValueChanged is not null && ExpressionValueChanged is not null)
+                {
+                    DisplayValueChanged.Invoke(this, displayValue);
+                    ExpressionValueChanged.Invoke(this, expressionValue);
+                }
+            }
+            else
+            {
+                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
+                    EditDisplayValue(value);
+
+                EditExpressionValue(value);
+
+                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
+                    binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
+            }
         }
 
         private void EditDisplayValue(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
+            if (value == Constants.BACKSPACE && displayValue.Count() == 1)
+                displayValue = "0";
+            else if (value == Constants.BACKSPACE)
+                displayValue = displayValue.Substring(0, displayValue.Length - 1);
+            else if (value == '=')
+            {
+                binaryOperationManager.BinaryOperation.SetResult();
+                displayValue = binaryOperationManager.BinaryOperation.Result!.ToString()!;
+            }
+            else if (binaryOperationManager.BinaryOperation.OperationType is not null && binaryOperationManager.BinaryOperation.Operand2 is null)
                 displayValue = GetValidOperandString(string.Empty, value);
             else
                 displayValue = GetValidOperandString(displayValue, value);
@@ -64,11 +104,36 @@ namespace WebCalc.Application.BinaryOperation
             {
                 if (binaryOperationManager.BinaryOperation.OperationType is not null)
                     expressionValue = expressionValue.Replace(expressionValue.Last(), value);
+                else if (expressionValue.Last() == '=')
+                    expressionValue = binaryOperationManager.BinaryOperation.Operand1!.ToString()! + value;
                 else
                     expressionValue += value;
 
                 SetOperationType(value);
             }
+            else if (value == Constants.BACKSPACE &&
+                binaryOperationManager.BinaryOperation.OperationState is OperationState.OperationTypeSetted)
+            {
+                int? operationTypeIndex = GetOperationTypeIndex(binaryOperationManager.BinaryOperation.OperationType);
+
+                if (operationTypeIndex is null)
+                    throw new ArgumentNullException();
+
+                var operand2String = expressionValue.Substring(operationTypeIndex.Value + 1, expressionValue.LastIndexOf(expressionValue.Last()) - operationTypeIndex.Value);
+
+                string validSecondOperandString = string.Empty;
+
+                if (operand2String.Count() == 1)
+                    validSecondOperandString = "0";
+                else
+                    validSecondOperandString = operand2String.Substring(0, operand2String.Length - 1);
+
+                expressionValue = expressionValue.Replace(
+                    $"{expressionValue[operationTypeIndex.Value]}{operand2String}",
+                    $"{expressionValue[operationTypeIndex.Value]}{validSecondOperandString}");
+            }
+            else if (value == Constants.BACKSPACE && expressionValue.Count() == 1) expressionValue = "0";
+            else if (value == Constants.BACKSPACE) expressionValue = expressionValue.Substring(0, expressionValue.Length - 1);
             else if (binaryOperationManager.BinaryOperation.OperationType is not null &&
                 value != '+' &&
                 value != '*' &&
@@ -80,14 +145,15 @@ namespace WebCalc.Application.BinaryOperation
                 if (operationTypeIndex is null)
                     throw new ArgumentNullException();
 
-                var secondOperandString = expressionValue.Substring(operationTypeIndex.Value + 1, expressionValue.LastIndexOf(expressionValue.Last()) - operationTypeIndex.Value);
+                var operand2String = expressionValue.Substring(operationTypeIndex.Value + 1, expressionValue.LastIndexOf(expressionValue.Last()) - operationTypeIndex.Value);
 
-                var validSecondOperandString = GetValidOperandString(secondOperandString, value);
+                var validSecondOperandString = GetValidOperandString(operand2String, value);
 
                 expressionValue = expressionValue.Replace(
-                    $"{expressionValue[operationTypeIndex.Value]}{secondOperandString}",
+                    $"{expressionValue[operationTypeIndex.Value]}{operand2String}",
                     $"{expressionValue[operationTypeIndex.Value]}{validSecondOperandString}");
             }
+            else if (value == '=') expressionValue += value;
             else expressionValue = GetValidOperandString(expressionValue, value);
         }
 
@@ -143,5 +209,13 @@ namespace WebCalc.Application.BinaryOperation
             else
                 return source;
         }
+
+        private bool IsChainingOperation(char value) =>
+            (value == '+' ||
+            value == '-' ||
+            value == '*' ||
+            value == '/') &&
+            binaryOperationManager.BinaryOperation.Operand2 is not null;
+
     }
 }
