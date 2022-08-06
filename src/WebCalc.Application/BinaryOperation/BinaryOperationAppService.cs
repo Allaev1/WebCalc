@@ -12,6 +12,7 @@ namespace WebCalc.Application.BinaryOperation
     public class BinaryOperationAppService : IBinaryOperationAppService
     {
         private readonly IBinaryOperationManager binaryOperationManager;
+        private const int DISPLAY_MAX_CHARS_COUNT = 15;
         private string displayValue = "0";
         private string expressionValue = "0";
         private const char FLOATING_POINT = ',';
@@ -27,7 +28,8 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
+            if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == FLOATING_POINT)) return;
+            else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
             else if (value == 'C')
             {
                 displayValue = "0";
