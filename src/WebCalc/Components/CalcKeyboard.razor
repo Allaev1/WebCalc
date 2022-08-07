@@ -3,7 +3,7 @@
 @inject IBinaryOperationAppService binaryOperationAppService;
 
 <div class="keyboard">
-    <div class="keyboard-keys row row-cols-4 g-1">
+    <div class="keyboard-keys">
         <div class="child col">
             <button style="background-color: var(--color-button-memory);">M+</button>
         </div>
@@ -98,7 +98,11 @@
         height: 100%;
     }
 
-    .keyboard-keys {
+    .keyboard-keys {        
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 5px;
+        row-gap: 5px;
         height: 100%;
         width: 100%;
     }
