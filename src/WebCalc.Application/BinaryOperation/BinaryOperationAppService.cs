@@ -28,8 +28,7 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted &&
-                (value == FLOATING_POINT || value == Constants.BACKSPACE)) return;
+            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
             else if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == FLOATING_POINT)) return;
             else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
             else if (value == 'C')
@@ -63,8 +62,8 @@ namespace WebCalc.Application.BinaryOperation
             {
                 if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == FLOATING_POINT))
                 {
-                    displayValue = string.Empty;
-                    expressionValue = string.Empty;
+                    displayValue = "0";
+                    expressionValue = "0";
                     binaryOperationManager.BinaryOperation.ClearOperation();
                 }
 
