@@ -61,6 +61,13 @@ namespace WebCalc.Application.BinaryOperation
             }
             else
             {
+                if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == FLOATING_POINT))
+                {
+                    displayValue = string.Empty;
+                    expressionValue = string.Empty;
+                    binaryOperationManager.BinaryOperation.ClearOperation();
+                }
+
                 if (char.IsDigit(value) || value == FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
                     EditDisplayValue(value);
 
