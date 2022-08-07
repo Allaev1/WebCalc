@@ -28,7 +28,9 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == FLOATING_POINT)) return; 
+            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted &&
+                (value == FLOATING_POINT || value == Constants.BACKSPACE)) return;
+            else if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == FLOATING_POINT)) return;
             else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
             else if (value == 'C')
             {
@@ -42,7 +44,7 @@ namespace WebCalc.Application.BinaryOperation
                     ExpressionValueChanged.Invoke(this, expressionValue);
                 }
             }
-            else if (IsChainingOperation(value))
+            else if (IsChainingCalculation(value))
             {
                 binaryOperationManager.BinaryOperation.SetResult();
                 binaryOperationManager.BinaryOperation.SetOperand(binaryOperationManager.BinaryOperation.Result);
@@ -212,7 +214,7 @@ namespace WebCalc.Application.BinaryOperation
                 return source;
         }
 
-        private bool IsChainingOperation(char value) =>
+        private bool IsChainingCalculation(char value) =>
             (value == '+' ||
             value == '-' ||
             value == '*' ||

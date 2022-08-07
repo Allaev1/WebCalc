@@ -65,6 +65,8 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '+', '2', Constants.CLEAR, '1', '+', '3', '-', '5', '=' }, "-1")]
         [InlineData(new char[] { Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "0")]
         [InlineData(new char[] { '1', '+', '1', '2', '3', '4', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "1")]
+        [InlineData(new char[] { '1', '+', '2', '=', '4' }, "4")]
+        [InlineData(new char[] { '1', '+', '2', '=', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "3")]
         public void TestDisplayValue(char[] values, string expected)
         {
             foreach (var value in values)
@@ -107,6 +109,8 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '+', '2', Constants.CLEAR, '1', '+', '3', '-', '5', '=' }, "4-5=")]
         [InlineData(new char[] { Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "0")]
         [InlineData(new char[] { '1', '+', '1', '2', '3', '4', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "1+1")]
+        [InlineData(new char[] { '1', '+', '2', '=', '4' }, "4")]
+        [InlineData(new char[] { '1', '+', '2', '=', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "1+2=")]
         public void TestExpressionValue(char[] values, string expected)
         {
             foreach (var value in values)
