@@ -15,7 +15,6 @@ namespace WebCalc.Application.BinaryOperation
         private const int DISPLAY_MAX_CHARS_COUNT = 15;
         private string displayValue = "0";
         private string expressionValue = "0";
-        private const char FLOATING_POINT = ',';
 
         public BinaryOperationAppService(IBinaryOperationManager binaryOperationManager)
         {
@@ -29,7 +28,7 @@ namespace WebCalc.Application.BinaryOperation
         public void EditValues(char value)
         {
             if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
-            else if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == FLOATING_POINT)) return;
+            else if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == Constants.FLOATING_POINT)) return;
             else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
             else if (value == 'C')
             {
@@ -60,20 +59,20 @@ namespace WebCalc.Application.BinaryOperation
             }
             else
             {
-                if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == FLOATING_POINT))
+                if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
                 {
                     displayValue = "0";
                     expressionValue = "0";
                     binaryOperationManager.BinaryOperation.ClearOperation();
                 }
 
-                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
+                if (char.IsDigit(value) || value == Constants.FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
                     EditDisplayValue(value);
 
                 EditExpressionValue(value);
 
-                if (char.IsDigit(value) || value == FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
-                    binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == FLOATING_POINT ? displayValue + '0' : displayValue));
+                if (char.IsDigit(value) || value == Constants.FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
+                    binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == Constants.FLOATING_POINT ? displayValue + '0' : displayValue));
             }
         }
 
@@ -209,7 +208,7 @@ namespace WebCalc.Application.BinaryOperation
         {
             string temp = string.Empty;
 
-            if (source == "0" && value != FLOATING_POINT)
+            if (source == "0" && value != Constants.FLOATING_POINT)
                 temp += value;
             else
                 temp = source + value;
