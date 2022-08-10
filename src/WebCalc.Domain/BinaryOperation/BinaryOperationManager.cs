@@ -11,10 +11,12 @@ namespace WebCalc.Domain.BinaryOperation
     public class BinaryOperationManager : IBinaryOperationManager
     {
         public BinaryOperation BinaryOperation { get; }
+        public UnaryOperation.UnaryOperation NegationOperation { get; }
 
         public BinaryOperationManager()
         {
             BinaryOperation = new();
+            NegationOperation = new(-1);
         }
     }
 }
