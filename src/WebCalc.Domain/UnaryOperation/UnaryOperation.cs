@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebCalc.Domain.BinaryOperation;
 
 namespace WebCalc.Domain.UnaryOperation
 {
     public class UnaryOperation
     {
-        internal UnaryOperation(float operand)
-        {
-            Operand1 = operand;
-        }
+        private readonly float operand1;
 
-        public float? Operand1 { get; }
+        internal UnaryOperation(float operand1)
+        {
+            this.operand1 = operand1;
+        }
 
         public float? Operand2 { get; private set; }
 
-        public float? Result { get; private set; }
-
         public UnaryOperationState OperationState { get; private set; }
+
+        public float? Result { get; private set; }
 
         public void SetResult()
         {
@@ -44,7 +45,7 @@ namespace WebCalc.Domain.UnaryOperation
                     Operand2 = (float?)value;
                     break;
                 case UnaryOperationState.Operand2Setted:
-                    Result = Operand1 * Operand2;
+                    Result = operand1 * Operand2;
                     OperationState = UnaryOperationState.ResultSetted;
                     break;
             }
