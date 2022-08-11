@@ -11,5 +11,7 @@ namespace WebCalc.Domain.BinaryOperation
         public const char BACKSPACE = 'x';
 
         public const char CLEAR = 'C';
+
+        public const char FLOATING_POINT = ',';
     }
 }
