@@ -13,8 +13,8 @@ namespace WebCalc.IntegrationTests
     public class BinaryOperationAppServiceTests
     {
         private readonly IBinaryOperationAppService binaryOperationAppService;
-        private string displayValue = null!;
-        private string expressionValue = null!;
+        private string displayValue = "0";
+        private string expressionValue = "0";
 
         public BinaryOperationAppServiceTests()
         {
@@ -68,6 +68,11 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '+', '2', '=', '4' }, "4")]
         [InlineData(new char[] { '1', '+', '2', '=', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "3")]
         [InlineData(new char[] { '1', '+', '2', '=', Constants.FLOATING_POINT, '1' }, "0,1")]
+        [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN }, "-12")]
+        [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "12")]
+        [InlineData(new char[] { Constants.NEGATION_OPERATION_SIGN }, "0")]
+        [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN }, "-123")]
+        [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "123")]
         public void TestDisplayValue(char[] values, string expected)
         {
             foreach (var value in values)
@@ -113,6 +118,12 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '+', '2', '=', '4' }, "4")]
         [InlineData(new char[] { '1', '+', '2', '=', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "1+2=")]
         [InlineData(new char[] { '1', '+', '2', '=', Constants.FLOATING_POINT, '1' }, "0,1")]
+        [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN }, "-12")]
+        [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "12")]
+        [InlineData(new char[] { Constants.NEGATION_OPERATION_SIGN }, "0")]
+        [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN }, "12+(-123)")]
+        [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "12+123")]
+        [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN, '+', '1', '2', '3' }, "(-12)+123")]
         public void TestExpressionValue(char[] values, string expected)
         {
             foreach (var value in values)

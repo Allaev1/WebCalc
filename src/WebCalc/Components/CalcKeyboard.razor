@@ -23,7 +23,7 @@
             <button style="background-color: var(--color-button-off);">%OFF</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);">&plusmn;</button>
+            <button style="background-color: var(--color-button-operator);" @onclick="()=>binaryOperationAppService.EditValues(Constants.NEGATION_OPERATION_SIGN)">&plusmn;</button>
         </div>
         <div class="child col">
             <button style="background-color: var(--color-button-operator);" @onclick="()=>binaryOperationAppService.EditValues('/') ">&divide;</button>

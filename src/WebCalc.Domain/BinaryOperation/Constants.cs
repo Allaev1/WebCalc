@@ -13,5 +13,7 @@ namespace WebCalc.Domain.BinaryOperation
         public const char CLEAR = 'C';
 
         public const char FLOATING_POINT = ',';
+
+        public const char NEGATION_OPERATION_SIGN = '±';
     }
 }
