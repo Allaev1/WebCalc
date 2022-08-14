@@ -25,6 +25,8 @@ namespace WebCalc.Application.BinaryOperation
 
         public event EventHandler<string> ExpressionValueChanged = null!;
 
+        public event EventHandler<string> MemoryValueChanged = null!;
+
         public void EditValues(char value)
         {
             if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
