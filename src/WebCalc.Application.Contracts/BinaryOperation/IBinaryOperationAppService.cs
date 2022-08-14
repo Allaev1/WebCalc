@@ -8,6 +8,8 @@ namespace WebCalc.Application.Contracts.BinaryOperation
 
         public event EventHandler<string> ExpressionValueChanged;
 
+        public event EventHandler<string> MemoryValueChanged;
+
         /// <summary>
         /// Edit display and expression values
         /// </summary>
