@@ -15,6 +15,7 @@ namespace WebCalc.IntegrationTests
         private readonly IBinaryOperationAppService binaryOperationAppService;
         private string displayValue = "0";
         private string expressionValue = "0";
+        private string memoryValue = "";
 
         public BinaryOperationAppServiceTests()
         {
@@ -23,6 +24,12 @@ namespace WebCalc.IntegrationTests
             binaryOperationAppService = new BinaryOperationAppService(binaryOperationDomainManager);
             binaryOperationAppService.DisplayValueChanged += BinaryOperationAppService_DisplayValueChanged;
             binaryOperationAppService.ExpressionValueChanged += BinaryOperationAppService_ExpressionValueChanged;
+            binaryOperationAppService.MemoryValueChanged += BinaryOperationAppService_MemoryValueChanged;
+        }
+
+        private void BinaryOperationAppService_MemoryValueChanged(object? sender, string e)
+        {
+            memoryValue = e;
         }
 
         private void BinaryOperationAppService_ExpressionValueChanged(object? sender, string e)
@@ -132,6 +139,20 @@ namespace WebCalc.IntegrationTests
             }
 
             expressionValue.Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData(new char[] { Constants.MEMORY_ADD }, "")]
+        [InlineData(new char[] { '1', Constants.MEMORY_ADD }, "1")]
+        [InlineData(new char[] { '1', Constants.MEMORY_ADD, '1', Constants.MEMORY_ADD }, "12")]
+        public void TestMemoryValue(char[] values, string expected)
+        {
+            foreach (var value in values)
+            {
+                binaryOperationAppService.EditValues(value);
+            }
+
+            memoryValue.Should().Be(expected);
         }
     }
 }
