@@ -10,10 +10,12 @@ namespace WebCalc.Domain.UnaryOperation
     public class UnaryOperation
     {
         private readonly float operand1;
+        private readonly OperationType operationType;
 
-        internal UnaryOperation(float operand1)
+        internal UnaryOperation(OperationType operationType, float operand1)
         {
             this.operand1 = operand1;
+            this.operationType = operationType;
         }
 
         public float? Operand2 { get; private set; }
@@ -45,10 +47,17 @@ namespace WebCalc.Domain.UnaryOperation
                     Operand2 = (float?)value;
                     break;
                 case UnaryOperationState.Operand2Setted:
-                    Result = operand1 * Operand2;
+                    Result = GetResult();
                     OperationState = UnaryOperationState.ResultSetted;
                     break;
             }
         }
+
+        private float GetResult() => operationType switch
+        {
+            OperationType.Addition => operand1 + Operand2!.Value,
+            OperationType.Multiplication => operand1 * Operand2!.Value,
+            _ => throw new ArgumentException("Incorrect operation type for unary operation")
+        };
     }
 }
