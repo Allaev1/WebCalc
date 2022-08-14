@@ -13,6 +13,6 @@ namespace WebCalc.Domain.BinaryOperation
 
         public UnaryOperation.UnaryOperation NegationOperation { get; }
 
-        public BinaryOperation MemoryOperation { get; }
+        public UnaryOperation.UnaryOperation MemoryOperation { get; }
     }
 }
