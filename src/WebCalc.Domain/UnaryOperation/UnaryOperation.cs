@@ -9,7 +9,7 @@ namespace WebCalc.Domain.UnaryOperation
 {
     public class UnaryOperation
     {
-        private readonly float operand1;
+        private float operand1;
         private readonly OperationType operationType;
 
         internal UnaryOperation(OperationType operationType, float operand1)
@@ -49,6 +49,12 @@ namespace WebCalc.Domain.UnaryOperation
                 case UnaryOperationState.Operand2Setted:
                     Result = GetResult();
                     OperationState = UnaryOperationState.ResultSetted;
+                    break;
+                case UnaryOperationState.ResultSetted:
+                    operand1 = Result!.Value;
+                    Operand2 = (float?)value;
+                    Result = null;
+                    OperationState = UnaryOperationState.SettingOperand2;
                     break;
             }
         }
