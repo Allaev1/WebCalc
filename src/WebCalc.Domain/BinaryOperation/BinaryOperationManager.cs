@@ -12,12 +12,13 @@ namespace WebCalc.Domain.BinaryOperation
     {
         public BinaryOperation BinaryOperation { get; }
         public UnaryOperation.UnaryOperation NegationOperation { get; }
-        public UnaryOperation.UnaryOperation MemoryOperation { get; }
+        public BinaryOperation MemoryOperation { get; }
 
         public BinaryOperationManager()
         {
             BinaryOperation = new();
-            MemoryOperation = new(OperationType.Addition, 0);
+            MemoryOperation = new();
+            MemoryOperation.SetOperand(0);
             NegationOperation = new(OperationType.Multiplication, -1);
         }
     }
