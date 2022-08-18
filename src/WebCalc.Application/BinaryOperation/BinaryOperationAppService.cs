@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Domain.BinaryOperation;
-using WebCalc.Domain.BinaryOperation.Exceptions;
 
 namespace WebCalc.Application.BinaryOperation
 {
@@ -15,6 +14,7 @@ namespace WebCalc.Application.BinaryOperation
         private const int DISPLAY_MAX_CHARS_COUNT = 15;
         private string displayValue = "0";
         private string expressionValue = "0";
+        private float memoryValue;
 
         public BinaryOperationAppService(IBinaryOperationManager binaryOperationManager)
         {
@@ -29,7 +29,22 @@ namespace WebCalc.Application.BinaryOperation
 
         public void EditValues(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
+            if (value == Constants.MEMORY_ADD)
+            {
+                memoryValue = binaryOperationManager.GetMemoryAddResult(float.Parse(displayValue));
+
+                if (memoryValue == 0)
+                    return;
+                else if (MemoryValueChanged is not null)
+                    MemoryValueChanged.Invoke(this, memoryValue.ToString());
+            }
+            else if (value == Constants.MEMORY_CLEAR) binaryOperationManager.ClearMemory();
+            else if (value == Constants.MEMORY_READ)
+            {
+                displayValue = memoryValue.ToString();
+
+            }
+            else if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
             else if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == Constants.FLOATING_POINT)) return;
             else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
             else if (value == Constants.NEGATION_OPERATION_SIGN && displayValue == "0") return;
@@ -153,7 +168,7 @@ namespace WebCalc.Application.BinaryOperation
                 {
                     operand2String = operand2String.Replace("(", string.Empty).Replace(")", string.Empty);
                 }
-                
+
                 binaryOperationManager.NegationOperation.SetOperand(float.Parse(operand2String));
                 binaryOperationManager.NegationOperation.SetResult();
                 var negatedOperand2String = binaryOperationManager.NegationOperation.Result!.ToString()!;
