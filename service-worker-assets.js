@@ -33,7 +33,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-coUCNnvbaOvXkBVDIwaAjZz+XVQ8aP9rZUludrY4\/+0=",
+      "hash": "sha256-tW6bnhTqMWSV05vSmJnljbOrwCc8mlSg\/VJBd7OJUOA=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -165,19 +165,19 @@
       "url": "_framework\/System.Threading.dll"
     },
     {
-      "hash": "sha256-Cr14gabPv9LWJMhyFK7NdC5Boy6WepoSxNegHxZloiQ=",
+      "hash": "sha256-WmBlJozWQ1PhPl\/fZ3rrSyN6QECxd007nF4dAg0har8=",
       "url": "_framework\/WebCalc.Application.Contracts.dll"
     },
     {
-      "hash": "sha256-fjmP3TQpHM9zNxQ4IPCms\/+S6lL2KCJngi6pTgcrfO4=",
+      "hash": "sha256-Jaa8sSZ+fH79ISoTqOw2rddOzwVdEg8muG10b54jqBM=",
       "url": "_framework\/WebCalc.Application.dll"
     },
     {
-      "hash": "sha256-+v2Sg7boZ8MSGw39A9pZBN89ptYNRmdmd5U4RzRDpwI=",
+      "hash": "sha256-UivvtGzxNZmU1ZGii7KNiwBsY9EjKtMfgz03du6XHKs=",
       "url": "_framework\/WebCalc.dll"
     },
     {
-      "hash": "sha256-oI1VHFg9JXmV3i+iPjxv1yy9FrpjbbHXU8w0UmUu\/GY=",
+      "hash": "sha256-2iiKgtdyruJNgDzQHVzhRVC4+mhMMTZ42U1awRcpMRU=",
       "url": "_framework\/WebCalc.Domain.dll"
     },
     {
@@ -257,5 +257,5 @@
       "url": "sample-data\/weather.json"
     }
   ],
-  "version": "ZLeZNjg4"
+  "version": "KIym1039"
 };
