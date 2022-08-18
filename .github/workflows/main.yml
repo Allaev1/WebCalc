@@ -4,6 +4,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   deploy-to-github-pages:
@@ -43,3 +45,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BRANCH: gh-pages
         FOLDER: release/wwwroot
+      
+    - name: Test
+      run: dotnet test test/WebCalc.IntegrationTests/WebCalc.IntegrationTests.csproj --no-build --verbosity normal
