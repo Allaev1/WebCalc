@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Domain.BinaryOperation;
-using WebCalc.Domain.BinaryOperation.Exceptions;
 
 namespace WebCalc.Application.BinaryOperation
 {
@@ -15,6 +14,7 @@ namespace WebCalc.Application.BinaryOperation
         private const int DISPLAY_MAX_CHARS_COUNT = 15;
         private string displayValue = "0";
         private string expressionValue = "0";
+        private float memoryValue;
 
         public BinaryOperationAppService(IBinaryOperationManager binaryOperationManager)
         {
@@ -25,11 +25,29 @@ namespace WebCalc.Application.BinaryOperation
 
         public event EventHandler<string> ExpressionValueChanged = null!;
 
+        public event EventHandler<string> MemoryValueChanged = null!;
+
         public void EditValues(char value)
         {
-            if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
+            if (value == Constants.MEMORY_ADD)
+            {
+                memoryValue = binaryOperationManager.GetMemoryAddResult(float.Parse(displayValue));
+
+                if (memoryValue == 0)
+                    return;
+                else if (MemoryValueChanged is not null)
+                    MemoryValueChanged.Invoke(this, memoryValue.ToString());
+            }
+            else if (value == Constants.MEMORY_CLEAR) binaryOperationManager.ClearMemory();
+            else if (value == Constants.MEMORY_READ)
+            {
+                displayValue = memoryValue.ToString();
+
+            }
+            else if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
             else if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == Constants.FLOATING_POINT)) return;
             else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
+            else if (value == Constants.NEGATION_OPERATION_SIGN && displayValue == "0") return;
             else if (value == 'C')
             {
                 displayValue = "0";
@@ -66,12 +84,25 @@ namespace WebCalc.Application.BinaryOperation
                     binaryOperationManager.BinaryOperation.ClearOperation();
                 }
 
-                if (char.IsDigit(value) || value == Constants.FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
-                    EditDisplayValue(value);
+                if (value == Constants.NEGATION_OPERATION_SIGN)
+                {
+                    binaryOperationManager.NegationOperation.SetOperand(float.Parse(displayValue));
+                    binaryOperationManager.NegationOperation.SetResult();
+                    displayValue = binaryOperationManager.NegationOperation.Result!.ToString()!;
 
-                EditExpressionValue(value);
+                    EditExpressionValue(value);
 
-                if (char.IsDigit(value) || value == Constants.FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
+                    if (DisplayValueChanged is not null)
+                        DisplayValueChanged.Invoke(this, displayValue);
+                }
+                else
+                {
+                    if (char.IsDigit(value) || value == Constants.FLOATING_POINT || value == '=' || value == Constants.BACKSPACE)
+                        EditDisplayValue(value);
+
+                    EditExpressionValue(value);
+                }
+                if (char.IsDigit(value) || value == Constants.FLOATING_POINT || value == '=' || value == Constants.BACKSPACE || value == Constants.NEGATION_OPERATION_SIGN)
                     binaryOperationManager.BinaryOperation.SetOperand(float.Parse(displayValue.Last() == Constants.FLOATING_POINT ? displayValue + '0' : displayValue));
             }
         }
@@ -111,6 +142,9 @@ namespace WebCalc.Application.BinaryOperation
                 value == '*' ||
                 value == '/')
             {
+                if (binaryOperationManager.BinaryOperation.Operand1 < 0)
+                    expressionValue = $"({expressionValue})";
+
                 if (binaryOperationManager.BinaryOperation.OperationType is not null)
                     expressionValue = expressionValue.Replace(expressionValue.Last(), value);
                 else if (expressionValue.Last() == '=')
@@ -119,6 +153,34 @@ namespace WebCalc.Application.BinaryOperation
                     expressionValue += value;
 
                 SetOperationType(value);
+            }
+            else if (binaryOperationManager.BinaryOperation.OperationState is OperationState.OperationTypeSetted &&
+                value == Constants.NEGATION_OPERATION_SIGN)
+            {
+                int? operationTypeIndex = GetOperationTypeIndex(binaryOperationManager.BinaryOperation.OperationType);
+
+                if (operationTypeIndex is null)
+                    throw new ArgumentNullException();
+
+                var operand2String = expressionValue.Substring(operationTypeIndex.Value + 1, expressionValue.LastIndexOf(expressionValue.Last()) - operationTypeIndex.Value);
+
+                if (operand2String.Contains('-'))
+                {
+                    operand2String = operand2String.Replace("(", string.Empty).Replace(")", string.Empty);
+                }
+
+                binaryOperationManager.NegationOperation.SetOperand(float.Parse(operand2String));
+                binaryOperationManager.NegationOperation.SetResult();
+                var negatedOperand2String = binaryOperationManager.NegationOperation.Result!.ToString()!;
+
+                if (negatedOperand2String.Contains('-'))
+                    expressionValue = expressionValue.Replace(
+                        $"{expressionValue[operationTypeIndex.Value]}{operand2String}",
+                        $"{expressionValue[operationTypeIndex.Value]}({negatedOperand2String})");
+                else
+                    expressionValue = expressionValue.Replace(
+                        $"{expressionValue[operationTypeIndex.Value]}({operand2String})",
+                        $"{expressionValue[operationTypeIndex.Value]}{negatedOperand2String}");
             }
             else if (value == Constants.BACKSPACE &&
                 binaryOperationManager.BinaryOperation.OperationState is OperationState.OperationTypeSetted)
@@ -163,6 +225,13 @@ namespace WebCalc.Application.BinaryOperation
                     $"{expressionValue[operationTypeIndex.Value]}{validSecondOperandString}");
             }
             else if (value == '=') expressionValue += value;
+            else if (value == Constants.NEGATION_OPERATION_SIGN)
+            {
+                binaryOperationManager.NegationOperation.SetOperand(float.Parse(expressionValue));
+                binaryOperationManager.NegationOperation.SetResult();
+
+                expressionValue = binaryOperationManager.NegationOperation.Result!.ToString()!;
+            }
             else expressionValue = GetValidOperandString(expressionValue, value);
         }
 
