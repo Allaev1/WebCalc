@@ -36,7 +36,7 @@ namespace WebCalc.Domain.BinaryOperation
 
         public void ClearMemory()
         {
-            memoryOperation.ClearOperation();
+            memoryOperation.Clear();
         }
     }
 }

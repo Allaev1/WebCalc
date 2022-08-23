@@ -31,7 +31,7 @@
             SetState(null!);
         }
 
-        public void ClearOperation()
+        public void Clear()
         {
             Operand1 = null;
             Operand2 = null;

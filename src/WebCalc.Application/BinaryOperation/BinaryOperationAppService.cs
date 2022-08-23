@@ -52,7 +52,7 @@ namespace WebCalc.Application.BinaryOperation
             {
                 displayValue = "0";
                 expressionValue = "0";
-                binaryOperationManager.BinaryOperation.ClearOperation();
+                binaryOperationManager.BinaryOperation.Clear();
 
                 if (DisplayValueChanged is not null && ExpressionValueChanged is not null)
                 {
@@ -81,7 +81,7 @@ namespace WebCalc.Application.BinaryOperation
                 {
                     displayValue = "0";
                     expressionValue = "0";
-                    binaryOperationManager.BinaryOperation.ClearOperation();
+                    binaryOperationManager.BinaryOperation.Clear();
                 }
 
                 if (value == Constants.NEGATION_OPERATION_SIGN)
