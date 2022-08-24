@@ -7,41 +7,14 @@ using WebCalc.Application.BinaryOperation;
 using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Domain.BinaryOperation;
 using FluentAssertions;
+using WebCalc.Components;
+using Bunit;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace WebCalc.IntegrationTests
 {
     public class BinaryOperationAppServiceTests
     {
-        private readonly IBinaryOperationAppService binaryOperationAppService;
-        private string displayValue = "0";
-        private string expressionValue = "0";
-        private string memoryValue = "";
-
-        public BinaryOperationAppServiceTests()
-        {
-            var binaryOperationDomainManager = new BinaryOperationManager();
-
-            binaryOperationAppService = new BinaryOperationAppService(binaryOperationDomainManager);
-            binaryOperationAppService.DisplayValueChanged += BinaryOperationAppService_DisplayValueChanged;
-            binaryOperationAppService.ExpressionValueChanged += BinaryOperationAppService_ExpressionValueChanged;
-            binaryOperationAppService.MemoryValueChanged += BinaryOperationAppService_MemoryValueChanged;
-        }
-
-        private void BinaryOperationAppService_MemoryValueChanged(object? sender, string e)
-        {
-            memoryValue = e;
-        }
-
-        private void BinaryOperationAppService_ExpressionValueChanged(object? sender, string e)
-        {
-            expressionValue = e;
-        }
-
-        private void BinaryOperationAppService_DisplayValueChanged(object? sender, string e)
-        {
-            displayValue = e;
-        }
-
         [Theory]
         [InlineData(new char[] { '1', '2', '3' }, "123")]
         [InlineData(new char[] { '0', '0', '1', '2', '3' }, "123")]
@@ -80,14 +53,19 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { Constants.NEGATION_OPERATION_SIGN }, "0")]
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN }, "-123")]
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "123")]
-        public void TestDisplayValue(char[] values, string expected)
+        public void TestValue(char[] values, string expected)
         {
+            using var context = new TestContext();
+            context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
+            var calc = context.RenderComponent<Calc>();
+            var display = calc.Instance.display!;
+
             foreach (var value in values)
             {
-                binaryOperationAppService.EditValues(value);
+                calc.WaitForState(() => display.AppendAsync(value).IsCompleted);
             }
 
-            displayValue.Should().Be(expected);
+            display.Value.Should().Be(expected);
         }
 
         [Theory]
@@ -131,28 +109,38 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN }, "12+(-123)")]
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "12+123")]
         [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN, '+', '1', '2', '3' }, "(-12)+123")]
-        public void TestExpressionValue(char[] values, string expected)
+        public void TestExpression(char[] values, string expected)
         {
+            using var context = new TestContext();
+            context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
+            var calc = context.RenderComponent<Calc>();
+            var display = calc.Instance.display!;
+
             foreach (var value in values)
             {
-                binaryOperationAppService.EditValues(value);
+                calc.WaitForState(() => display.AppendAsync(value).IsCompleted);
             }
 
-            expressionValue.Should().Be(expected);
+            display.Expression.Should().Be(expected);
         }
 
         [Theory]
         [InlineData(new char[] { Constants.MEMORY_ADD }, "")]
         [InlineData(new char[] { '1', Constants.MEMORY_ADD }, "1")]
         [InlineData(new char[] { '1', Constants.MEMORY_ADD, '1', Constants.MEMORY_ADD }, "12")]
-        public void TestMemoryValue(char[] values, string expected)
+        public void TestMemory(char[] values, string expected)
         {
+            using var context = new TestContext();
+            context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
+            var calc = context.RenderComponent<Calc>();
+            var display = calc.Instance.display!;
+
             foreach (var value in values)
             {
-                binaryOperationAppService.EditValues(value);
+                calc.WaitForState(() => display.AppendAsync(value).IsCompleted);
             }
 
-            memoryValue.Should().Be(expected);
+            display.Memory.Should().Be(expected);
         }
     }
 }
