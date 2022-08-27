@@ -97,6 +97,7 @@ namespace WebCalc.Components
             var temp = new string(chars);
 
             value = GetValidOperand(temp);
+            expression = GetValidOperand(temp);
 
             StateHasChanged();
         }
