@@ -1,4 +1,6 @@
-﻿namespace WebCalc.Domain.BinaryOperation
+﻿using WebCalc.Domain.Shared;
+
+namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperation
     {
@@ -80,10 +82,10 @@
 
         private float GetResult() => OperationType!.Value switch
         {
-            Domain.BinaryOperation.OperationType.Addition => Operand1!.Value + Operand2!.Value,
-            Domain.BinaryOperation.OperationType.Subtraction => Operand1!.Value - Operand2!.Value,
-            Domain.BinaryOperation.OperationType.Division => Operand1!.Value / Operand2!.Value,
-            Domain.BinaryOperation.OperationType.Multiplication => Operand1!.Value * Operand2!.Value,
+            Domain.Shared.OperationType.Addition => Operand1!.Value + Operand2!.Value,
+            Domain.Shared.OperationType.Subtraction => Operand1!.Value - Operand2!.Value,
+            Domain.Shared.OperationType.Division => Operand1!.Value / Operand2!.Value,
+            Domain.Shared.OperationType.Multiplication => Operand1!.Value * Operand2!.Value,
             _ => throw new NotImplementedException()
         };
     }

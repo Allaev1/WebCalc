@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Localization" Version="6.0.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WebCalc.Domain.Shared\WebCalc.Domain.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

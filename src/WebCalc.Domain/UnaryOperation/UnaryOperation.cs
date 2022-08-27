@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Domain.BinaryOperation;
+using WebCalc.Domain.Shared;
 
 namespace WebCalc.Domain.UnaryOperation
 {

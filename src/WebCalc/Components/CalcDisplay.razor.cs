@@ -2,6 +2,7 @@
 using System.IO.Pipes;
 using System.Reflection.Metadata;
 using WebCalc.Domain.BinaryOperation;
+using WebCalc.Domain.Shared;
 
 namespace WebCalc.Components
 {

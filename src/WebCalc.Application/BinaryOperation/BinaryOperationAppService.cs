@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Domain.BinaryOperation;
+using WebCalc.Domain.Shared;
 
 namespace WebCalc.Application.BinaryOperation
 {

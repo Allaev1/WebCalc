@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using WebCalc.Domain.BinaryOperation;
+using WebCalc.Domain.Shared;
 
 namespace WebCalc.Components
 {

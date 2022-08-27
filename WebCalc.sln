@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Domain", "src\WebCa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7DF9709E-5A8C-451D-AECB-F43103660DA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.IntegrationTests", "test\WebCalc.IntegrationTests\WebCalc.IntegrationTests.csproj", "{33DD309B-4ABB-46E9-8775-25442915C827}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.IntegrationTests", "test\WebCalc.IntegrationTests\WebCalc.IntegrationTests.csproj", "{33DD309B-4ABB-46E9-8775-25442915C827}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.Domain.Shared", "src\WebCalc.Domain.Shared\WebCalc.Domain.Shared.csproj", "{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{33DD309B-4ABB-46E9-8775-25442915C827}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33DD309B-4ABB-46E9-8775-25442915C827}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33DD309B-4ABB-46E9-8775-25442915C827}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{AFCB3F3D-309A-42D4-A850-E77EDE90B90F} = {F57FD55A-8CBE-4F59-A8B8-FBFBDCB48860}
 		{4DF4ECEF-EE1C-4196-B7B8-1F1FDDE69C88} = {F57FD55A-8CBE-4F59-A8B8-FBFBDCB48860}
 		{33DD309B-4ABB-46E9-8775-25442915C827} = {7DF9709E-5A8C-451D-AECB-F43103660DA2}
+		{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1} = {F57FD55A-8CBE-4F59-A8B8-FBFBDCB48860}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D90F8C6-4191-4650-8C2E-54FD8768A3FD}
