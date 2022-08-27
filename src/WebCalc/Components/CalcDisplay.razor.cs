@@ -31,12 +31,16 @@ namespace WebCalc.Components
 
             this.memory = memory;
             showMemory = true;
+
+            StateHasChanged();
         }
 
         public void ClearMemory()
         {
             this.memory = string.Empty;
             showMemory = false;
+
+            StateHasChanged();
         }
 
         public string Value => value;
@@ -101,7 +105,7 @@ namespace WebCalc.Components
         {
             (string? firstOperand, char? operationType, string? secondOperand) = GetExpressionComponents(expression);
 
-            if (operationType is not null && string.IsNullOrWhiteSpace(secondOperand) && (char.IsDigit(@char) || @char==Constants.FLOATING_POINT))
+            if (operationType is not null && string.IsNullOrWhiteSpace(secondOperand) && (char.IsDigit(@char) || @char == Constants.FLOATING_POINT))
             {
                 value = INITIAL_STRING;
             }
@@ -122,11 +126,25 @@ namespace WebCalc.Components
             }
             else if (operationType is null)
             {
-                firstOperand = GetValidOperand(firstOperand ?? string.Empty, @char);
+                if (@char == Constants.BACKSPACE)
+                {
+                    firstOperand = GetValidOperand(GetBackspaced(string.IsNullOrWhiteSpace(firstOperand) ? "0" : firstOperand));
+                }
+                else
+                {
+                    firstOperand = GetValidOperand(string.IsNullOrWhiteSpace(firstOperand) ? "0" : firstOperand, @char);
+                }
             }
             else
             {
-                secondOperand = GetValidOperand(secondOperand ?? string.Empty, @char);
+                if(@char == Constants.BACKSPACE)
+                {
+                    secondOperand = GetValidOperand(GetBackspaced(string.IsNullOrWhiteSpace(secondOperand) ? "0" : secondOperand));
+                }
+                else
+                {
+                    secondOperand = GetValidOperand(string.IsNullOrWhiteSpace(secondOperand) ? "0" : secondOperand, @char);
+                }
             }
 
             return string.Concat(firstOperand, operationType, secondOperand);
