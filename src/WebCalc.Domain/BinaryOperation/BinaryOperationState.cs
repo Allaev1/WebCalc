@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.BinaryOperation
 {
-    //TODO: Rename
-    public enum OperationState
+    public enum BinaryOperationState
     {
         Start,
         SettingOperand1,

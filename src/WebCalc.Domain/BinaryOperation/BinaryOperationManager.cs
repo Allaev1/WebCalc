@@ -25,7 +25,7 @@ namespace WebCalc.Domain.BinaryOperation
 
         public float GetMemoryAddResult(float operand)
         {
-            if (memoryOperation.OperationState is not OperationState.ResultSetted) memoryOperation.SetOperand(0);
+            if (memoryOperation.OperationState is not BinaryOperationState.ResultSetted) memoryOperation.SetOperand(0);
             else memoryOperation.SetOperand(memoryOperation.Result);
 
             memoryOperation.SetOperationType(OperationType.Addition);

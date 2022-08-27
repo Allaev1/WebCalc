@@ -45,9 +45,9 @@ namespace WebCalc.Application.BinaryOperation
                 displayValue = memoryValue.ToString();
 
             }
-            else if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE) return;
+            else if (binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && value == Constants.BACKSPACE) return;
             else if (displayValue.Count() == DISPLAY_MAX_CHARS_COUNT && (char.IsDigit(value) || value == Constants.FLOATING_POINT)) return;
-            else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted) return;
+            else if (value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.Operand1Setted) return;
             else if (value == Constants.NEGATION_OPERATION_SIGN && displayValue == "0") return;
             else if (value == 'C')
             {
@@ -78,7 +78,7 @@ namespace WebCalc.Application.BinaryOperation
             }
             else
             {
-                if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
+                if (binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
                 {
                     displayValue = "0";
                     expressionValue = "0";
@@ -155,7 +155,7 @@ namespace WebCalc.Application.BinaryOperation
 
                 SetOperationType(value);
             }
-            else if (binaryOperationManager.BinaryOperation.OperationState is OperationState.OperationTypeSetted &&
+            else if (binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.OperationTypeSetted &&
                 value == Constants.NEGATION_OPERATION_SIGN)
             {
                 int? operationTypeIndex = GetOperationTypeIndex(binaryOperationManager.BinaryOperation.OperationType);
@@ -184,7 +184,7 @@ namespace WebCalc.Application.BinaryOperation
                         $"{expressionValue[operationTypeIndex.Value]}{negatedOperand2String}");
             }
             else if (value == Constants.BACKSPACE &&
-                binaryOperationManager.BinaryOperation.OperationState is OperationState.OperationTypeSetted)
+                binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.OperationTypeSetted)
             {
                 int? operationTypeIndex = GetOperationTypeIndex(binaryOperationManager.BinaryOperation.OperationType);
 

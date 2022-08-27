@@ -54,14 +54,14 @@ namespace WebCalc.Components
             }
             else
             {
-                if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (value == '+' || value == '-' || value == '*' || value == '/'))
+                if (binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && (value == '+' || value == '-' || value == '*' || value == '/'))
                 {
                     display.Clear();
                     display.Append(binaryOperationManager.BinaryOperation.Result.ToString()!.ToArray());
                     binaryOperationManager.BinaryOperation.SetOperand(float.Parse(display.Value));
                 }
 
-                if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
+                if (binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
                 {
                     display.Clear();
                     binaryOperationManager.BinaryOperation.Clear();
@@ -88,7 +88,7 @@ namespace WebCalc.Components
         }
 
         private bool TryToBackspaceResult(char value)
-            => binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE;
+            => binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && value == Constants.BACKSPACE;
 
         private bool TryToExceedMaxCountOfCharsOnDisplay(char value)
             => display!.Value.Count() == display.MaxDisplayCharsCount && (char.IsDigit(value) || value == Constants.FLOATING_POINT);
