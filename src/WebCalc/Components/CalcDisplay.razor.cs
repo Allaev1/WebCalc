@@ -86,12 +86,11 @@ namespace WebCalc.Components
 
         public void Append(char[] chars)
         {
-            var temp = chars.ToString();
+            var temp = new string(chars);
 
-            if (temp is null)
-                return;
+            value = GetValidOperand(temp);
 
-            var operand = GetValidOperand(temp);
+            StateHasChanged();
         }
 
         private void ClearValueIfNeeded()
