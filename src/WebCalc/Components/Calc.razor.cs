@@ -58,6 +58,7 @@ namespace WebCalc.Components
                 {
                     display.Clear();
                     display.Append(binaryOperationManager.BinaryOperation.Result.ToString()!.ToArray());
+                    binaryOperationManager.BinaryOperation.SetOperand(float.Parse(display.Value));
                 }
 
                 if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
