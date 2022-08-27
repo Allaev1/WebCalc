@@ -97,7 +97,10 @@ namespace WebCalc.Components
             var temp = new string(chars);
 
             value = GetValidOperand(temp);
-            expression = GetValidOperand(temp);
+            if (!expression.Contains('='))
+            {
+                expression = GetValidOperand(temp);
+            }
 
             StateHasChanged();
         }
@@ -131,6 +134,10 @@ namespace WebCalc.Components
                 {
                     firstOperand = GetValidOperand(GetBackspaced(string.IsNullOrWhiteSpace(firstOperand) ? "0" : firstOperand));
                 }
+                else if (@char == Constants.NEGATION_OPERATION_SIGN)
+                {
+                    firstOperand = firstOperand!.Contains('-') ? firstOperand.Trim('(', ')', '-') : $"(-{firstOperand})";
+                }
                 else
                 {
                     firstOperand = GetValidOperand(string.IsNullOrWhiteSpace(firstOperand) ? "0" : firstOperand, @char);
@@ -138,9 +145,13 @@ namespace WebCalc.Components
             }
             else
             {
-                if(@char == Constants.BACKSPACE)
+                if (@char == Constants.BACKSPACE)
                 {
                     secondOperand = GetValidOperand(GetBackspaced(string.IsNullOrWhiteSpace(secondOperand) ? "0" : secondOperand));
+                }
+                else if (@char == Constants.NEGATION_OPERATION_SIGN)
+                {
+                    secondOperand = secondOperand!.Contains('-') ? secondOperand.Trim('(', ')', '-') : $"(-{secondOperand})";
                 }
                 else
                 {
@@ -153,8 +164,35 @@ namespace WebCalc.Components
 
         private (string?, char?, string?) GetExpressionComponents(string expression)
         {
-            var operands = expression.Split('+', '-', '*', '/');
-            var operationTypeIndex = expression.IndexOfAny(new[] { '+', '-', '*', '/' });
+            var operands = new string[2];
+            var operationTypeIndex = 0;
+            if (expression.FirstOrDefault() == '(')
+            {
+                operands = expression.Split(new[] { ")-", ")+", ")/", ")*" }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                if (operands[0].Last() != ')')
+                {
+                    operands[0] = $"{operands[0]})";
+                }
+
+                var tempIndex = expression.IndexOf(')') + 1;
+                var operationType = expression.ElementAtOrDefault(tempIndex);
+
+                if (operationType == default)
+                {
+                    operationTypeIndex = -1;
+                }
+                else
+                {
+                    operationTypeIndex = tempIndex;
+                }
+            }
+            else
+            {
+                operands = expression.Split(new[] { '+', '-', '*', '/' }, 2);
+                operationTypeIndex = expression.IndexOfAny(new[] { '+', '-', '*', '/' });
+            }
+
 
             if (operands.ElementAtOrDefault(1) is string secondOperand)
             {

@@ -104,7 +104,7 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '+', '2', '=', '4' }, "4")]
         [InlineData(new char[] { '1', '+', '2', '=', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "1+2=")]
         [InlineData(new char[] { '1', '+', '2', '=', Constants.FLOATING_POINT, '1' }, "0,1")]
-        [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN }, "-12")]
+        [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN }, "(-12)")]
         [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "12")]
         [InlineData(new char[] { Constants.NEGATION_OPERATION_SIGN }, "")]
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN }, "12+(-123)")]

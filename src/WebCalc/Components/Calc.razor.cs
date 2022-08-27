@@ -70,8 +70,6 @@ namespace WebCalc.Components
                 {
                     binaryOperationManager.NegationOperation.SetOperand(float.Parse(display.Value));
                     binaryOperationManager.NegationOperation.SetResult();
-                    display.Clear();
-                    display.Append(binaryOperationManager.NegationOperation.Result.ToString()!.ToArray());
                 }
             }
 
