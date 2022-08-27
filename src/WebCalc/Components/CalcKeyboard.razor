@@ -10,10 +10,10 @@
             <button style="background-color: var(--color-button-memory);">MC</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.CLEAR)">C</button>
+            <button id="@Constants.CLEAR" style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.CLEAR)">C</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.BACKSPACE)">BACK</button>
+            <button id="@Constants.BACKSPACE" style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.BACKSPACE)">BACK</button>
         </div>
         <div class="child col">
             <button style="background-color: var(--color-button-memory);">MR</button>
@@ -22,58 +22,58 @@
             <button style="background-color: var(--color-button-off);">%OFF</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick(Constants.NEGATION_OPERATION_SIGN)">&plusmn;</button>
+            <button id="@Constants.NEGATION_OPERATION_SIGN" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick(Constants.NEGATION_OPERATION_SIGN)">&plusmn;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('/') ">&divide;</button>
+            <button id="/" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('/') ">&divide;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('7')">7</button>
+            <button id="7" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('7')">7</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('8')">8</button>
+            <button id="8" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('8')">8</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('9')">9</button>
+            <button id="9" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('9')">9</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('*')">&times;</button>
+            <button id="*" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('*')">&times;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('4')">4</button>
+            <button id="4" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('4')">4</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('5')">5</button>
+            <button id="5" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('5')">5</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('6')">6</button>
+            <button id="6" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('6')">6</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('-')">&minus;</button>
+            <button id="-" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('-')">&minus;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('1')">1</button>
+            <button id="1" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('1')">1</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('2')">2</button>
+            <button id="2" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('2')">2</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('3')">3</button>
+            <button id="3" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('3')">3</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('+')">&plus;</button>
+            <button id="+" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('+')">&plus;</button>
         </div>
         <div class="child col">
             <button id="const" style="background-color: var(--color-button-const);">CONST</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('0')">0</button>
+            <button id="0" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('0')">0</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick(Constants.FLOATING_POINT)">&sdot;</button>
+            <button id="@Constants.FLOATING_POINT" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick(Constants.FLOATING_POINT)">&sdot;</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('=')">&equals;</button>
+            <button id="=" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('=')">&equals;</button>
         </div>
     </div>
 </div>

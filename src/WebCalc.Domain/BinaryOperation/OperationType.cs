@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.BinaryOperation
 {
+    //TODO: Remove NotSet
     public enum OperationType
     {
         Addition,

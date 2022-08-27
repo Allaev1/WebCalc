@@ -1,4 +1,5 @@
-﻿using WebCalc.Domain.BinaryOperation;
+﻿using System.Diagnostics;
+using WebCalc.Domain.BinaryOperation;
 
 namespace WebCalc.Components
 {
@@ -24,7 +25,7 @@ namespace WebCalc.Components
             }
             else if (
                 TryToBackspaceResult(value) ||
-                TryToBackspaceWhenOperand1Setted(value) ||
+                TryToBackspaceAndOperand2IsZero(value) ||
                 TryToExceedMaxCountOfCharsOnDisplay(value) ||
                 TryToNegateZero(value))
                 return;
@@ -41,10 +42,24 @@ namespace WebCalc.Components
                 operand1.ToArray().CopyTo(chars, 0);
                 chars[operand1.Length] = value;
 
-                await display.AppendAsync(chars);
+                display.Append(chars);
+            }
+            else if (value == '=')
+            {
+                binaryOperationManager.BinaryOperation.SetResult();
+                await display.AppendAsync(value);
+                display.Append(binaryOperationManager.BinaryOperation.Result.ToString()!.ToArray());
+
+                return;
             }
             else
             {
+                if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (value == '+' || value == '-' || value == '*' || value == '/'))
+                {
+                    display.Clear();
+                    display.Append(binaryOperationManager.BinaryOperation.Result.ToString()!.ToArray());
+                }
+
                 if (binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
                 {
                     display.Clear();
@@ -55,6 +70,8 @@ namespace WebCalc.Components
                 {
                     binaryOperationManager.NegationOperation.SetOperand(float.Parse(display.Value));
                     binaryOperationManager.NegationOperation.SetResult();
+                    display.Clear();
+                    display.Append(binaryOperationManager.NegationOperation.Result.ToString()!.ToArray());
                 }
             }
 
@@ -66,14 +83,19 @@ namespace WebCalc.Components
             binaryOperationManager.BinaryOperation.SetOperand(operand);
         }
 
+        private void SetOperationType(OperationType operationType)
+        {
+            binaryOperationManager.BinaryOperation.SetOperationType(operationType);
+        }
+
         private bool TryToBackspaceResult(char value)
             => binaryOperationManager.BinaryOperation.OperationState is OperationState.ResultSetted && value == Constants.BACKSPACE;
 
         private bool TryToExceedMaxCountOfCharsOnDisplay(char value)
             => display!.Value.Count() == display.MaxDisplayCharsCount && (char.IsDigit(value) || value == Constants.FLOATING_POINT);
 
-        private bool TryToBackspaceWhenOperand1Setted(char value)
-            => value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.OperationState is OperationState.Operand1Setted;
+        private bool TryToBackspaceAndOperand2IsZero(char value)
+            => value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.Operand2 is 0;
 
         private bool TryToNegateZero(char value)
             => value == Constants.NEGATION_OPERATION_SIGN && display!.Value == "0";

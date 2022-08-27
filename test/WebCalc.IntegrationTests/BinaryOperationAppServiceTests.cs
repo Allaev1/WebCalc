@@ -58,11 +58,12 @@ namespace WebCalc.IntegrationTests
             using var context = new TestContext();
             context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
             var calc = context.RenderComponent<Calc>();
+            var buttons = calc.FindAll("button");
             var display = calc.Instance.display!;
 
             foreach (var value in values)
             {
-                calc.WaitForState(() => display.AppendAsync(value).IsCompleted);
+                buttons.Single(x => x.Id == value.ToString()).Click(new());
             }
 
             display.Value.Should().Be(expected);

@@ -50,9 +50,15 @@
                 OperationState = OperationState.Operand2Setted;
             else if (OperationState is OperationState.Start && value is float)
                 OperationState = OperationState.SettingOperand1;
+            else if (OperationState is OperationState.ResultSetted && value is float)
+                OperationState = OperationState.SettingOperand1;
 
             switch (OperationState)
             {
+                case OperationState.SettingOperand1 when Result is not null:
+                    Operand1 = Result;
+                    Result = null;
+                    break;
                 case OperationState.SettingOperand1:
                     Operand1 = (float?)value;
                     break;
@@ -68,10 +74,6 @@
                     Operand2 = null;
                     OperationType = null;
                     OperationState = OperationState.ResultSetted;
-                    break;
-                case OperationState.ResultSetted:
-                    Operand1 = (float?)value;
-                    Result = null;
                     break;
             }
         }

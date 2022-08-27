@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.IO.Pipes;
+using System.Reflection.Metadata;
 using WebCalc.Domain.BinaryOperation;
 
 namespace WebCalc.Components
@@ -19,6 +21,9 @@ namespace WebCalc.Components
 
         [Parameter]
         public EventCallback<float> OnValidOperandGenerated { get; set; }
+
+        [Parameter]
+        public EventCallback<OperationType> OnOperationTypeChanged { get; set; }
 
         public void SetMemory(string memory)
         {
@@ -44,10 +49,25 @@ namespace WebCalc.Components
             expression = string.Empty;
         }
 
+        /// <summary>
+        /// When passing "=" sign, value is cleared
+        /// </summary>
+        /// <param name="char"></param>
+        /// <returns></returns>
         public async Task AppendAsync(char @char)
         {
             var oldValue = value;
-            value = GetValidOperand(value, @char);
+
+            ClearValueIfNeeded();
+
+            if (@char == Constants.BACKSPACE)
+            {
+                value = GetValidOperand(GetBackspaced(value));
+            }
+            else
+            {
+                value = GetValidOperand(value, @char);
+            }
 
             if (oldValue != value)
             {
@@ -56,14 +76,31 @@ namespace WebCalc.Components
 
             expression = GetValidExpression(expression, @char);
 
+            if (@char == '=')
+            {
+                value = INITIAL_STRING;
+            }
+
             StateHasChanged();
         }
 
-        public async Task AppendAsync(char[] chars)
+        public void Append(char[] chars)
         {
-            foreach (var @char in chars)
+            var temp = chars.ToString();
+
+            if (temp is null)
+                return;
+
+            var operand = GetValidOperand(temp);
+        }
+
+        private void ClearValueIfNeeded()
+        {
+            (string? firstOperand, char? operationType, string? secondOperand) = GetExpressionComponents(expression);
+
+            if (operationType is not null && string.IsNullOrWhiteSpace(secondOperand))
             {
-                await AppendAsync(@char);
+                value = INITIAL_STRING;
             }
         }
 
@@ -71,24 +108,22 @@ namespace WebCalc.Components
         {
             (string? firstOperand, char? operationType, string? secondOperand) = GetExpressionComponents(expression);
 
-            if (secondOperand is not null)
+            if (@char == '=')
             {
-                secondOperand = GetValidOperand(secondOperand, @char);
+                return expression += @char;
             }
-            else if (operationType is not null)
+            else if (operationType is null && (@char == '+' || @char == '-' || @char == '/' || @char == '*'))
             {
-                if (char.IsDigit(@char))
-                {
-                    secondOperand = GetValidOperand(string.Empty, @char);
-                }
-                else
-                {
-                    operationType = @char;
-                }
+                OnOperationTypeChanged.InvokeAsync(GetOperationType(@char));
+                operationType = @char;
             }
-            else if (firstOperand is not null)
+            else if (operationType is null)
             {
-                firstOperand = GetValidOperand(firstOperand, @char);
+                firstOperand = GetValidOperand(firstOperand ?? string.Empty, @char);
+            }
+            else
+            {
+                secondOperand = GetValidOperand(secondOperand ?? string.Empty, @char);
             }
 
             return string.Concat(firstOperand, operationType, secondOperand);
@@ -113,11 +148,13 @@ namespace WebCalc.Components
             }
         }
 
-        private string GetValidOperand(string source, char @char)
+        private string GetValidOperand(string source, char? @char = null)
         {
             string temp = string.Empty;
 
-            if (source == INITIAL_STRING && @char != Constants.FLOATING_POINT)
+            if (@char is null)
+                temp = source;
+            else if (source == INITIAL_STRING && @char != Constants.FLOATING_POINT)
                 temp += @char;
             else
                 temp = source + @char;
@@ -126,6 +163,35 @@ namespace WebCalc.Components
                 return temp;
             else
                 return source;
+        }
+
+        private string GetBackspaced(string source)
+        {
+            var result = source.Substring(0, source.Length - 1);
+
+            if (string.IsNullOrWhiteSpace(result))
+            {
+                result = "0";
+            }
+
+            return result;
+        }
+
+        private OperationType GetOperationType(char value)
+        {
+            switch (value)
+            {
+                case '+':
+                    return OperationType.Addition;
+                case '-':
+                    return OperationType.Subtraction;
+                case '*':
+                    return OperationType.Multiplication;
+                case '/':
+                    return OperationType.Division;
+                default:
+                    throw new ArgumentException();
+            }
         }
     }
 }

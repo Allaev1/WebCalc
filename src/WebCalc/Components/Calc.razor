@@ -3,7 +3,7 @@
 @inject IBinaryOperationManager binaryOperationManager;
 
 <div class="container py-2">
-    <CalcDisplay @ref="display" OnValidOperandGenerated="SetOperand"></CalcDisplay>
+    <CalcDisplay @ref="display" OnValidOperandGenerated="SetOperand" OnOperationTypeChanged="SetOperationType"></CalcDisplay>
     <CalcKeyboard OnButtonClick="UpdateDisplayAsync"></CalcKeyboard>
 </div>
 
