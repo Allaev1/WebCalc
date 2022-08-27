@@ -69,8 +69,7 @@ namespace WebCalc.Components
 
                 if (value == Constants.NEGATION_OPERATION_SIGN)
                 {
-                    binaryOperationManager.NegationOperation.SetOperand(float.Parse(display.Value));
-                    binaryOperationManager.NegationOperation.SetResult();
+                    binaryOperationManager.GetNegateOperand();
                 }
             }
 

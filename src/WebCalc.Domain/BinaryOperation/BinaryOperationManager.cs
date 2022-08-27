@@ -12,15 +12,31 @@ namespace WebCalc.Domain.BinaryOperation
     public class BinaryOperationManager : IBinaryOperationManager
     {
         private readonly BinaryOperation memoryOperation;
+        private UnaryOperation.UnaryOperation negationOperation;
 
         public BinaryOperation BinaryOperation { get; }
-        public UnaryOperation.UnaryOperation NegationOperation { get; }
 
         public BinaryOperationManager()
         {
             BinaryOperation = new();
             memoryOperation = new();
-            NegationOperation = new(OperationType.Multiplication, -1);
+            negationOperation = new(OperationType.Multiplication, -1);
+        }
+
+        public float GetNegateOperand()
+        {
+            if (BinaryOperation.OperationState is BinaryOperationState.SettingOperand1)
+            {
+                negationOperation.SetOperand(BinaryOperation.Operand1!.Value);
+            }
+            else
+            {
+                negationOperation.SetOperand(BinaryOperation.Operand2!.Value);
+            }
+
+            negationOperation.SetResult();
+            BinaryOperation.SetOperand(negationOperation.Result);
+            return negationOperation.Result!.Value;
         }
 
         public float GetMemoryAddResult(float operand)
