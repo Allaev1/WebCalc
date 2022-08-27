@@ -216,6 +216,8 @@ namespace WebCalc.Components
                 temp = source;
             else if (source == INITIAL_STRING && @char != Constants.FLOATING_POINT)
                 temp += @char;
+            else if (@char == Constants.NEGATION_OPERATION_SIGN)
+                temp = source.Contains('-') ? source.Trim('-') : $"-{source}";
             else
                 temp = source + @char;
 
