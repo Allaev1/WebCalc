@@ -27,22 +27,21 @@ namespace WebCalc.Components
                 TryToBackspaceResult(value) ||
                 TryToBackspaceAndOperand2IsZero(value) ||
                 TryToExceedMaxCountOfCharsOnDisplay(value) ||
-                TryToNegateZero(value))
+                TryToNegateZero(value) ||
+                TryToBackspaceOperationType(value))
                 return;
             else if (value == Constants.CLEAR)
+            {
+                display.Clear();
                 binaryOperationManager.BinaryOperation.Clear();
+            }
             else if (IsChainingCalculation(value))
             {
                 binaryOperationManager.BinaryOperation.SetResult();
                 binaryOperationManager.BinaryOperation.SetOperand(binaryOperationManager.BinaryOperation.Result);
-                SetOperationType(value);
+                display.Clear();
 
-                var operand1 = binaryOperationManager.BinaryOperation.Operand1.ToString()!;
-                var chars = new char[operand1.Count() + 1];
-                operand1.ToArray().CopyTo(chars, 0);
-                chars[operand1.Length] = value;
-
-                display.Append(chars);
+                display.Append(binaryOperationManager.BinaryOperation.Operand1.ToString()!.ToArray());
             }
             else if (value == '=')
             {
@@ -100,6 +99,11 @@ namespace WebCalc.Components
 
         private bool TryToNegateZero(char value)
             => value == Constants.NEGATION_OPERATION_SIGN && display!.Value == "0";
+
+        private bool TryToBackspaceOperationType(char value)
+            => value == Constants.BACKSPACE && 
+            binaryOperationManager.BinaryOperation.OperationType is not null && 
+            binaryOperationManager.BinaryOperation.Operand2 is null;
 
         private bool IsChainingCalculation(char value) =>
             (value == '+' || value == '-' || value == '*' || value == '/') &&

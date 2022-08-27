@@ -47,6 +47,8 @@ namespace WebCalc.Components
         {
             value = INITIAL_STRING;
             expression = string.Empty;
+
+            StateHasChanged();
         }
 
         /// <summary>
@@ -56,9 +58,9 @@ namespace WebCalc.Components
         /// <returns></returns>
         public async Task AppendAsync(char @char)
         {
-            var oldValue = value;
-
             ClearValueIfNeeded(@char);
+
+            var oldValue = value;
 
             if (@char == Constants.BACKSPACE)
             {
