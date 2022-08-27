@@ -4,10 +4,10 @@
 <div class="keyboard">
     <div class="keyboard-keys">
         <div class="child col">
-            <button style="background-color: var(--color-button-memory);">M+</button>
+            <button id="@Constants.MEMORY_ADD" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_ADD)">M+</button>
         </div>
         <div class="child col">
-            <button style="background-color: var(--color-button-memory);">MC</button>
+            <button id="@Constants.MEMORY_CLEAR" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_CLEAR)">MC</button>
         </div>
         <div class="child col">
             <button id="@Constants.CLEAR" style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.CLEAR)">C</button>

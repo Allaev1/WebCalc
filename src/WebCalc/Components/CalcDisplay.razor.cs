@@ -27,6 +27,8 @@ namespace WebCalc.Components
 
         public void SetMemory(string memory)
         {
+            if (memory == "0") return;
+
             this.memory = memory;
             showMemory = true;
         }
