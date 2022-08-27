@@ -58,7 +58,7 @@ namespace WebCalc.Components
         {
             var oldValue = value;
 
-            ClearValueIfNeeded();
+            ClearValueIfNeeded(@char);
 
             if (@char == Constants.BACKSPACE)
             {
@@ -93,11 +93,11 @@ namespace WebCalc.Components
             StateHasChanged();
         }
 
-        private void ClearValueIfNeeded()
+        private void ClearValueIfNeeded(char @char)
         {
             (string? firstOperand, char? operationType, string? secondOperand) = GetExpressionComponents(expression);
 
-            if (operationType is not null && string.IsNullOrWhiteSpace(secondOperand))
+            if (operationType is not null && string.IsNullOrWhiteSpace(secondOperand) && (char.IsDigit(@char) || @char==Constants.FLOATING_POINT))
             {
                 value = INITIAL_STRING;
             }
@@ -111,7 +111,7 @@ namespace WebCalc.Components
             {
                 return expression += @char;
             }
-            else if (operationType is null && (@char == '+' || @char == '-' || @char == '/' || @char == '*'))
+            else if (firstOperand is not null && string.IsNullOrWhiteSpace(secondOperand) && (@char == '+' || @char == '-' || @char == '/' || @char == '*'))
             {
                 OnOperationTypeChanged.InvokeAsync(GetOperationType(@char));
                 operationType = @char;
