@@ -14,7 +14,7 @@ using WebCalc.Contracts;
 
 namespace WebCalc.IntegrationTests
 {
-    public class BinaryOperationAppServiceTests
+    public class CalcComponentTests
     {
         [Theory]
         [InlineData(new char[] { '1', '2', '3' }, "123")]
