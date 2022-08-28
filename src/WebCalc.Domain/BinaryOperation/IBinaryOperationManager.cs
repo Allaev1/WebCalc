@@ -16,5 +16,7 @@ namespace WebCalc.Domain.BinaryOperation
         public float GetMemoryAddResult(float operand);
 
         public void ClearMemory();
+
+        public float? ReadMemory();
     }
 }

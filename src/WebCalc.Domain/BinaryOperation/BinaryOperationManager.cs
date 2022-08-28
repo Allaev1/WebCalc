@@ -55,5 +55,7 @@ namespace WebCalc.Domain.BinaryOperation
         {
             memoryOperation.Clear();
         }
+
+        public float? ReadMemory() => memoryOperation.Result.HasValue ? memoryOperation.Result.Value : null;
     }
 }
