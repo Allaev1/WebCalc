@@ -59,39 +59,39 @@
         else if (value == Constants.CLEAR)
         {
             display.Clear();
-            binaryOperationManager.BinaryOperation.Clear();
+            binaryOperationManager.MainOperation.Clear();
 
             return;
         }
         else if (IsChainingCalculation(value))
         {
-            binaryOperationManager.BinaryOperation.SetResult();
-            binaryOperationManager.BinaryOperation.SetOperand(binaryOperationManager.BinaryOperation.Result);
+            binaryOperationManager.MainOperation.SetResult();
+            binaryOperationManager.MainOperation.SetOperand(binaryOperationManager.MainOperation.Result);
             display.Clear();
 
-            display.Append(binaryOperationManager.BinaryOperation.Operand1.ToString()!.ToArray());
+            display.Append(binaryOperationManager.MainOperation.Operand1.ToString()!.ToArray());
         }
         else if (value == '=')
         {
-            binaryOperationManager.BinaryOperation.SetResult();
+            binaryOperationManager.MainOperation.SetResult();
             await display.AppendAsync(value);
-            display.Append(binaryOperationManager.BinaryOperation.Result.ToString()!.ToArray());
+            display.Append(binaryOperationManager.MainOperation.Result.ToString()!.ToArray());
 
             return;
         }
         else
         {
-            if (binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && (value == '+' || value == '-' || value == '*' || value == '/'))
+            if (binaryOperationManager.MainOperation.OperationState is BinaryOperationState.ResultSetted && (value == '+' || value == '-' || value == '*' || value == '/'))
             {
                 display.Clear();
-                display.Append(binaryOperationManager.BinaryOperation.Result.ToString()!.ToArray());
-                binaryOperationManager.BinaryOperation.SetOperand(float.Parse(display.Value));
+                display.Append(binaryOperationManager.MainOperation.Result.ToString()!.ToArray());
+                binaryOperationManager.MainOperation.SetOperand(float.Parse(display.Value));
             }
 
-            if (binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
+            if (binaryOperationManager.MainOperation.OperationState is BinaryOperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
             {
                 display.Clear();
-                binaryOperationManager.BinaryOperation.Clear();
+                binaryOperationManager.MainOperation.Clear();
             }
 
             if (value == Constants.NEGATION_OPERATION_SIGN)
@@ -105,50 +105,50 @@
 
     private void SetOperand(float operand)
     {
-        binaryOperationManager.BinaryOperation.SetOperand(operand);
+        binaryOperationManager.MainOperation.SetOperand(operand);
     }
 
     private void SetOperationType(OperationType operationType)
     {
-        binaryOperationManager.BinaryOperation.SetOperationType(operationType);
+        binaryOperationManager.MainOperation.SetOperationType(operationType);
     }
 
     private bool TryToBackspaceResult(char value)
-        => binaryOperationManager.BinaryOperation.OperationState is BinaryOperationState.ResultSetted && value == Constants.BACKSPACE;
+        => binaryOperationManager.MainOperation.OperationState is BinaryOperationState.ResultSetted && value == Constants.BACKSPACE;
 
     private bool TryToExceedMaxCountOfCharsOnDisplay(char value)
         => display!.Value.Count() == display.MaxDisplayCharsCount && (char.IsDigit(value) || value == Constants.FLOATING_POINT);
 
     private bool TryToBackspaceAndOperand2IsZero(char value)
-        => value == Constants.BACKSPACE && binaryOperationManager.BinaryOperation.Operand2 is 0;
+        => value == Constants.BACKSPACE && binaryOperationManager.MainOperation.Operand2 is 0;
 
     private bool TryToNegateZero(char value)
         => value == Constants.NEGATION_OPERATION_SIGN && display!.Value == "0";
 
     private bool TryToBackspaceOperationType(char value)
         => value == Constants.BACKSPACE &&
-        binaryOperationManager.BinaryOperation.OperationType is not null &&
-        binaryOperationManager.BinaryOperation.Operand2 is null;
+        binaryOperationManager.MainOperation.OperationType is not null &&
+        binaryOperationManager.MainOperation.Operand2 is null;
 
     private bool IsChainingCalculation(char value) =>
         (value == '+' || value == '-' || value == '*' || value == '/') &&
-        binaryOperationManager.BinaryOperation.Operand2 is not null;
+        binaryOperationManager.MainOperation.Operand2 is not null;
 
     private void SetOperationType(char value)
     {
         switch (value)
         {
             case '+':
-                binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Addition);
+                binaryOperationManager.MainOperation.SetOperationType(OperationType.Addition);
                 break;
             case '-':
-                binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Subtraction);
+                binaryOperationManager.MainOperation.SetOperationType(OperationType.Subtraction);
                 break;
             case '*':
-                binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Multiplication);
+                binaryOperationManager.MainOperation.SetOperationType(OperationType.Multiplication);
                 break;
             case '/':
-                binaryOperationManager.BinaryOperation.SetOperationType(OperationType.Division);
+                binaryOperationManager.MainOperation.SetOperationType(OperationType.Division);
                 break;
             default:
                 throw new ArgumentException();

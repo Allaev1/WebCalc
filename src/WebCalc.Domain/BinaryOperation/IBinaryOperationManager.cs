@@ -9,7 +9,7 @@ namespace WebCalc.Domain.BinaryOperation
 {
     public interface IBinaryOperationManager
     {
-        public BinaryOperation BinaryOperation { get; }
+        public BinaryOperation MainOperation { get; }
 
         public float GetNegateOperand();
 

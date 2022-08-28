@@ -14,28 +14,28 @@ namespace WebCalc.Domain.BinaryOperation
         private readonly BinaryOperation memoryOperation;
         private UnaryOperation.UnaryOperation negationOperation;
 
-        public BinaryOperation BinaryOperation { get; }
+        public BinaryOperation MainOperation { get; }
 
         public BinaryOperationManager()
         {
-            BinaryOperation = new();
+            MainOperation = new();
             memoryOperation = new();
             negationOperation = new(OperationType.Multiplication, -1);
         }
 
         public float GetNegateOperand()
         {
-            if (BinaryOperation.OperationState is BinaryOperationState.SettingOperand1)
+            if (MainOperation.OperationState is BinaryOperationState.SettingOperand1)
             {
-                negationOperation.SetOperand(BinaryOperation.Operand1!.Value);
+                negationOperation.SetOperand(MainOperation.Operand1!.Value);
             }
             else
             {
-                negationOperation.SetOperand(BinaryOperation.Operand2!.Value);
+                negationOperation.SetOperand(MainOperation.Operand2!.Value);
             }
 
             negationOperation.SetResult();
-            BinaryOperation.SetOperand(negationOperation.Result);
+            MainOperation.SetOperand(negationOperation.Result);
             return negationOperation.Result!.Value;
         }
 
@@ -56,6 +56,10 @@ namespace WebCalc.Domain.BinaryOperation
             memoryOperation.Clear();
         }
 
-        public float? ReadMemory() => memoryOperation.Result.HasValue ? memoryOperation.Result.Value : null;
+        public float? ReadMemory() 
+        {
+            MainOperation.SetOperand(memoryOperation.Result);
+            return memoryOperation.Result.HasValue? memoryOperation.Result.Value : null; 
+        }
     }
 }
