@@ -2,6 +2,10 @@
 {
     public interface ICalc
     {
-        public Task UpdateDisplayAsync();
+        public string GetDisplayValue();
+
+        public string GetDisplayMemory();
+
+        public string GetDisplayExpression();
     }
 }
