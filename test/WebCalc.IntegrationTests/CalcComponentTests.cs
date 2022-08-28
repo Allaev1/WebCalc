@@ -54,6 +54,8 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { Constants.NEGATION_OPERATION_SIGN }, "0")]
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN }, "-123")]
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "123")]
+        [InlineData(new char[] { '7', '2', Constants.MEMORY_ADD, '1', Constants.MEMORY_READ, Constants.BACKSPACE }, "72")]
+        [InlineData(new char[] { '7', '2', Constants.MEMORY_ADD, '2', Constants.MEMORY_READ, Constants.BACKSPACE, '1', '3' }, "13")]
         public void TestValue(char[] values, string expected)
         {
             using var context = new TestContext();
@@ -98,7 +100,7 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '+', Constants.BACKSPACE, '2', '+', '4' }, "3+4")]
         [InlineData(new char[] { '1', '+', '1', Constants.BACKSPACE }, "1+0")]
         [InlineData(new char[] { '1', '+', '1', Constants.BACKSPACE, '=' }, "1+0=")]
-        [InlineData(new char[] { '1', '+', '2', Constants.CLEAR }, "0")]
+        [InlineData(new char[] { '1', '+', '2', Constants.CLEAR }, "")]
         [InlineData(new char[] { '1', '+', '2', Constants.CLEAR, '1', '+', '3', '-', '5', '=' }, "4-5=")]
         [InlineData(new char[] { Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "0")]
         [InlineData(new char[] { '1', '+', '1', '2', '3', '4', Constants.BACKSPACE, Constants.BACKSPACE, Constants.BACKSPACE }, "1+1")]

@@ -28,7 +28,7 @@
 
     public string GetDisplayExpression() => display.Expression;
 
-    public async Task UpdateDisplayAsync(char value)
+    private async Task UpdateDisplayAsync(char value)
     {
         if (display is null) throw new NullReferenceException();
 
@@ -44,6 +44,11 @@
             display.ClearMemory();
             return;
         }
+        else if(value==Constants.MEMORY_READ)
+        {
+            display.ReadMemory();
+            return;
+        }
         else if (
             TryToBackspaceResult(value) ||
             TryToBackspaceAndOperand2IsZero(value) ||
@@ -55,6 +60,8 @@
         {
             display.Clear();
             binaryOperationManager.BinaryOperation.Clear();
+
+            return;
         }
         else if (IsChainingCalculation(value))
         {
