@@ -1,6 +1,8 @@
 ﻿@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Domain.Shared
+@implements ICalcDisplay
 
 <div class="display">
     <div class="memory display-child mx-1 my-1" hidden="@showMemory">
@@ -102,6 +104,10 @@
         showMemory = false;
 
         StateHasChanged();
+    }
+
+    public void ReadMemory(){
+
     }
 
     public string Value => value;

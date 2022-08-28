@@ -1,7 +1,9 @@
 ﻿@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Domain.Shared
 @inject IBinaryOperationManager binaryOperationManager;
+@implements ICalc
 
 <div class="container py-2">
     <CalcDisplay @ref="display" OnValidOperandGenerated="SetOperand" OnOperationTypeChanged="SetOperationType"></CalcDisplay>
@@ -18,9 +20,15 @@
 </style>
 
 @code{
-    public CalcDisplay? display;
+    private CalcDisplay display;
 
-    private async Task UpdateDisplayAsync(char value)
+    public string GetDisplayValue() => display.Value;
+
+    public string GetDisplayMemory() => display.Memory;
+
+    public string GetDisplayExpression() => display.Expression;
+
+    public async Task UpdateDisplayAsync(char value)
     {
         if (display is null) throw new NullReferenceException();
 

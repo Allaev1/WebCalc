@@ -10,6 +10,7 @@ using FluentAssertions;
 using WebCalc.Components;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
+using WebCalc.Contracts;
 
 namespace WebCalc.IntegrationTests
 {
@@ -57,16 +58,16 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
-            var calc = context.RenderComponent<Calc>();
-            var buttons = calc.FindAll("button");
-            var display = calc.Instance.display!;
+            var calcComponent = context.RenderComponent<Calc>();
+            var buttons = calcComponent.FindAll("button");
+            ICalc calc = calcComponent.Instance;
 
             foreach (var value in values)
             {
                 buttons.Single(x => x.Id == value.ToString()).Click(new());
             }
 
-            display.Value.Should().Be(expected);
+            calc.GetDisplayValue().Should().Be(expected);
         }
 
         [Theory]
@@ -114,16 +115,16 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
-            var calc = context.RenderComponent<Calc>();
-            var buttons = calc.FindAll("button");
-            var display = calc.Instance.display!;
+            var calcComponent = context.RenderComponent<Calc>();
+            ICalc calc = calcComponent.Instance;
+            var buttons = calcComponent.FindAll("button");
 
             foreach (var value in values)
             {
                 buttons.Single(x => x.Id == value.ToString()).Click(new());
             }
 
-            display.Expression.Should().Be(expected);
+            calc.GetDisplayExpression().Should().Be(expected);
         }
 
         [Theory]
@@ -134,16 +135,16 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
-            var calc = context.RenderComponent<Calc>();
-            var buttons = calc.FindAll("button");
-            var display = calc.Instance.display!;
+            var calcComponent = context.RenderComponent<Calc>();
+            var calc = calcComponent.Instance;
+            var buttons = calcComponent.FindAll("button");
 
             foreach (var value in values)
             {
                 buttons.Single(x => x.Id == value.ToString()).Click(new());
             }
 
-            display.Memory.Should().Be(expected);
+            calc.GetDisplayMemory().Should().Be(expected);
         }
     }
 }
