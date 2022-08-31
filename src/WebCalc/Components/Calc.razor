@@ -5,7 +5,7 @@
 @inject IBinaryOperationManager binaryOperationManager;
 @implements ICalc
 
-<div class="container py-2">
+<div class="container">
     <CalcDisplay @ref="display" OnValidOperandGenerated="SetOperand" OnOperationTypeChanged="SetOperationType"></CalcDisplay>
     <CalcKeyboard OnButtonClick="UpdateDisplayAsync"></CalcKeyboard>
 </div>
