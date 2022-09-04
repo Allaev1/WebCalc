@@ -1,112 +1,103 @@
-﻿@using WebCalc.Application.Contracts.BinaryOperation
+﻿@using System.Drawing
+@using WebCalc.Application.Contracts.BinaryOperation
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
 @implements ICalcKeyboard
 
-<div class="keyboard">
-    <div class="keyboard-keys">
-        <div class="child col">
-            <button id="@Constants.MEMORY_ADD" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_ADD)">M+</button>
-        </div>
-        <div class="child col">
-            <button id="@Constants.MEMORY_CLEAR" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_CLEAR)">MC</button>
-        </div>
-        <div class="child col">
-            <button id="@Constants.CLEAR" style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.CLEAR)">C</button>
-        </div>
-        <div class="child col">
-            <button id="@Constants.BACKSPACE" style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.BACKSPACE)">BACK</button>
-        </div>
-        <div class="child col">
-            <button id="@Constants.MEMORY_READ" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_READ)">MR</button>
-        </div>
-        <div class="child col">
-            <button style="background-color: var(--color-button-off);">%OFF</button>
-        </div>
-        <div class="child col">
-            <button id="@Constants.NEGATION_OPERATION_SIGN" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick(Constants.NEGATION_OPERATION_SIGN)">&plusmn;</button>
-        </div>
-        <div class="child col">
-            <button id="/" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('/') ">&divide;</button>
-        </div>
-        <div class="child col">
-            <button id="7" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('7')">7</button>
-        </div>
-        <div class="child col">
-            <button id="8" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('8')">8</button>
-        </div>
-        <div class="child col">
-            <button id="9" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('9')">9</button>
-        </div>
-        <div class="child col">
-            <button id="*" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('*')">&times;</button>
-        </div>
-        <div class="child col">
-            <button id="4" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('4')">4</button>
-        </div>
-        <div class="child col">
-            <button id="5" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('5')">5</button>
-        </div>
-        <div class="child col">
-            <button id="6" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('6')">6</button>
-        </div>
-        <div class="child col">
-            <button id="-" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('-')">&minus;</button>
-        </div>
-        <div class="child col">
-            <button id="1" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('1')">1</button>
-        </div>
-        <div class="child col">
-            <button id="2" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('2')">2</button>
-        </div>
-        <div class="child col">
-            <button id="3" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('3')">3</button>
-        </div>
-        <div class="child col">
-            <button id="+" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('+')">&plus;</button>
-        </div>
-        <div class="child col">
-            <button id="const" style="background-color: var(--color-button-const);">CONST</button>
-        </div>
-        <div class="child col">
-            <button id="0" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('0')">0</button>
-        </div>
-        <div class="child col">
-            <button id="@Constants.FLOATING_POINT" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick(Constants.FLOATING_POINT)">&sdot;</button>
-        </div>
-        <div class="child col">
-            <button id="=" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('=')">&equals;</button>
-        </div>
+<div id="keyboard">
+    <div class="child col">
+        <button id="@Constants.MEMORY_ADD" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_ADD)">M+</button>
+    </div>
+    <div class="child col">
+        <button id="@Constants.MEMORY_CLEAR" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_CLEAR)">MC</button>
+    </div>
+    <div class="child col">
+        <button id="@Constants.CLEAR" style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.CLEAR)">C</button>
+    </div>
+    <div class="child col">
+        <button id="@Constants.BACKSPACE" style="background-color: var(--color-button-back);" @onclick="()=>RiseOnButtonClick(Constants.BACKSPACE)">BACK</button>
+    </div>
+    <div class="child col">
+        <button id="@Constants.MEMORY_READ" style="background-color: var(--color-button-memory);" @onclick="()=>RiseOnButtonClick(Constants.MEMORY_READ)">MR</button>
+    </div>
+    <div class="child col">
+        <button style="background-color: var(--color-button-off);">%OFF</button>
+    </div>
+    <div class="child col">
+        <button id="@Constants.NEGATION_OPERATION_SIGN" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick(Constants.NEGATION_OPERATION_SIGN)">&plusmn;</button>
+    </div>
+    <div class="child col">
+        <button id="/" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('/') ">&divide;</button>
+    </div>
+    <div class="child col">
+        <button id="7" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('7')">7</button>
+    </div>
+    <div class="child col">
+        <button id="8" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('8')">8</button>
+    </div>
+    <div class="child col">
+        <button id="9" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('9')">9</button>
+    </div>
+    <div class="child col">
+        <button id="*" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('*')">&times;</button>
+    </div>
+    <div class="child col">
+        <button id="4" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('4')">4</button>
+    </div>
+    <div class="child col">
+        <button id="5" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('5')">5</button>
+    </div>
+    <div class="child col">
+        <button id="6" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('6')">6</button>
+    </div>
+    <div class="child col">
+        <button id="-" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('-')">&minus;</button>
+    </div>
+    <div class="child col">
+        <button id="1" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('1')">1</button>
+    </div>
+    <div class="child col">
+        <button id="2" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('2')">2</button>
+    </div>
+    <div class="child col">
+        <button id="3" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('3')">3</button>
+    </div>
+    <div class="child col">
+        <button id="+" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('+')">&plus;</button>
+    </div>
+    <div class="child col">
+        <button id="const" style="background-color: var(--color-button-const);">CONST</button>
+    </div>
+    <div class="child col">
+        <button id="0" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('0')">0</button>
+    </div>
+    <div class="child col">
+        <button id="@Constants.FLOATING_POINT" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick(Constants.FLOATING_POINT)">&sdot;</button>
+    </div>
+    <div class="child col">
+        <button id="=" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('=')">&equals;</button>
     </div>
 </div>
 
 <style>
     * {
-        --color-button-memory: green;
-        --color-button-back: orange;
-        --color-button-figure: rgb(0, 102, 255);
-        --color-button-off: red;
-        --color-button-const: black;
-        --color-button-operator: rgb(0, 49, 139);
-        --color-button-fore: white;
-        --color-display-back: black;
-        --color-display-fore: rgb(208, 255, 0);
-        --color-calc-back: lightgrey;
-        --color-body: rgb(173, 196, 238);
+        --color-button-memory: @MemoryColor.Name;
+        --color-button-back: @BackspaceAndClearColor.Name;
+        --color-button-figure: @ColorTranslator.ToHtml(FigureColor);
+        --color-button-off: @PercentageOffColor.Name;
+        --color-button-const: @ConstColor.Name;
+        --color-button-operator: @OperationTypeColor.Name;
+        --color-button-fore: @ButtonForgeGroundColor.Name;
     }
 
-    .keyboard {
-        height: 100%;
-        margin-bottom: 10px;
-    }
-
-    .keyboard-keys {        
+    #keyboard {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         column-gap: 5px;
         row-gap: 5px;
         height: 100%;
         width: 100%;
+        margin-bottom: 10px;
     }
 
     .child > button {
@@ -129,9 +120,30 @@
     }
 </style>
 
-@code{
+@code {
     [Parameter]
     public EventCallback<char> OnButtonClick { get; set; }
+
+    [Parameter]
+    public Color MemoryColor { get; set; } = Color.Green;
+
+    [Parameter]
+    public Color FigureColor { get; set; } = Color.FromArgb(0, 102, 255);
+
+    [Parameter]
+    public Color PercentageOffColor { get; set; } = Color.Red;
+
+    [Parameter]
+    public Color OperationTypeColor { get; set; } = Color.Blue;
+
+    [Parameter]
+    public Color ConstColor { get; set; } = Color.Black;
+
+    [Parameter]
+    public Color BackspaceAndClearColor { get; set; } = Color.Orange;
+
+    [Parameter]
+    public Color ButtonForgeGroundColor { get; set; } = Color.White;
 
     private async void RiseOnButtonClick(char value)
     {
