@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7DF9709E-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.IntegrationTests", "test\WebCalc.IntegrationTests\WebCalc.IntegrationTests.csproj", "{33DD309B-4ABB-46E9-8775-25442915C827}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.Domain.Shared", "src\WebCalc.Domain.Shared\WebCalc.Domain.Shared.csproj", "{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Domain.Shared", "src\WebCalc.Domain.Shared\WebCalc.Domain.Shared.csproj", "{1C6953DC-86D9-44BB-AAE2-AF16E54FAAC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
