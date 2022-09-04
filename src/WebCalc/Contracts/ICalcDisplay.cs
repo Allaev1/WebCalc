@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Drawing;
 using WebCalc.Domain.Shared;
 
 namespace WebCalc.Contracts
@@ -16,6 +17,15 @@ namespace WebCalc.Contracts
 
         [Parameter]
         public EventCallback<OperationType> OnOperationTypeChanged { get; set; }
+
+        [Parameter]
+        public Color MemoryColor { get; set; }
+
+        [Parameter]
+        public Color ExpressionColor { get; set; }
+
+        [Parameter]
+        public Color ValueColor { get; set; }
 
         public string Value { get; }
 

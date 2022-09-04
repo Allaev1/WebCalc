@@ -1,74 +1,89 @@
-﻿@using WebCalc.Application.Contracts.BinaryOperation
+﻿@using System.Drawing
+@using WebCalc.Application.Contracts.BinaryOperation
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Domain.Shared
 @implements ICalcDisplay
 
-<div class="display">
-    <div class="memory display-child">
-        <p id="memory" style="visibility:@visibilityValue"><span style="background:green; color:white">Memory:</span>@memory</p>
+<div id="display">
+    <div id="memory" class="display-component">
+        <p id="memory-paragraph">
+            <span id="memory-capture">Memory:</span>
+            <span id="memory-value">@memory</span>
+        </p>
     </div>
-    <div class="result display-child">
-        <p id="value">@value</p>
+    <div id="value" class="display-component">
+        <p id="value-holder">@value</p>
     </div>
-    <div class="equation display-child">
-        <p id="expression">@expression</p>
+    <div id="expression" class="display-component">
+        <p id="expression-value">@expression</p>
     </div>
 </div>
 
 <style>
-    .display {
+    #display {
         background: white;
         margin-bottom: 10px;
+        margin-top: 10px;
     }
 
-    .memory {
-        color: green;
+    .display-component>p{
+        margin-bottom: 0; /*Overwrite display's margin-bottom rule*/
     }
 
-    .result {
+    #memory-paragraph {
+        visibility:@visibilityValue;
+        margin-left: 5px;
+    }
+
+    #memory-capture {
+        background: @MemoryColor.Name;
+        color: white;
+    }
+
+    #memory-value {
+        color: @MemoryColor.Name;
+    }
+
+    #value-holder {
         text-align: right;
-        color: black;
+        color: @ValueColor.Name;
     }
 
-    .equation {
+    #expression-value {
         text-align: right;
-        color: red;
+        color: @ExpressionColor.Name;
     }
 
-    #expression:empty::before{
+    #expression-value:empty::before {
         content: "";
-        display:inline-block;
-    }
-
-    .display-child > p {
-        margin: 0px;
+        display: inline-block;
     }
 
     @@media (max-width:280px) {
-        .memory {
+        #memory-paragraph {
             font-size: 16px;
         }
 
-        .result {
+        #value-holder {
             font-size: 22px;
         }
 
-        .display {
+        #expression-value {
             font-size: 16px;
         }
     }
 
     @@media (min-width:281px) {
-        .memory {
+        #memory-paragraph {
             font-size: 22px;
         }
 
-        .result {
+        #value-holder {
             font-size: 32px;
         }
 
-        .display {
+        #expression-value {
             font-size: 22px;
         }
     }
@@ -95,6 +110,15 @@
 
     [Parameter]
     public EventCallback<OperationType> OnOperationTypeChanged { get; set; }
+
+    [Parameter]
+    public Color MemoryColor { get; set; } = Color.Green;
+
+    [Parameter]
+    public Color ExpressionColor { get; set; } = Color.Red;
+
+    [Parameter]
+    public Color ValueColor { get; set; } = Color.Black;
 
     public void SetMemory(string memory)
     {
