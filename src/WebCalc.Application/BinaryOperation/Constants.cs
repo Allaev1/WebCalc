@@ -21,5 +21,7 @@ namespace WebCalc.Domain.BinaryOperation
         public const char MEMORY_READ = '&';
 
         public const char MEMORY_CLEAR = '$';
+
+        public const char OFF = '%';
     }
 }
