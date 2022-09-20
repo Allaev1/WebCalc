@@ -15,6 +15,8 @@ namespace WebCalc.Domain.BinaryOperation
 
         public float GetMemoryAddResult(float operand);
 
+        public float GetWithoutPercentage(int percentageOff, float number);
+
         public void ClearMemory();
 
         public float? ReadMemory();
