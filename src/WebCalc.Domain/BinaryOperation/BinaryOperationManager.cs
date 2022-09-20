@@ -13,6 +13,7 @@ namespace WebCalc.Domain.BinaryOperation
     {
         private readonly BinaryOperation memoryOperation;
         private UnaryOperation.UnaryOperation negationOperation;
+        private UnaryOperation.UnaryOperation percentageOf;
 
         public BinaryOperation MainOperation { get; }
 
@@ -21,6 +22,7 @@ namespace WebCalc.Domain.BinaryOperation
             MainOperation = new();
             memoryOperation = new();
             negationOperation = new(OperationType.Multiplication, -1);
+            percentageOf = new(OperationType.Multiplication, 0.01f);
         }
 
         public float GetNegateOperand()
@@ -49,6 +51,15 @@ namespace WebCalc.Domain.BinaryOperation
             memoryOperation.SetResult();
 
             return memoryOperation.Result!.Value;
+        }
+
+        public float GetWithoutPercentage(int percentage, float number)
+        {
+            percentageOf.SetOperand(number);
+            percentageOf.SetResult();
+            var percentageOfNumber = percentageOf.Result!.Value;
+
+            return number - percentageOfNumber;
         }
 
         public void ClearMemory()
