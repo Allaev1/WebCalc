@@ -24,7 +24,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\WebCalc.Application\WebCalc.Application.csproj" />
     <ProjectReference Include="..\..\src\WebCalc\WebCalc.csproj" />
   </ItemGroup>
 

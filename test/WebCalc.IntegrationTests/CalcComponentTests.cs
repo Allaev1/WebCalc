@@ -56,6 +56,7 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "123")]
         [InlineData(new char[] { '7', '2', Constants.MEMORY_ADD, '1', Constants.MEMORY_READ, Constants.BACKSPACE }, "72")]
         [InlineData(new char[] { '7', '2', Constants.MEMORY_ADD, '2', Constants.MEMORY_READ, Constants.BACKSPACE, '1', '3' }, "13")]
+        [InlineData(new char[] { '1', '0', Constants.PERCENTAGE_OFF, '2', '5', '=' }, "7.5")]
         public void TestValue(char[] values, string expected)
         {
             using var context = new TestContext();
@@ -113,6 +114,8 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN }, "12+(-123)")]
         [InlineData(new char[] { '1', '2', '+', '1', '2', '3', Constants.NEGATION_OPERATION_SIGN, Constants.NEGATION_OPERATION_SIGN }, "12+123")]
         [InlineData(new char[] { '1', '2', Constants.NEGATION_OPERATION_SIGN, '+', '1', '2', '3' }, "(-12)+123")]
+        [InlineData(new char[] { '1', '0', Constants.PERCENTAGE_OFF }, "10-")]
+        [InlineData(new char[] { '1', '0', Constants.PERCENTAGE_OFF, '2', '5', '=' }, "10-10*0,25=")]
         public void TestExpression(char[] values, string expected)
         {
             using var context = new TestContext();
