@@ -19,7 +19,7 @@
     }
 </style>
 
-@code{
+@code {
     private CalcDisplay display;
 
     public string GetDisplayValue() => display.Value;
@@ -44,7 +44,7 @@
             display.ClearMemory();
             return;
         }
-        else if(value==Constants.MEMORY_READ)
+        else if (value == Constants.MEMORY_READ)
         {
             display.ReadMemory();
             return;
@@ -70,6 +70,14 @@
             display.Clear();
 
             display.Append(binaryOperationManager.MainOperation.Operand1.ToString()!.ToArray());
+        }
+        else if (value == '=' && display.PercentageOff)
+        {
+            var result = binaryOperationManager.GetWithoutPercentage(int.Parse(display.Value));
+            await display.AppendAsync(value);
+            display.Append(result.ToString()!.ToArray());
+
+            return;
         }
         else if (value == '=')
         {
