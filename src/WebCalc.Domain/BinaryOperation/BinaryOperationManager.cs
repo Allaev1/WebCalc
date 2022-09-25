@@ -11,9 +11,9 @@ namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperationManager : IBinaryOperationManager
     {
-        private readonly BinaryOperation memoryOperation;
-        private UnaryOperation.UnaryOperation negationOperation;
-        private UnaryOperation.UnaryOperation percentageOf;
+        private BinaryOperation memoryOperation;
+        private readonly UnaryOperation.UnaryOperation negationOperation;
+        private readonly UnaryOperation.UnaryOperation percentageFrom;
 
         public BinaryOperation MainOperation { get; }
 
@@ -22,7 +22,7 @@ namespace WebCalc.Domain.BinaryOperation
             MainOperation = new();
             memoryOperation = new();
             negationOperation = new(OperationType.Multiplication, -1);
-            percentageOf = new(OperationType.Multiplication, 0.01f);
+            percentageFrom = new(OperationType.Multiplication, 0.01f);
         }
 
         public float GetNegateOperand()
@@ -53,13 +53,23 @@ namespace WebCalc.Domain.BinaryOperation
             return memoryOperation.Result!.Value;
         }
 
-        public float GetWithoutPercentage(int percentage, float number)
+        public float GetWithoutPercentage(int percentageOff)
         {
-            percentageOf.SetOperand(number);
-            percentageOf.SetResult();
-            var percentageOfNumber = percentageOf.Result!.Value;
+            var binaryOperation = new BinaryOperation();
 
-            return number - percentageOfNumber;
+            percentageFrom.SetOperand(percentageOff);
+            percentageFrom.SetResult();
+            var percentage = this.percentageFrom.Result!.Value;
+
+            binaryOperation.SetOperand(MainOperation.Operand1!.Value);
+            binaryOperation.SetOperationType(OperationType.Multiplication);
+            binaryOperation.SetOperand(percentage);
+            binaryOperation.SetResult();
+
+            MainOperation.SetOperand(binaryOperation.Result);
+            MainOperation.SetResult();
+
+            return MainOperation.Result!.Value;
         }
 
         public void ClearMemory()
