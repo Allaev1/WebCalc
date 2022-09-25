@@ -22,6 +22,6 @@ namespace WebCalc.Domain.BinaryOperation
 
         public const char MEMORY_CLEAR = '$';
 
-        public const char OFF = '%';
+        public const char PERCENTAGE_OFF = '%';
     }
 }
