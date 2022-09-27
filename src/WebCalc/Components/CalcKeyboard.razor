@@ -3,6 +3,7 @@
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
 @implements ICalcKeyboard
+@inject NavigationManager navigationManager
 
 <div id="keyboard">
     <div class="child col">
@@ -66,7 +67,7 @@
         <button id="+" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('+')">&plus;</button>
     </div>
     <div class="child col">
-        <button id="const" style="background-color: var(--color-button-const);">CONST</button>
+        <button id="const" style="background-color: var(--color-button-const);" @onclick="NavigateToConsts">CONST</button>
     </div>
     <div class="child col">
         <button id="0" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('0')">0</button>
@@ -131,6 +132,11 @@
 
     [Parameter]
     public Color ButtonForgeGroundColor { get; set; } = Color.White;
+
+    private void NavigateToConsts()
+    {
+        navigationManager.NavigateTo("/consts");
+    }
 
     private async void RiseOnButtonClick(char value)
     {
