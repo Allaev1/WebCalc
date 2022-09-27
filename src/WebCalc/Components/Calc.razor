@@ -4,13 +4,33 @@
 @using WebCalc.Domain.Shared
 @inject IBinaryOperationManager binaryOperationManager;
 @implements ICalc
+@inject NavigationManager navigationManager
 
 <div class="container">
+    <div id="menu">
+        <button id="add-constant-button" class="menu-button" @onclick="NavigateToAddEditConst">add constant</button>
+        <button class="menu-button">settings</button>
+    </div>
     <CalcDisplay @ref="display" OnValidOperandGenerated="SetOperand" OnOperationTypeChanged="SetOperationType"></CalcDisplay>
     <CalcKeyboard OnButtonClick="UpdateDisplayAsync"></CalcKeyboard>
 </div>
 
 <style>
+    #menu{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+
+    .menu-button{
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+
+    #add-constant-button{
+        margin-right: 5px;
+    }
+
     .container {
         display: flex;
         flex-direction: column;
@@ -27,6 +47,11 @@
     public string GetDisplayMemory() => display.Memory;
 
     public string GetDisplayExpression() => display.Expression;
+
+    private void NavigateToAddEditConst()
+    {
+        navigationManager.NavigateTo($"/addEditConst/{display.Value}");
+    }
 
     private async Task UpdateDisplayAsync(char value)
     {
