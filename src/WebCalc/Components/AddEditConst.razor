@@ -1,0 +1,11 @@
+﻿@page "/addEditConst/{constant:float}"
+
+<div>
+    <h3>AddEditConstant</h3>
+    <p>Passed constant - @Constant</p>
+</div>
+
+@code {
+    [Parameter]
+    public float Constant { get; set; }
+}
