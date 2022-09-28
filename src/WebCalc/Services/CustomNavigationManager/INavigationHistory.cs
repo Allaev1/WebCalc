@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace WebCalc.Services
+namespace WebCalc.Services.CustomNavigationManager
 {
     public interface INavigationHistory
     {

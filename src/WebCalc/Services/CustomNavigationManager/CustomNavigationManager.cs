@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Collections.ObjectModel;
 
-namespace WebCalc.Services
+namespace WebCalc.Services.CustomNavigationManager
 {
     public class CustomNavigationManager : NavigationManager, IBackNavigateable, IDisposable
     {
@@ -9,7 +9,7 @@ namespace WebCalc.Services
 
         public CustomNavigationManager()
         {
-            this.LocationChanged += NavigationManagerWithHistory_LocationChanged;
+            LocationChanged += NavigationManagerWithHistory_LocationChanged;
             History = new(history);
         }
 
@@ -24,12 +24,12 @@ namespace WebCalc.Services
         {
             var location = history.Last();
             history.Remove(location);
-            this.NavigateTo(location);
+            NavigateTo(location);
         }
 
         public void Dispose()
         {
-            this.LocationChanged -= NavigationManagerWithHistory_LocationChanged;
+            LocationChanged -= NavigationManagerWithHistory_LocationChanged;
         }
     }
 }

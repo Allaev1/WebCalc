@@ -1,4 +1,4 @@
-﻿namespace WebCalc.Services
+﻿namespace WebCalc.Services.CustomNavigationManager
 {
     public interface IBackNavigateable : INavigationHistory
     {
