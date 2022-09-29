@@ -1,7 +1,16 @@
 ﻿@page "/consts"
 
+@using WebCalc.Services
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
+
 <h3>Constants</h3>
+<button @onclick="NavigateBack">Back</button>
 
 @code {
-
+    private void NavigateBack()
+    {
+        var location = backNavigateable.GetNaivgateBackLocation();
+        navigationManager.NavigateTo(location);
+    }
 }

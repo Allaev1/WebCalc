@@ -2,9 +2,11 @@
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Domain.Shared
+@using WebCalc.Services
 @inject IBinaryOperationManager binaryOperationManager;
 @implements ICalc
 @inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
 
 <div class="container">
     <div id="menu">
@@ -50,6 +52,7 @@
 
     private void NavigateToAddEditConst()
     {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
         navigationManager.NavigateTo($"/addEditConst/{display.Value}");
     }
 

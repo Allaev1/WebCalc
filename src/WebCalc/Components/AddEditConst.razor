@@ -1,11 +1,21 @@
 ﻿@page "/addEditConst/{constant:float}"
+@using WebCalc.Services
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
 
 <div>
     <h3>AddEditConstant</h3>
     <p>Passed constant - @Constant</p>
+    <button @onclick="NavigateBack">Back</button>
 </div>
 
 @code {
     [Parameter]
     public float Constant { get; set; }
+
+    private void NavigateBack()
+    {
+        var location = backNavigateable.GetNaivgateBackLocation();
+        navigationManager.NavigateTo(location);
+    }
 }

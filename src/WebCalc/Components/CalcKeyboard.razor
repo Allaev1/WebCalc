@@ -2,8 +2,10 @@
 @using WebCalc.Application.Contracts.BinaryOperation
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
+@using WebCalc.Services
 @implements ICalcKeyboard
 @inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
 
 <div id="keyboard">
     <div class="child col">
@@ -135,6 +137,7 @@
 
     private void NavigateToConsts()
     {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
         navigationManager.NavigateTo("/consts");
     }
 
