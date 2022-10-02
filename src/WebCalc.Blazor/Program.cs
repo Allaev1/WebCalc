@@ -1,4 +1,4 @@
-using WebCalc;
+using WebCalc.Blazor;
 using Microsoft.AspNetCore.Components.Web;
 using System.Buffers;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;

@@ -14,7 +14,7 @@
         <button class="menu-button">settings</button>
     </div>
     <CalcDisplay @ref="display" OnValidOperandGenerated="SetOperand" OnOperationTypeChanged="SetOperationType"></CalcDisplay>
-    <CalcKeyboard OnButtonClick="UpdateDisplayAsync"></CalcKeyboard>
+    <CalcKeyboard OnButtonClick="UpdateDisplayAsync" OnConstClick="NavigateToConsts"></CalcKeyboard>
 </div>
 
 <style>
@@ -49,6 +49,12 @@
     public string GetDisplayMemory() => display.Memory;
 
     public string GetDisplayExpression() => display.Expression;
+
+    private void NavigateToConsts()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo("/consts");
+    }
 
     private void NavigateToAddEditConst()
     {

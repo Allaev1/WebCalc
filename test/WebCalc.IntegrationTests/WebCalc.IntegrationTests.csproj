@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\WebCalc\WebCalc.csproj" />
+    <ProjectReference Include="..\..\src\WebCalc.Blazor\WebCalc.Blazor.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,5 +4,6 @@ namespace WebCalc.Application.Contracts.BinaryOperation
 {
     public interface IBinaryOperationAppService
     {
+
     }
 }

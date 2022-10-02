@@ -4,8 +4,6 @@
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Services
 @implements ICalcKeyboard
-@inject NavigationManager navigationManager
-@inject IBackNavigateable backNavigateable
 
 <div id="keyboard">
     <div class="child col">
@@ -69,7 +67,7 @@
         <button id="+" style="background-color: var(--color-button-operator);" @onclick="()=>RiseOnButtonClick('+')">&plus;</button>
     </div>
     <div class="child col">
-        <button id="const" style="background-color: var(--color-button-const);" @onclick="NavigateToConsts">CONST</button>
+        <button id="const" style="background-color: var(--color-button-const);" @onclick="RiseOnConstClick">CONST</button>
     </div>
     <div class="child col">
         <button id="0" style="background-color: var(--color-button-figure);" @onclick="()=>RiseOnButtonClick('0')">0</button>
@@ -115,6 +113,9 @@
     public EventCallback<char> OnButtonClick { get; set; }
 
     [Parameter]
+    public EventCallback OnConstClick { get; set; }
+
+    [Parameter]
     public Color MemoryColor { get; set; } = Color.Green;
 
     [Parameter]
@@ -135,14 +136,13 @@
     [Parameter]
     public Color ButtonForgeGroundColor { get; set; } = Color.White;
 
-    private void NavigateToConsts()
-    {
-        backNavigateable.AddCurrentLocation(navigationManager.Uri);
-        navigationManager.NavigateTo("/consts");
-    }
-
     private async void RiseOnButtonClick(char value)
     {
         await OnButtonClick.InvokeAsync(value);
+    }
+
+    private async void RiseOnConstClick()
+    {
+        await OnConstClick.InvokeAsync();
     }
 }

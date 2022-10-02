@@ -7,7 +7,7 @@ using WebCalc.Application.BinaryOperation;
 using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Domain.BinaryOperation;
 using FluentAssertions;
-using WebCalc.Components;
+using WebCalc.Blazor.Components;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using WebCalc.Contracts;
