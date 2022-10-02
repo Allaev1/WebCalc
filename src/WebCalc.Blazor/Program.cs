@@ -15,5 +15,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 
 await builder.Build().RunAsync(); 

@@ -3,8 +3,9 @@
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Domain.Shared
 @using WebCalc.Services
-@inject IBinaryOperationManager binaryOperationManager;
 @implements ICalc
+@inject IBinaryOperationManager binaryOperationManager
+@inject IBinaryOperationAppService binaryOperationAppService
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
 
@@ -13,7 +14,7 @@
         <button id="add-constant-button" class="menu-button" @onclick="NavigateToAddEditConst">add constant</button>
         <button class="menu-button">settings</button>
     </div>
-    <CalcDisplay @ref="display" OnValidOperandGenerated="SetOperand" OnOperationTypeChanged="SetOperationType"></CalcDisplay>
+    <CalcDisplay @ref="display" OnValidOperandGenerated="binaryOperationAppService.SetOperand" OnOperationTypeChanged="binaryOperationAppService.SetOperationType"></CalcDisplay>
     <CalcKeyboard OnButtonClick="UpdateDisplayAsync" OnConstClick="NavigateToConsts"></CalcKeyboard>
 </div>
 
@@ -145,16 +146,6 @@
         await display.AppendAsync(value);
     }
 
-    private void SetOperand(float operand)
-    {
-        binaryOperationManager.MainOperation.SetOperand(operand);
-    }
-
-    private void SetOperationType(OperationType operationType)
-    {
-        binaryOperationManager.MainOperation.SetOperationType(operationType);
-    }
-
     private bool TryToBackspaceResult(char value)
         => binaryOperationManager.MainOperation.OperationState is BinaryOperationState.ResultSetted && value == Constants.BACKSPACE;
 
@@ -175,25 +166,4 @@
     private bool IsChainingCalculation(char value) =>
         (value == '+' || value == '-' || value == '*' || value == '/') &&
         binaryOperationManager.MainOperation.Operand2 is not null;
-
-    private void SetOperationType(char value)
-    {
-        switch (value)
-        {
-            case '+':
-                binaryOperationManager.MainOperation.SetOperationType(OperationType.Addition);
-                break;
-            case '-':
-                binaryOperationManager.MainOperation.SetOperationType(OperationType.Subtraction);
-                break;
-            case '*':
-                binaryOperationManager.MainOperation.SetOperationType(OperationType.Multiplication);
-                break;
-            case '/':
-                binaryOperationManager.MainOperation.SetOperationType(OperationType.Division);
-                break;
-            default:
-                throw new ArgumentException();
-        }
-    }
 }

@@ -11,6 +11,7 @@ using WebCalc.Blazor.Components;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using WebCalc.Contracts;
+using WebCalc.Services;
 
 namespace WebCalc.IntegrationTests
 {
@@ -61,6 +62,8 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
+            context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+            context.Services.AddSingleton<IBinaryOperationAppService>(services => new BinaryOperationAppService(services.GetRequiredService<IBinaryOperationManager>()));
             var calcComponent = context.RenderComponent<Calc>();
             var buttons = calcComponent.FindAll("button");
             ICalc calc = calcComponent.Instance;
@@ -120,6 +123,8 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
+            context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+            context.Services.AddSingleton<IBinaryOperationAppService>(services => new BinaryOperationAppService(services.GetRequiredService<IBinaryOperationManager>()));
             var calcComponent = context.RenderComponent<Calc>();
             ICalc calc = calcComponent.Instance;
             var buttons = calcComponent.FindAll("button");
@@ -140,6 +145,8 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
+            context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+            context.Services.AddSingleton<IBinaryOperationAppService>(services => new BinaryOperationAppService(services.GetRequiredService<IBinaryOperationManager>()));
             var calcComponent = context.RenderComponent<Calc>();
             var calc = calcComponent.Instance;
             var buttons = calcComponent.FindAll("button");
