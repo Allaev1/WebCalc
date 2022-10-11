@@ -9,6 +9,12 @@ namespace WebCalc.Application.Contracts.BinaryOperation
 
         public void SetOperationType(OperationType operationType);
 
+        public float GetMemoryAddResult(float value);
+
+        public void ClearMemory();
+
+        public float GetMemoryValue();
+
         public float GetResult();
     }
 }

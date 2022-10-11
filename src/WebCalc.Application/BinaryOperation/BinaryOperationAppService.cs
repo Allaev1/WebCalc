@@ -33,5 +33,30 @@ namespace WebCalc.Application.BinaryOperation
             binaryOperationManager.MainOperation.SetResult();
             return binaryOperationManager.MainOperation.Result!.Value;
         }
+
+        public float GetMemoryAddResult(float value)
+        {
+            var memory = binaryOperationManager.GetMemoryAddResult(value);
+            return memory;
+        }
+
+        public void ClearMemory()
+        {
+            binaryOperationManager.ClearMemory();
+        }
+
+        public float GetMemoryValue()
+        {
+            var memory = binaryOperationManager.ReadMemory();
+
+            if (memory.HasValue)
+            {
+                return memory.Value;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 }
