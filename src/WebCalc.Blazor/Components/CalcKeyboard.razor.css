@@ -6,7 +6,7 @@
     border-radius: 8px;
 }
 
-@@media(max-width:280px) {
+@media(max-width:280px) {
     .child > button {
         font-size: 12px;
     }
