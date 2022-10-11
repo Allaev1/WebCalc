@@ -1,5 +1,5 @@
 ﻿@using WebCalc.Application.BinaryOperation
-﻿@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Application.Contracts.BinaryOperation
 @using WebCalc.Application.Contracts.Services.InputValidationService
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
@@ -72,14 +72,16 @@
 
         if (value == Constants.MEMORY_ADD)
         {
-            var memory = binaryOperationManager.GetMemoryAddResult(float.Parse(display!.Value));
+            var memory = binaryOperationAppService.GetMemoryAddResult(float.Parse(display!.Value));
             display.SetMemory(memory.ToString());
+
             return;
         }
         else if (value == Constants.MEMORY_CLEAR)
         {
-            binaryOperationManager.ClearMemory();
+            binaryOperationAppService.ClearMemory();
             display.ClearMemory();
+
             return;
         }
         else if (value == Constants.MEMORY_READ)
