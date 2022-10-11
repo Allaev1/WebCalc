@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebCalc.Domain.BinaryOperation
+namespace WebCalc.Application.BinaryOperation
 {
     public static class Constants
     {
