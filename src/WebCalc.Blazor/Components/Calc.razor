@@ -1,4 +1,6 @@
+﻿@using WebCalc.Application.BinaryOperation
 ﻿@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Application.Contracts.Services.InputValidationService
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Domain.Shared
@@ -8,6 +10,7 @@
 @inject IBinaryOperationAppService binaryOperationAppService
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
+@inject IInputValidationService inputValidationService
 
 <div class="container">
     <div id="menu">
@@ -84,13 +87,7 @@
             display.ReadMemory();
             return;
         }
-        else if (
-            TryToBackspaceResult(value) ||
-            TryToBackspaceAndOperand2IsZero(value) ||
-            TryToExceedMaxCountOfCharsOnDisplay(value) ||
-            TryToNegateZero(value) ||
-            TryToBackspaceOperationType(value))
-            return;
+        else if (inputValidationService.IsEditionAllowed(value, display.Value)) return;
         else if (value == Constants.CLEAR)
         {
             display.Clear();
@@ -145,23 +142,6 @@
 
         await display.AppendAsync(value);
     }
-
-    private bool TryToBackspaceResult(char value)
-        => binaryOperationManager.MainOperation.OperationState is BinaryOperationState.ResultSetted && value == Constants.BACKSPACE;
-
-    private bool TryToExceedMaxCountOfCharsOnDisplay(char value)
-        => display!.Value.Count() == display.MaxDisplayCharsCount && (char.IsDigit(value) || value == Constants.FLOATING_POINT);
-
-    private bool TryToBackspaceAndOperand2IsZero(char value)
-        => value == Constants.BACKSPACE && binaryOperationManager.MainOperation.Operand2 is 0;
-
-    private bool TryToNegateZero(char value)
-        => value == Constants.NEGATION_OPERATION_SIGN && display!.Value == "0";
-
-    private bool TryToBackspaceOperationType(char value)
-        => value == Constants.BACKSPACE &&
-        binaryOperationManager.MainOperation.OperationType is not null &&
-        binaryOperationManager.MainOperation.Operand2 is null;
 
     private bool IsChainingCalculation(char value) =>
         (value == '+' || value == '-' || value == '*' || value == '/') &&
