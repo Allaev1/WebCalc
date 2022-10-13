@@ -1,62 +1,93 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebCalc.Application.Contracts.BinaryOperation;
+﻿using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Domain.BinaryOperation;
 using WebCalc.Domain.Shared;
+using WebCalc.Domain.UnaryOperation;
 
 namespace WebCalc.Application.BinaryOperation
 {
     public class BinaryOperationAppService : IBinaryOperationAppService
     {
         private readonly IBinaryOperationManager binaryOperationManager;
+        private readonly IUnaryOperationManager unaryOperationManager;
 
-        public BinaryOperationAppService(IBinaryOperationManager binaryOperationManager)
+        public BinaryOperationAppService(IBinaryOperationManager binaryOperationManager, IUnaryOperationManager unaryOperationManager)
         {
             this.binaryOperationManager = binaryOperationManager;
+            this.unaryOperationManager = unaryOperationManager;
         }
 
         public void SetOperand(float operand)
         {
-            binaryOperationManager.MainOperation.SetOperand(operand);
+            binaryOperationManager.Operation.SetOperand(operand);
         }
 
         public void SetOperationType(OperationType operationType)
         {
-            binaryOperationManager.MainOperation.SetOperationType(operationType);
+            binaryOperationManager.Operation.SetOperationType(operationType);
         }
 
-        public float GetResult()
+        public void SetResult()
         {
-            binaryOperationManager.MainOperation.SetResult();
-            return binaryOperationManager.MainOperation.Result!.Value;
+            binaryOperationManager.Operation.SetResult();
         }
 
-        public float GetMemoryAddResult(float value)
+        public float? GetOperand1() => binaryOperationManager.Operation.Operand1;
+
+        public OperationType? GetOperationType() => binaryOperationManager.Operation.OperationType;
+
+        public float? GetOperand2() => binaryOperationManager.Operation.Operand2;
+
+        public float? GetResult() => binaryOperationManager.Operation.Result;
+
+        public BinaryOperationState GetState() => binaryOperationManager.Operation.OperationState;
+
+        public void ClearOperation()
         {
-            var memory = binaryOperationManager.GetMemoryAddResult(value);
-            return memory;
+            binaryOperationManager.Operation.Clear();
         }
 
-        public void ClearMemory()
+        public float GetUpdatedMemory(float increase, float current) => increase + current;
+
+        public float GetNumberWithoutPercentage(int percentageOff)
         {
-            binaryOperationManager.ClearMemory();
+            var operand = binaryOperationManager.Operation.Operand1;
+            unaryOperationManager.Percentage.SetOperand(operand!.Value);
+            unaryOperationManager.Percentage.SetResult();
+            var percentage = unaryOperationManager.Percentage.Result;
+
+            var temp = binaryOperationManager.Operation.Operand1;
+            binaryOperationManager.Operation.Clear();
+
+            binaryOperationManager.Operation.SetOperand(temp);
+            binaryOperationManager.Operation.SetOperationType(OperationType.Multiplication);
+            binaryOperationManager.Operation.SetOperand(percentage);
+            binaryOperationManager.Operation.SetResult();
+            var percentageOf = binaryOperationManager.Operation.Result;
+            binaryOperationManager.Operation.Clear();
+
+            binaryOperationManager.Operation.SetOperand(temp);
+            binaryOperationManager.Operation.SetOperationType(OperationType.Subtraction);
+            binaryOperationManager.Operation.SetOperand(percentageOf);
+            binaryOperationManager.Operation.SetResult();
+
+            return binaryOperationManager.Operation.Result!.Value;
         }
 
-        public float GetMemoryValue()
+        public void NegateOperand()
         {
-            var memory = binaryOperationManager.ReadMemory();
-
-            if (memory.HasValue)
+            if (binaryOperationManager.Operation.OperationState is BinaryOperationState.SettingOperand1)
             {
-                return memory.Value;
+                unaryOperationManager.Negate.SetOperand(binaryOperationManager.Operation.Operand1!.Value);
             }
             else
             {
-                return 0;
+                unaryOperationManager.Negate.SetOperand(binaryOperationManager.Operation.Operand2!.Value);
             }
+
+            unaryOperationManager.Negate.SetResult();
+            var negatedOperand = unaryOperationManager.Negate.Result;
+
+            binaryOperationManager.Operation.SetOperand(negatedOperand);
         }
     }
 }

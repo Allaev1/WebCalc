@@ -9,12 +9,24 @@ namespace WebCalc.Application.Contracts.BinaryOperation
 
         public void SetOperationType(OperationType operationType);
 
-        public float GetMemoryAddResult(float value);
+        public void SetResult();
 
-        public void ClearMemory();
+        public float GetUpdatedMemory(float increase, float current);
 
-        public float GetMemoryValue();
+        public float GetNumberWithoutPercentage(int percentageOff);
 
-        public float GetResult();
+        public float? GetOperand1();
+
+        public OperationType? GetOperationType();
+
+        public float? GetOperand2();
+
+        public float? GetResult();
+
+        public BinaryOperationState GetState();
+
+        public void ClearOperation();
+
+        public void NegateOperand();
     }
 }

@@ -9,16 +9,6 @@ namespace WebCalc.Domain.BinaryOperation
 {
     public interface IBinaryOperationManager
     {
-        public BinaryOperation MainOperation { get; }
-
-        public float GetNegateOperand();
-
-        public float GetMemoryAddResult(float operand);
-
-        public float GetWithoutPercentage(int percentageOff);
-
-        public void ClearMemory();
-
-        public float? ReadMemory();
+        public BinaryOperation Operation { get; }
     }
 }

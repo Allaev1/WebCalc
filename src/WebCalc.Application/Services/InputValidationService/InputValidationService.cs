@@ -33,20 +33,20 @@ namespace WebCalc.Application.Services.InputValidationService
             TryToBackspaceOperationType(input);
 
         private bool TryToBackspaceResult(char input)
-            => binaryOperationManager.MainOperation.OperationState is BinaryOperationState.ResultSetted && input == Application.BinaryOperation.Constants.BACKSPACE;
+            => binaryOperationManager.Operation.OperationState is BinaryOperationState.ResultSetted && input == Application.BinaryOperation.Constants.BACKSPACE;
 
         private bool TryToExceedMaxCountOfCharsOnDisplay(char input, string value)
             => value.Count() == settings.MaxDisplayCharsCount && (char.IsDigit(input) || input == Application.BinaryOperation.Constants.FLOATING_POINT);
 
         private bool TryToBackspaceAndOperand2IsZero(char value)
-            => value == Application.BinaryOperation.Constants.BACKSPACE && binaryOperationManager.MainOperation.Operand2 is 0;
+            => value == Application.BinaryOperation.Constants.BACKSPACE && binaryOperationManager.Operation.Operand2 is 0;
 
         private bool TryToNegateZero(char input, string value)
             => input == Application.BinaryOperation.Constants.NEGATION_OPERATION_SIGN && value == "0";
 
         private bool TryToBackspaceOperationType(char value)
         => value == Application.BinaryOperation.Constants.BACKSPACE &&
-            binaryOperationManager.MainOperation.OperationType is not null &&
-            binaryOperationManager.MainOperation.Operand2 is null;
+            binaryOperationManager.Operation.OperationType is not null &&
+            binaryOperationManager.Operation.Operand2 is null;
     }
 }

@@ -16,6 +16,7 @@ using WebCalc.Application.Contracts.Services.InputValidationService;
 using WebCalc.Application.Contracts.Services.Settings;
 using WebCalc.Application.Services.InputValidationService;
 using WebCalc.Application.Services.Settings;
+using WebCalc.Domain.UnaryOperation;
 
 namespace WebCalc.IntegrationTests
 {
@@ -65,9 +66,10 @@ namespace WebCalc.IntegrationTests
         public void TestValue(char[] values, string expected)
         {
             using var context = new TestContext();
-            context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
-            context.Services.AddSingleton<IBinaryOperationAppService>(services => new BinaryOperationAppService(services.GetRequiredService<IBinaryOperationManager>()));
+            context.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>(); 
+            context.Services.AddSingleton<IUnaryOperationManager, UnaryOperationManager>();
+            context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
@@ -129,9 +131,10 @@ namespace WebCalc.IntegrationTests
         public void TestExpression(char[] values, string expected)
         {
             using var context = new TestContext();
-            context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
-            context.Services.AddSingleton<IBinaryOperationAppService>(services => new BinaryOperationAppService(services.GetRequiredService<IBinaryOperationManager>()));
+            context.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>();
+            context.Services.AddSingleton<IUnaryOperationManager, UnaryOperationManager>();
+            context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
@@ -154,9 +157,10 @@ namespace WebCalc.IntegrationTests
         public void TestMemory(char[] values, string expected)
         {
             using var context = new TestContext();
-            context.Services.AddSingleton<IBinaryOperationManager>(new BinaryOperationManager());
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
-            context.Services.AddSingleton<IBinaryOperationAppService>(services => new BinaryOperationAppService(services.GetRequiredService<IBinaryOperationManager>()));
+            context.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>();
+            context.Services.AddSingleton<IUnaryOperationManager, UnaryOperationManager>();
+            context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
