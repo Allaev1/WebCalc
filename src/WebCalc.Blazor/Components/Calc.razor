@@ -117,6 +117,7 @@
         }
         else if (value == '=')
         {
+            binaryOperationAppService.SetResult();
             var result = binaryOperationAppService.GetResult();
             await display.AppendAsync(value);
             display.Append(result.ToString()!.ToArray());

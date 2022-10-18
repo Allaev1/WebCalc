@@ -50,8 +50,7 @@ namespace WebCalc.Application.BinaryOperation
 
         public float GetNumberWithoutPercentage(int percentageOff)
         {
-            var operand = binaryOperationManager.Operation.Operand1;
-            unaryOperationManager.Percentage.SetOperand(operand!.Value);
+            unaryOperationManager.Percentage.SetOperand(percentageOff);
             unaryOperationManager.Percentage.SetResult();
             var percentage = unaryOperationManager.Percentage.Result;
 
