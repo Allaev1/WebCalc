@@ -10,10 +10,27 @@ namespace WebCalc.Domain.UnaryOperation
 {
     public class UnaryOperation
     {
+        private static UnaryOperation? percentageOperation;
+        private static UnaryOperation? negationOperation;
+
         private float operand1;
         private readonly OperationType operationType;
 
-        internal UnaryOperation(OperationType operationType, float operand1)
+        public static UnaryOperation GetPercentageOperation()
+        {
+            if (percentageOperation is null)
+                percentageOperation = new(Shared.OperationType.Multiplication, 0.01f);
+            return percentageOperation;
+        }
+
+        public static UnaryOperation GetNegationOperation()
+        {
+            if (negationOperation is null)
+                negationOperation = new(Shared.OperationType.Multiplication, -1);
+            return negationOperation;
+        }
+
+        private UnaryOperation(OperationType operationType, float operand1)
         {
             this.operand1 = operand1;
             this.operationType = operationType;
@@ -33,6 +50,13 @@ namespace WebCalc.Domain.UnaryOperation
         public void SetOperand(float value)
         {
             SetState(value);
+        }
+
+        public void Clear()
+        {
+            Operand2 = null;
+            OperationState = Domain.UnaryOperation.UnaryOperationState.SettingOperand2;
+            Result = null;
         }
 
         private void SetState(object value)

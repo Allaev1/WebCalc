@@ -7,13 +7,6 @@ namespace WebCalc.Application.BinaryOperation
 {
     public class BinaryOperationAppService : IBinaryOperationAppService
     {
-        private readonly IUnaryOperationManager unaryOperationManager;
-
-        public BinaryOperationAppService(IUnaryOperationManager unaryOperationManager)
-        {
-            this.unaryOperationManager = unaryOperationManager;
-        }
-
         public void SetOperand(float operand)
         {
             Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(operand);
@@ -42,15 +35,17 @@ namespace WebCalc.Application.BinaryOperation
         public void ClearOperations()
         {
             Domain.BinaryOperation.BinaryOperation.Instance().Clear();
+            Domain.UnaryOperation.UnaryOperation.GetNegationOperation().Clear();
+            Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().Clear();
         }
 
         public float GetUpdatedMemory(float increase, float current) => increase + current;
 
         public float GetNumberWithoutPercentage(int percentageOff)
         {
-            unaryOperationManager.Percentage.SetOperand(percentageOff);
-            unaryOperationManager.Percentage.SetResult();
-            var percentage = unaryOperationManager.Percentage.Result;
+            Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().SetOperand(percentageOff);
+            Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().SetResult();
+            var percentage = Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().Result;
 
             var temp = Domain.BinaryOperation.BinaryOperation.Instance().Operand1;
             Domain.BinaryOperation.BinaryOperation.Instance().Clear();
@@ -74,15 +69,15 @@ namespace WebCalc.Application.BinaryOperation
         {
             if (Domain.BinaryOperation.BinaryOperation.Instance().OperationState is BinaryOperationState.SettingOperand1)
             {
-                unaryOperationManager.Percentage.SetOperand(Domain.BinaryOperation.BinaryOperation.Instance().Operand1!.Value);
+                Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().SetOperand(Domain.BinaryOperation.BinaryOperation.Instance().Operand1!.Value);
             }
             else
             {
-                unaryOperationManager.Percentage.SetOperand(Domain.BinaryOperation.BinaryOperation.Instance().Operand2!.Value);
+                Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().SetOperand(Domain.BinaryOperation.BinaryOperation.Instance().Operand2!.Value);
             }
 
-            unaryOperationManager.Percentage.SetResult();
-            var negatedOperand = unaryOperationManager.Percentage.Result;
+            Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().SetResult();
+            var negatedOperand = Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().Result;
 
             Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(negatedOperand);
         }

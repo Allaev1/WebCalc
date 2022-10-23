@@ -69,7 +69,6 @@ namespace WebCalc.IntegrationTests
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
             context.Services.AddTransient<IBinaryOperationAppService, BinaryOperationAppService>();
-            context.Services.AddTransient<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
@@ -134,7 +133,6 @@ namespace WebCalc.IntegrationTests
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
-            context.Services.AddTransient<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
@@ -160,7 +158,6 @@ namespace WebCalc.IntegrationTests
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
-            context.Services.AddTransient<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
