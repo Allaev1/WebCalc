@@ -25,7 +25,7 @@ namespace WebCalc.Application.Contracts.BinaryOperation
 
         public BinaryOperationState GetState();
 
-        public void ClearOperation();
+        public void ClearOperations();
 
         public void NegateOperand();
     }

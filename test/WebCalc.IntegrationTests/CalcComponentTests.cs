@@ -23,6 +23,8 @@ namespace WebCalc.IntegrationTests
     public class CalcComponentTests
     {
         [Theory]
+        [InlineData(new char[] { '1', '+', '2', '=' }, "3")]
+        [InlineData(new char[] { '2', '+', '1', '=' }, "3")]
         [InlineData(new char[] { '1', '2', '3' }, "123")]
         [InlineData(new char[] { '0', '0', '1', '2', '3' }, "123")]
         [InlineData(new char[] { '1', Constants.FLOATING_POINT, Constants.FLOATING_POINT, '0' }, "1,0")]
@@ -34,7 +36,6 @@ namespace WebCalc.IntegrationTests
         [InlineData(new char[] { '1', '2', '3', '+', '1', '2' }, "12")]
         [InlineData(new char[] { '1', '2', '3', '+', '-', '/', '0', Constants.FLOATING_POINT, '1', '2' }, "0,12")]
         [InlineData(new char[] { '1', '2', '3', '+', '-', '/', '0', '0', '1', '2', Constants.FLOATING_POINT, Constants.FLOATING_POINT, '3', '0', Constants.FLOATING_POINT, '4', '0' }, "12,3040")]
-        [InlineData(new char[] { '1', '+', '2', '=' }, "3")]
         [InlineData(new char[] { '1', '+', '2', '=', '+', }, "3")]
         [InlineData(new char[] { '1', '+', '2', '=', '+', '2' }, "2")]
         [InlineData(new char[] { '1', '+', '2', '=', '+', '2', '=' }, "5")]
@@ -67,9 +68,8 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
-            context.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>(); 
-            context.Services.AddSingleton<IUnaryOperationManager, UnaryOperationManager>();
-            context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
+            context.Services.AddTransient<IBinaryOperationAppService, BinaryOperationAppService>();
+            context.Services.AddTransient<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
@@ -83,6 +83,7 @@ namespace WebCalc.IntegrationTests
             }
 
             calc.GetDisplayValue().Should().Be(expected);
+            calc.ClearOperations();
         }
 
         [Theory]
@@ -132,9 +133,8 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
-            context.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>();
-            context.Services.AddSingleton<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
+            context.Services.AddTransient<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
@@ -148,6 +148,7 @@ namespace WebCalc.IntegrationTests
             }
 
             calc.GetDisplayExpression().Should().Be(expected);
+            calc.ClearOperations();
         }
 
         [Theory]
@@ -158,9 +159,8 @@ namespace WebCalc.IntegrationTests
         {
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
-            context.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>();
-            context.Services.AddSingleton<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
+            context.Services.AddTransient<IUnaryOperationManager, UnaryOperationManager>();
             context.Services.AddSingleton<ISettings, FakeSettings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
 
@@ -174,6 +174,7 @@ namespace WebCalc.IntegrationTests
             }
 
             calc.GetDisplayMemory().Should().Be(expected);
+            calc.ClearOperations();
         }
     }
 }

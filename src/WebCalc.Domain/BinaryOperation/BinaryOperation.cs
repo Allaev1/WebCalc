@@ -4,8 +4,13 @@ namespace WebCalc.Domain.BinaryOperation
 {
     public class BinaryOperation
     {
-        internal BinaryOperation()
+        private static BinaryOperation instance;
+
+        public static BinaryOperation Instance()
         {
+            if (instance is null)
+                instance = new ();
+            return instance;
         }
 
         public float? Operand1 { get; private set; }

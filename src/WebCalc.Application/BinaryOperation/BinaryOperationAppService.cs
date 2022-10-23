@@ -7,43 +7,41 @@ namespace WebCalc.Application.BinaryOperation
 {
     public class BinaryOperationAppService : IBinaryOperationAppService
     {
-        private readonly IBinaryOperationManager binaryOperationManager;
         private readonly IUnaryOperationManager unaryOperationManager;
 
-        public BinaryOperationAppService(IBinaryOperationManager binaryOperationManager, IUnaryOperationManager unaryOperationManager)
+        public BinaryOperationAppService(IUnaryOperationManager unaryOperationManager)
         {
-            this.binaryOperationManager = binaryOperationManager;
             this.unaryOperationManager = unaryOperationManager;
         }
 
         public void SetOperand(float operand)
         {
-            binaryOperationManager.Operation.SetOperand(operand);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(operand);
         }
 
         public void SetOperationType(OperationType operationType)
         {
-            binaryOperationManager.Operation.SetOperationType(operationType);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperationType(operationType);
         }
 
         public void SetResult()
         {
-            binaryOperationManager.Operation.SetResult();
+            Domain.BinaryOperation.BinaryOperation.Instance().SetResult();
         }
 
-        public float? GetOperand1() => binaryOperationManager.Operation.Operand1;
+        public float? GetOperand1() => Domain.BinaryOperation.BinaryOperation.Instance().Operand1;
 
-        public OperationType? GetOperationType() => binaryOperationManager.Operation.OperationType;
+        public OperationType? GetOperationType() => Domain.BinaryOperation.BinaryOperation.Instance().OperationType;
 
-        public float? GetOperand2() => binaryOperationManager.Operation.Operand2;
+        public float? GetOperand2() => Domain.BinaryOperation.BinaryOperation.Instance().Operand2;
 
-        public float? GetResult() => binaryOperationManager.Operation.Result;
+        public float? GetResult() => Domain.BinaryOperation.BinaryOperation.Instance().Result;
 
-        public BinaryOperationState GetState() => binaryOperationManager.Operation.OperationState;
+        public BinaryOperationState GetState() => Domain.BinaryOperation.BinaryOperation.Instance().OperationState;
 
-        public void ClearOperation()
+        public void ClearOperations()
         {
-            binaryOperationManager.Operation.Clear();
+            Domain.BinaryOperation.BinaryOperation.Instance().Clear();
         }
 
         public float GetUpdatedMemory(float increase, float current) => increase + current;
@@ -54,39 +52,39 @@ namespace WebCalc.Application.BinaryOperation
             unaryOperationManager.Percentage.SetResult();
             var percentage = unaryOperationManager.Percentage.Result;
 
-            var temp = binaryOperationManager.Operation.Operand1;
-            binaryOperationManager.Operation.Clear();
+            var temp = Domain.BinaryOperation.BinaryOperation.Instance().Operand1;
+            Domain.BinaryOperation.BinaryOperation.Instance().Clear();
 
-            binaryOperationManager.Operation.SetOperand(temp);
-            binaryOperationManager.Operation.SetOperationType(OperationType.Multiplication);
-            binaryOperationManager.Operation.SetOperand(percentage);
-            binaryOperationManager.Operation.SetResult();
-            var percentageOf = binaryOperationManager.Operation.Result;
-            binaryOperationManager.Operation.Clear();
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(temp);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperationType(OperationType.Multiplication);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(percentage);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetResult();
+            var percentageOf = Domain.BinaryOperation.BinaryOperation.Instance().Result;
+            Domain.BinaryOperation.BinaryOperation.Instance().Clear();
 
-            binaryOperationManager.Operation.SetOperand(temp);
-            binaryOperationManager.Operation.SetOperationType(OperationType.Subtraction);
-            binaryOperationManager.Operation.SetOperand(percentageOf);
-            binaryOperationManager.Operation.SetResult();
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(temp);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperationType(OperationType.Subtraction);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(percentageOf);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetResult();
 
-            return binaryOperationManager.Operation.Result!.Value;
+            return Domain.BinaryOperation.BinaryOperation.Instance().Result!.Value;
         }
 
         public void NegateOperand()
         {
-            if (binaryOperationManager.Operation.OperationState is BinaryOperationState.SettingOperand1)
+            if (Domain.BinaryOperation.BinaryOperation.Instance().OperationState is BinaryOperationState.SettingOperand1)
             {
-                unaryOperationManager.Negate.SetOperand(binaryOperationManager.Operation.Operand1!.Value);
+                unaryOperationManager.Percentage.SetOperand(Domain.BinaryOperation.BinaryOperation.Instance().Operand1!.Value);
             }
             else
             {
-                unaryOperationManager.Negate.SetOperand(binaryOperationManager.Operation.Operand2!.Value);
+                unaryOperationManager.Percentage.SetOperand(Domain.BinaryOperation.BinaryOperation.Instance().Operand2!.Value);
             }
 
-            unaryOperationManager.Negate.SetResult();
-            var negatedOperand = unaryOperationManager.Negate.Result;
+            unaryOperationManager.Percentage.SetResult();
+            var negatedOperand = unaryOperationManager.Percentage.Result;
 
-            binaryOperationManager.Operation.SetOperand(negatedOperand);
+            Domain.BinaryOperation.BinaryOperation.Instance().SetOperand(negatedOperand);
         }
     }
 }

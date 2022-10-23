@@ -53,6 +53,11 @@
 
     public string GetDisplayExpression() => display.Expression;
 
+    // For test use only
+    public void ClearOperations(){
+        binaryOperationAppService.ClearOperations();
+    }
+
     private void NavigateToConsts()
     {
         backNavigateable.AddCurrentLocation(navigationManager.Uri);
@@ -94,7 +99,7 @@
         else if (value == Constants.CLEAR)
         {
             display.Clear();
-            binaryOperationAppService.ClearOperation();
+            binaryOperationAppService.ClearOperations();
 
             return;
         }
@@ -136,7 +141,7 @@
             if (binaryOperationAppService.GetState() is BinaryOperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
             {
                 display.Clear();
-                binaryOperationAppService.ClearOperation();
+                binaryOperationAppService.ClearOperations();
             }
 
             if (value == Constants.NEGATION_OPERATION_SIGN)

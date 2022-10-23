@@ -16,7 +16,6 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-builder.Services.AddSingleton<IBinaryOperationManager, BinaryOperationManager>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
