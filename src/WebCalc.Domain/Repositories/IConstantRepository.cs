@@ -12,10 +12,10 @@ namespace WebCalc.Domain.Repositories
 
         public Task<Constant.Constant> GetByIdAsync(Guid id);
 
-        public Task<Constant.Constant> CreateAsync(string name, float value, string? description = null);
+        public Task CreateAsync(Constant.Constant constant);
 
         public Task DeleteAsync(Guid id);
 
-        public Task<Constant.Constant> UpdateAsync(Guid id, Constant.Constant value);
+        public Task UpdateAsync(Guid id, Constant.Constant constant);
     }
 }

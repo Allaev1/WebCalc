@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Blazored.LocalStorage;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,29 +11,49 @@ namespace WebCalc.BrowserLocalStorageAccess.Repositories
 {
     public class ConstantRepository : IConstantRepository
     {
-        public Task<Constant> CreateAsync(string name, float value, string? description = null)
+        private readonly ILocalStorageService localStorageService;
+
+        public ConstantRepository(ILocalStorageService localStorageService)
         {
-            throw new NotImplementedException();
+            this.localStorageService = localStorageService;
         }
 
-        public Task DeleteAsync(Guid id)
+        public async Task CreateAsync(Constant constant)
         {
-            throw new NotImplementedException();
+            await localStorageService.SetItemAsync(constant.Id.ToString(), constant);
         }
 
-        public Task<IEnumerable<Constant>> GetAllAsync()
+        public async Task DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            await localStorageService.RemoveItemAsync(id.ToString());
         }
 
-        public Task<Constant> GetByIdAsync(Guid id)
+        public async Task<IEnumerable<Constant>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            List<Constant> constants = new();
+            var keys = await localStorageService.KeysAsync();
+
+            foreach (var key in keys)
+            {
+                var constant = await localStorageService.GetItemAsync<Constant>(key);
+                constants.Add(constant);
+            }
+
+            return constants;
         }
 
-        public Task<Constant> UpdateAsync(Guid id, Constant value)
+        public async Task<Constant> GetByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var constant = await localStorageService.GetItemAsync<Constant>(id.ToString());
+
+            return constant;
+        }
+
+        public async Task UpdateAsync(Guid id, Constant constant)
+        {
+            await localStorageService.RemoveItemAsync(id.ToString());
+
+            await localStorageService.SetItemAsync(id.ToString(), constant);
         }
     }
 }
