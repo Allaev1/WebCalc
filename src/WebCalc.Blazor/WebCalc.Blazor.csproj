@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebCalc.Application\WebCalc.Application.csproj" />
+    <ProjectReference Include="..\WebCalc.BrowserLocalStorageAccess\WebCalc.BrowserLocalStorageAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

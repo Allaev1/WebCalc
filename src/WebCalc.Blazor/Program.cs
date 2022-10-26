@@ -10,6 +10,10 @@ using WebCalc.Application.Contracts.Services.Settings;
 using WebCalc.Application.Services.Settings;
 using WebCalc.Application.Contracts.Services.InputValidationService;
 using WebCalc.Application.Services.InputValidationService;
+using Blazored.LocalStorage;
+using WebCalc.Domain.Repositories;
+using WebCalc.BrowserLocalStorageAccess.Repositories;
+using WebCalc.Domain.Constant.DomainManager;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -21,5 +25,8 @@ builder.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<ISettings, FakeSettings>();
 builder.Services.AddSingleton<IInputValidationService, InputValidationService>();
+builder.Services.AddSingleton<IConstantRepository, ConstantRepository>();
+builder.Services.AddSingleton<IConstantManager, ConstantManager>();
+builder.Services.AddBlazoredLocalStorage();
 
 await builder.Build().RunAsync(); 
