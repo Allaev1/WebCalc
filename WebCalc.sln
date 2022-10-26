@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Application.Contrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Application", "src\WebCalc.Application\WebCalc.Application.csproj", "{75FA26F5-9F81-4CE4-A048-B1EC7780E18B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.BrowserLocalStorageAccess", "src\WebCalc.BrowserLocalStorageAccess\WebCalc.BrowserLocalStorageAccess.csproj", "{AAAA740B-CDCD-4310-B1D7-AFE93A1234FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{75FA26F5-9F81-4CE4-A048-B1EC7780E18B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75FA26F5-9F81-4CE4-A048-B1EC7780E18B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75FA26F5-9F81-4CE4-A048-B1EC7780E18B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAAA740B-CDCD-4310-B1D7-AFE93A1234FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAAA740B-CDCD-4310-B1D7-AFE93A1234FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAAA740B-CDCD-4310-B1D7-AFE93A1234FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAAA740B-CDCD-4310-B1D7-AFE93A1234FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{CC103473-7994-4224-9213-EC875DC03F51} = {F57FD55A-8CBE-4F59-A8B8-FBFBDCB48860}
 		{AE799ED7-976C-405E-B9C6-8A1A647A9A51} = {F57FD55A-8CBE-4F59-A8B8-FBFBDCB48860}
 		{75FA26F5-9F81-4CE4-A048-B1EC7780E18B} = {F57FD55A-8CBE-4F59-A8B8-FBFBDCB48860}
+		{AAAA740B-CDCD-4310-B1D7-AFE93A1234FD} = {F57FD55A-8CBE-4F59-A8B8-FBFBDCB48860}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D90F8C6-4191-4650-8C2E-54FD8768A3FD}
