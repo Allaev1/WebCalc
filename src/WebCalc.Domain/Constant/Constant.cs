@@ -15,7 +15,7 @@ namespace WebCalc.Domain.Constant
         internal Constant(
             string name,
             float value,
-            string description)
+            string? description)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new EmptyConstantNameException(nameof(Name));

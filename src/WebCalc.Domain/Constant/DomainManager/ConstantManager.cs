@@ -17,7 +17,7 @@ namespace WebCalc.Domain.Constant.DomainManager
             this.constantRepository = constantRepository;
         }
 
-        public async Task<Constant> CreateConstantAsync(string name, float value, string description)
+        public async Task<Constant> CreateConstantAsync(string name, float value, string? description)
         {
             await ValidateName(name);
 
@@ -26,7 +26,7 @@ namespace WebCalc.Domain.Constant.DomainManager
             return constant;
         }
 
-        public async Task<Constant> UpdateConstantAsync(Guid id, string name, float value, string description)
+        public async Task<Constant> UpdateConstantAsync(Guid id, string name, float value, string? description)
         {
             var @const = await constantRepository.GetByIdAsync(id);
 
