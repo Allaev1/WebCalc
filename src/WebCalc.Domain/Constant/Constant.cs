@@ -4,41 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Domain.Constant.Exceptions;
+using WebCalc.Domain.Shared.Constant;
 
 namespace WebCalc.Domain.Constant
 {
-    public class Constant
+    public class Constant : ConstantBase<float>
     {
-        //For serialization
-        private Constant() { }
-
         internal Constant(
             string name,
             float value,
-            string? description)
+            string? description):base(name, value)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new EmptyConstantNameException(nameof(Name));
-
-            Id = Guid.NewGuid();
-            Name = name;
-            Value = value;
+            Description = description;
         }
-
-        public Guid Id { get; }
-
-        public string Name { get; private set; }
-
-        public float Value { get; set; }
 
         public string? Description { get; set; }
-
-        public void SetName(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new EmptyConstantNameException(nameof(Name));
-
-            Name = name;
-        }
     }
 }
