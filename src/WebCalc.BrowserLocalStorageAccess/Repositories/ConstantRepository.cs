@@ -33,10 +33,13 @@ namespace WebCalc.BrowserLocalStorageAccess.Repositories
             List<Constant> constants = new();
             var keys = await localStorageService.KeysAsync();
 
-            foreach (var key in keys)
+            if (keys.Count() > 0)
             {
-                var constant = await localStorageService.GetItemAsync<Constant>(key);
-                constants.Add(constant);
+                foreach (var key in keys)
+                {
+                    var constant = await localStorageService.GetItemAsync<Constant>(key);
+                    constants.Add(constant);
+                }
             }
 
             return constants;

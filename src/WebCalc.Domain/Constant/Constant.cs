@@ -10,6 +10,8 @@ namespace WebCalc.Domain.Constant
 {
     public class Constant : ConstantBase<float>
     {
+        private Constant() { }
+
         internal Constant(
             string name,
             float value,

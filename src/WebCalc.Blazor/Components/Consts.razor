@@ -1,13 +1,54 @@
 ﻿@page "/consts"
 
+@using WebCalc.Application.Contracts.Constants
+@using WebCalc.Application.Contracts.Constants.DTO
 @using WebCalc.Services
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
+@inject IConstantAppService constantAppService
 
-<h3>Constants</h3>
-<button @onclick="NavigateBack">Back</button>
+<div id="consts-container">
+    <h3>Constants</h3>
+
+    @if (constants.Count() > 0)
+    {
+        @foreach (var constant in constants)
+        {
+            <p>
+                @constant.Name
+            </p>
+        }
+    }
+    else
+    {
+        <p>You do not have saved constants</p>
+    }
+
+    <button @onclick="NavigateBack">Back</button>
+</div>
+
+<style>
+    #consts-container {
+        display: flex;
+        flex-direction: column;
+    }
+</style>
 
 @code {
+    private List<ConstantDto> constants = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var consts = await constantAppService.GetAllAsync();
+
+        if (constants.Count() != 0)
+        {
+            constants.Clear();
+        }
+
+        constants.AddRange(consts);
+    }
+
     private void NavigateBack()
     {
         var location = backNavigateable.GetNaivgateBackLocation();

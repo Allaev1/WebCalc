@@ -1,17 +1,126 @@
-﻿@page "/addEditConst/{constant:float}"
+﻿@page "/addEditConst/{constantValue:float}/{constantName?}/{constantDescription?}"
+@using WebCalc.Application.Contracts.Constants
+@using WebCalc.Domain.Constant.DomainManager
 @using WebCalc.Services
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
+@inject IConstantAppService constantAppService
 
-<div>
-    <h3>AddEditConstant</h3>
-    <p>Passed constant - @Constant</p>
-    <button @onclick="NavigateBack">Back</button>
+<div id="add-edit-const-container">
+    <h3>@title</h3>
+
+    <div class="add-edit-block">
+        <p id="constant-name-header">
+            <label for="name-input">Name</label>
+        </p>
+        <input id="name-input" type="text" @bind-value="@ConstantName" placeholder="Constant name"/>
+    </div>
+
+    <div class="add-edit-block">
+        <p id="value-header">
+            <label for="value-input">Value</label>
+        </p>
+        <input id="value-input" type="number" @bind-value="@ConstantValue" placeholder="Constant value"/>
+    </div>
+
+    <div class="add-edit-block">
+        <p>
+            <label for="description-value">Description</label>
+        </p>
+        <input id="description-value" type="text" @bind-value="@ConstantDescription" placeholder="Constant description"/>
+    </div>
+
+    <div id="save-back-container">
+        <button id="save-button" class="save-back-container-button" @onclick="SaveAsync">@saveButtonText</button>
+        <button id="back-button" class="save-back-container-button" @onclick="NavigateBack">Back</button>
+    </div>
 </div>
 
+<style>
+    #buttons-container {
+        display: flex;
+    }
+
+    #save-button{
+        background-color: #4CAF50;
+        margin-right: 8px;
+    }
+
+    #back-button{
+        background-color: red;
+        margin-left: 8px;
+    }
+
+    #save-back-container{
+        display: flex;
+    }
+
+    .save-back-container-button{
+        width: 100%;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    #add-edit-const-container {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        margin: 10px;
+        row-gap: 20px;
+    }
+
+    .add-edit-block>input{
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>
+
 @code {
+    private string title = null!;
+    private string saveButtonText = null!;
+    private bool addingConstant;
+
     [Parameter]
-    public float Constant { get; set; }
+    public float ConstantValue { get; set; }
+
+    [Parameter]
+    public string? ConstantName { get; set; }
+
+    [Parameter]
+    public string? ConstantDescription { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        addingConstant = ConstantName is null;
+        saveButtonText = addingConstant ? "Add" : "Save";
+        title = addingConstant ? "Adding constant" : "Editing constant";
+    }
+
+    private async Task SaveAsync()
+    {
+        if (addingConstant)
+        {
+            await constantAppService.CreateAsync(new ()
+            {
+                Name = ConstantName,
+                Description = ConstantDescription,
+                Value = ConstantValue                
+            });
+        }
+        else
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     private void NavigateBack()
     {

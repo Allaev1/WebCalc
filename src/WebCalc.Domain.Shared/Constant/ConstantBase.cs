@@ -10,7 +10,7 @@ namespace WebCalc.Domain.Shared.Constant
 {
     public abstract class ConstantBase<TValue>
     {
-        private ConstantBase() { }
+        protected ConstantBase() { }
 
         protected internal ConstantBase(string name, TValue value)
         {
