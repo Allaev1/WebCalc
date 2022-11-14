@@ -6,6 +6,7 @@
 @using WebCalc.Domain.Shared
 @using WebCalc.Services
 @using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
 @implements ICalc
 @inject IBinaryOperationAppService binaryOperationAppService
 @inject NavigationManager navigationManager
@@ -14,12 +15,12 @@
 
 <div class="container">
     <div id="menu">
-        <SfButton CssClass="menu-button e-round" IsPrimary="true" OnClick="NavigateToAddEditConst">
+        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="NavigateToAddEditConst">
             <span class="material-symbols-outlined">
                 add
             </span>
         </SfButton>
-        <SfButton CssClass="menu-button e-round" IsPrimary="true">
+        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true">
             <span class="material-symbols-outlined">
                 settings
             </span>
@@ -40,18 +41,19 @@
     .menu-button {
         margin-top: 5px;
         margin-bottom: 5px;
-    }
-
-    .menu-button {
         background: unset;
         border: unset;
         outline: unset;
     }
 
+    .material-symbols-outlined{
+        padding: 2px;
+    }
+
     .container {
         display: flex;
         flex-direction: column;
-        width: auto;
+        width: 100%;
         background: lightgray;
     }
 </style>

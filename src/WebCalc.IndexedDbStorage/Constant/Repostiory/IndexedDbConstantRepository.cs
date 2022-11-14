@@ -65,7 +65,7 @@ namespace WebCalc.IndexedDbStorage.Constant.Repostiory
         {
             using var db = await indexedDbFactory.Create<WebCalcDb>();
             var constant = db.Constants.Single(x => x.Id == id);
-            var result = Activator.CreateInstance(typeof(Domain.Constant.Constant).BaseType!, true);
+            var result = Activator.CreateInstance(typeof(Domain.Constant.Constant), true);
 
             SetConstant(constant, result);
 
@@ -86,14 +86,14 @@ namespace WebCalc.IndexedDbStorage.Constant.Repostiory
 
         private void SetConstant(ConstantModel constantModel, object constantDomain)
         {
-            var idProperty = typeof(Domain.Constant.Constant).BaseType!.GetProperty("Id");
-            var nameProperty = typeof(Domain.Constant.Constant).BaseType!.GetProperty("Name");
-            var valueProperty = typeof(Domain.Constant.Constant).BaseType!.GetProperty("Value");
+            var idProperty = typeof(Domain.Constant.Constant).GetProperty("Id");
+            var nameProperty = typeof(Domain.Constant.Constant).GetProperty("Name");
+            var valueProperty = typeof(Domain.Constant.Constant).GetProperty("Value");
             var descriptionProperty = typeof(Domain.Constant.Constant).GetProperty("Description");
 
-            idProperty?.SetValue(constantDomain, constantModel.Id);
-            nameProperty?.SetValue(constantDomain, constantModel.Name);
-            valueProperty?.SetValue(constantDomain, constantModel.Value);
+            idProperty.SetValue(constantDomain, constantModel.Id);
+            nameProperty.SetValue(constantDomain, constantModel.Name);
+            valueProperty.SetValue(constantDomain, constantModel.Value);
             descriptionProperty?.SetValue(constantDomain, constantModel.Description);
         }
     }
