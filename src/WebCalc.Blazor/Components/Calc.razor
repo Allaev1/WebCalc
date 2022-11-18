@@ -1,0 +1,174 @@
+﻿@using WebCalc.Application.BinaryOperation
+@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Application.Contracts.Services.InputValidationService
+@using WebCalc.Contracts
+@using WebCalc.Domain.BinaryOperation
+@using WebCalc.Domain.Shared
+@using WebCalc.Services
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+@implements ICalc
+@inject IBinaryOperationAppService binaryOperationAppService
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
+@inject IInputValidationService inputValidationService
+
+<div class="container">
+    <div id="menu">
+        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="NavigateToAddEditConst">
+            <span class="material-symbols-outlined">
+                add
+            </span>
+        </SfButton>
+        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                settings
+            </span>
+        </SfButton>
+    </div>
+    <CalcDisplay @ref="display" OnValidOperandGenerated="binaryOperationAppService.SetOperand" OnOperationTypeChanged="binaryOperationAppService.SetOperationType"></CalcDisplay>
+    <CalcKeyboard OnButtonClick="UpdateDisplayAsync" OnConstClick="NavigateToConsts"></CalcKeyboard>
+</div>
+
+<style>
+    #menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+
+    .menu-button {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        background: unset;
+        border: unset;
+        outline: unset;
+    }
+
+    .material-symbols-outlined{
+        padding: 2px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background: lightgray;
+    }
+</style>
+
+@code {
+    private CalcDisplay display;
+
+    public string GetDisplayValue() => display.Value;
+
+    public string GetDisplayMemory() => display.Memory;
+
+    public string GetDisplayExpression() => display.Expression;
+
+    // For test use only
+    public void ClearOperations()
+    {
+        binaryOperationAppService.ClearOperations();
+    }
+
+    private void NavigateToConsts()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo("/consts");
+    }
+
+    private void NavigateToAddEditConst()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo($"/addEditConst/{display.Value}");
+    }
+
+    private async Task UpdateDisplayAsync(char value)
+    {
+        if (display is null) throw new NullReferenceException();
+
+        if (value == Constants.MEMORY_ADD)
+        {
+            var displayMemory = display.Memory;
+            var memory = binaryOperationAppService.GetUpdatedMemory(
+                float.Parse(display.Value),
+                float.Parse(string.IsNullOrWhiteSpace(displayMemory) ? "0" : displayMemory));
+            display.SetMemory(memory.ToString());
+
+            return;
+        }
+        else if (value == Constants.MEMORY_CLEAR)
+        {
+            display.ClearMemory();
+
+            return;
+        }
+        else if (value == Constants.MEMORY_READ)
+        {
+            display.ReadMemory();
+            return;
+        }
+        else if (inputValidationService.IsEditionAllowed(value, display.Value)) return;
+        else if (value == Constants.CLEAR)
+        {
+            display.Clear();
+            binaryOperationAppService.ClearOperations();
+
+            return;
+        }
+        else if (IsChainingCalculation(value))
+        {
+            binaryOperationAppService.SetResult();
+            var result = binaryOperationAppService.GetResult();
+            binaryOperationAppService.SetOperand(result!.Value);
+            display.Clear();
+
+            display.Append(result.ToString()!.ToArray());
+        }
+        else if (value == '=' && display.PercentageOff)
+        {
+            var result = binaryOperationAppService.GetNumberWithoutPercentage(int.Parse(display.Value));
+            await display.AppendAsync(value);
+            display.Append(result.ToString()!.ToArray());
+
+            return;
+        }
+        else if (value == '=')
+        {
+            binaryOperationAppService.SetResult();
+            var result = binaryOperationAppService.GetResult();
+            await display.AppendAsync(value);
+            display.Append(result.ToString()!.ToArray());
+
+            return;
+        }
+        else
+        {
+            if (binaryOperationAppService.GetState() is BinaryOperationState.ResultSetted && (value == '+' || value == '-' || value == '*' || value == '/'))
+            {
+                display.Clear();
+                display.Append(binaryOperationAppService.GetResult().ToString()!.ToArray());
+                binaryOperationAppService.SetOperand(float.Parse(display.Value));
+            }
+
+            if (binaryOperationAppService.GetState() is BinaryOperationState.ResultSetted && (char.IsDigit(value) || value == Constants.FLOATING_POINT))
+            {
+                display.Clear();
+                binaryOperationAppService.ClearOperations();
+            }
+
+            if (value == Constants.NEGATION_OPERATION_SIGN)
+            {
+                binaryOperationAppService.NegateOperand();
+            }
+        }
+
+        await display.AppendAsync(value);
+    }
+
+    private bool IsChainingCalculation(char value) =>
+        (value == '+' || value == '-' || value == '*' || value == '/') &&
+        binaryOperationAppService.GetOperand2() is not null;
+}

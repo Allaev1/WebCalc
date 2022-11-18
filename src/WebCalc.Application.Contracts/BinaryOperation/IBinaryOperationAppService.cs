@@ -1,19 +1,32 @@
 ﻿using WebCalc.Domain.BinaryOperation;
+using WebCalc.Domain.Shared;
 
 namespace WebCalc.Application.Contracts.BinaryOperation
 {
     public interface IBinaryOperationAppService
     {
-        public event EventHandler<string> DisplayValueChanged;
+        public void SetOperand(float operand);
 
-        public event EventHandler<string> ExpressionValueChanged;
+        public void SetOperationType(OperationType operationType);
 
-        public event EventHandler<string> MemoryValueChanged;
+        public void SetResult();
 
-        /// <summary>
-        /// Edit display and expression values
-        /// </summary>
-        /// <param name="value"></param>
-        public void EditValues(char value);
+        public float GetUpdatedMemory(float increase, float current);
+
+        public float GetNumberWithoutPercentage(int percentageOff);
+
+        public float? GetOperand1();
+
+        public OperationType? GetOperationType();
+
+        public float? GetOperand2();
+
+        public float? GetResult();
+
+        public BinaryOperationState GetState();
+
+        public void ClearOperations();
+
+        public void NegateOperand();
     }
 }

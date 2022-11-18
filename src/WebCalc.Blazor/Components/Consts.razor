@@ -1,0 +1,125 @@
+﻿@page "/consts"
+
+@using WebCalc.Application.Contracts.Constants
+@using WebCalc.Application.Contracts.Constants.DTO
+@using WebCalc.Services
+@using Syncfusion.Blazor.Lists
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
+@inject IConstantAppService constantAppService
+
+<div id="consts-container">
+    <SfAppBar id="consts-app-bar" ColorMode="AppBarColor.Primary">
+        <span class="regular">Constants</span>
+        <AppBarSpacer></AppBarSpacer>
+        <SfButton CssClass="e-round" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                add
+            </span>
+        </SfButton>
+        <SfButton CssClass="e-round" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                edit
+            </span>
+        </SfButton>
+        <SfButton CssClass="e-round" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                delete
+            </span>
+        </SfButton>
+    </SfAppBar>
+    <SfListView ID="list-view" DataSource="@constants" CssClass="e-list-template" TValue="ConstantDto">
+        <ListViewTemplates TValue="ConstantDto">
+            <Template>
+                <div id="constant-template">
+                    <p id="constant-name">@context.Name</p>
+                    <p id="constant-value">@context.Value</p>
+                    <p id="constant-description">@context.Description</p>
+                </div>
+            </Template>
+        </ListViewTemplates>
+    </SfListView>
+
+    <SfButton id="back-button" @onclick="NavigateBack" IsPrimary="true">Back</SfButton>
+</div>
+
+<style>
+    #consts-app-bar{
+        margin: 0;
+    }
+
+    .e-round{
+        margin: 2px;
+        border-color: white;
+    }
+
+    .material-symbols-outlined{
+        padding: 2px;
+    }
+
+    #list-view{
+        flex-grow: 1;
+    }
+
+    #back-button{
+        height: auto;
+        background: red;
+    }
+
+    #constant-template{
+        display: flex;
+        flex-direction: column;
+    }
+
+    #constant-template>p{
+        margin-bottom:0;
+    }
+
+    #constant-name{
+        font-size: 36px;
+        color: red;
+    }
+
+    #constant-value{
+        font-size: 28px;
+        color: blue;
+    }
+
+    #constant-description{
+        font-size: 20px;
+        color: gray;
+    }
+
+    #consts-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        align-items: stretch;
+        margin: 5px;
+        gap: 5px;
+    }
+</style>
+
+@code {
+    private List<ConstantDto> constants = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var consts = await constantAppService.GetAllAsync();
+
+        if (constants.Count() != 0)
+        {
+            constants.Clear();
+        }
+
+        constants.AddRange(consts);
+    }
+
+    private void NavigateBack()
+    {
+        var location = backNavigateable.GetNaivgateBackLocation();
+        navigationManager.NavigateTo(location);
+    }
+}

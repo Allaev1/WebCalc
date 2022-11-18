@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" PrivateAssets="all" />
+    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="20.3.0.56" />
+    <PackageReference Include="Syncfusion.Blazor.Lists" Version="20.3.0.56" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="20.3.0.56" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.3.0.56" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WebCalc.Application\WebCalc.Application.csproj" />
+    <ProjectReference Include="..\WebCalc.IndexedDbStorage\WebCalc.IndexedDbStorage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
+  </ItemGroup>
+
+</Project>

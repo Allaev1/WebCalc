@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WebCalc.Domain.BinaryOperation
+namespace WebCalc.Application.BinaryOperation
 {
     public static class Constants
     {
@@ -21,5 +21,7 @@ namespace WebCalc.Domain.BinaryOperation
         public const char MEMORY_READ = '&';
 
         public const char MEMORY_CLEAR = '$';
+
+        public const char PERCENTAGE_OFF = '%';
     }
 }
