@@ -1,36 +1,45 @@
 ﻿@page "/consts"
 
+@using System.Collections.ObjectModel;
 @using WebCalc.Application.Contracts.Constants
 @using WebCalc.Application.Contracts.Constants.DTO
 @using WebCalc.Services
 @using Syncfusion.Blazor.Lists
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
 @inject IConstantAppService constantAppService
 
 <div id="consts-container">
     <SfAppBar id="consts-app-bar" ColorMode="AppBarColor.Primary">
-        <span class="regular">Constants</span>
+        <SfButton id="back-button" CssClass="e-round" OnClick="NavigateBack" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                arrow_back
+            </span>
+        </SfButton>
+        <span id="page-title" class="regular">Constants</span>
         <AppBarSpacer></AppBarSpacer>
-        <SfButton CssClass="e-round" IsPrimary="true">
+        <SfButton CssClass="e-round" IsPrimary="true" OnClick="@OnAddButtonClick">
             <span class="material-symbols-outlined">
                 add
             </span>
         </SfButton>
-        <SfButton CssClass="e-round" IsPrimary="true">
+        <SfButton CssClass="e-round" IsPrimary="true" Disabled="@editButtonDisabled" OnClick="@OnEditButtonClick">
             <span class="material-symbols-outlined">
                 edit
             </span>
         </SfButton>
-        <SfButton CssClass="e-round" IsPrimary="true">
+        <SfButton CssClass="e-round" IsPrimary="true" Disabled="@deleteButtonDisabled" OnClick="@(e => deleteDialogVisible = true)">
             <span class="material-symbols-outlined">
                 delete
             </span>
         </SfButton>
     </SfAppBar>
     <SfListView ID="list-view" DataSource="@constants" CssClass="e-list-template" TValue="ConstantDto">
+        <ListViewFieldSettings TValue="ConstantDto" Id="Id"></ListViewFieldSettings>
+        <ListViewEvents TValue="ConstantDto" Clicked="@OnListViewItemSelected"></ListViewEvents>
         <ListViewTemplates TValue="ConstantDto">
             <Template>
                 <div id="constant-template">
@@ -42,52 +51,63 @@
         </ListViewTemplates>
     </SfListView>
 
-    <SfButton id="back-button" @onclick="NavigateBack" IsPrimary="true">Back</SfButton>
+    <SfDialog Target="#consts-container" Width="500px" @bind-Visible="deleteDialogVisible">
+        <DialogTemplates>
+            <Header>Delete dialog</Header>
+            <Content>
+                Delete constant - @selectedConstant.Name?
+            </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton IsPrimary="true" OnClick="DeleteConstantAsync" Content="Delete"></DialogButton>
+            <DialogButton OnClick="CloseDeleteDialog" Content="Cancel">No</DialogButton>
+        </DialogButtons>
+    </SfDialog>
 </div>
 
 <style>
-    #consts-app-bar{
+    #page-title{
+        font-size: 25px;
+        margin-left: 5px;
+    }
+
+    #consts-app-bar {
         margin: 0;
     }
 
-    .e-round{
+    .e-round {
         margin: 2px;
         border-color: white;
     }
 
-    .material-symbols-outlined{
+    .material-symbols-outlined {
         padding: 2px;
     }
 
-    #list-view{
+    #list-view {
         flex-grow: 1;
     }
 
-    #back-button{
-        height: auto;
-        background: red;
-    }
-
-    #constant-template{
+    #constant-template {
         display: flex;
         flex-direction: column;
     }
 
-    #constant-template>p{
-        margin-bottom:0;
+    #constant-template > p {
+        margin-bottom: 0;
     }
 
-    #constant-name{
+    #constant-name {
         font-size: 36px;
         color: red;
     }
 
-    #constant-value{
+    #constant-value {
         font-size: 28px;
         color: blue;
     }
 
-    #constant-description{
+    #constant-description {
         font-size: 20px;
         color: gray;
     }
@@ -103,7 +123,48 @@
 </style>
 
 @code {
-    private List<ConstantDto> constants = new();
+    private bool deleteButtonDisabled = true;
+    private bool editButtonDisabled = true;
+    private bool deleteDialogVisible;
+    private ObservableCollection<ConstantDto> constants = new();
+    private ConstantDto? selectedConstant;
+
+
+    private void CloseDeleteDialog()
+    {
+        deleteDialogVisible = false;
+        selectedConstant = null;
+    }
+
+    private async Task DeleteConstantAsync()
+    {
+        deleteDialogVisible = false;
+        constants.Remove(selectedConstant);
+        await constantAppService.DeleteAsync(selectedConstant.Id);
+
+        selectedConstant = null;
+        deleteButtonDisabled = true;
+        editButtonDisabled = true;
+    }
+
+    private void OnListViewItemSelected(ClickEventArgs<ConstantDto> args)
+    {
+        deleteButtonDisabled = false;
+        editButtonDisabled = false;
+        selectedConstant = constants.Single(x => x.Id == args.ItemData.Id);
+    }
+
+    private void OnEditButtonClick(MouseEventArgs args)
+    {
+        backNavigateable.AddCurrentLocation("/consts");
+        navigationManager.NavigateTo($"/addEditConst/{selectedConstant.Id}/{selectedConstant.Name}/{selectedConstant.Value}/{selectedConstant.Description}");
+    }
+
+    private void OnAddButtonClick(MouseEventArgs args)
+    {
+        backNavigateable.AddCurrentLocation("/consts");
+        navigationManager.NavigateTo("/addEditConst");
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -114,7 +175,10 @@
             constants.Clear();
         }
 
-        constants.AddRange(consts);
+        foreach (var constant in consts)
+        {
+            constants.Add(constant);
+        }
     }
 
     private void NavigateBack()

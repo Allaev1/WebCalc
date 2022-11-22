@@ -1,8 +1,10 @@
-﻿@page "/addEditConst/{constantValue:float?}/{constantName?}/{constantDescription?}"
+﻿@page "/addEditConst/{id:guid}/{constantName}/{constantValue:float}/{constantDescription?}"
+@page "/addEditConst/{constantValue:float}"
+
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.Notifications
 @using WebCalc.Application.Contracts.Constants
 @using WebCalc.Blazor.Validation
 @using WebCalc.Domain.Constant.DomainManager
@@ -13,7 +15,7 @@
 
 <div id="add-edit-const-container">
     <SfAppBar id="add-edit-const-app-bar" ColorMode="AppBarColor.Primary">
-        <SfButton id="back-button" CssClass="e-round">
+        <SfButton id="back-button" CssClass="e-round" OnClick="NavigateBack" IsPrimary="true">
             <span class="material-symbols-outlined">
                 arrow_back
             </span>
@@ -45,20 +47,21 @@
         </div>
     </EditForm>
 
-    <SfDialog @bind-Visible="IsDialogVisible" Width="100%" ShowCloseIcon="true" Target="add-edit-const-container">
-        <DialogTemplates>
-            <Header>Operation result</Header>
-            <Content>@dialogContent</Content>
-        </DialogTemplates>
-    </SfDialog>
+    <SfToast ID="operation-result-toast" @ref="@operationResultToast" Title="Success" CssClass="e-toast-success" Icon="e-success toast-icons" Content="@popupContent" Timeout="5000">
+        <ToastPosition X="Right"></ToastPosition>
+    </SfToast>
 </div>
 
 <style>
-    .material-symbols-outlined{
-        padding:2px;
+    #operation-result-toast {
+        font-size: 17px;
     }
 
-    #title{
+    .material-symbols-outlined {
+        padding: 2px;
+    }
+
+    #title {
         font-size: 25px;
         margin-left: 5px;
     }
@@ -88,22 +91,69 @@
         row-gap: 20px;
     }
 
-    .add-edit-block{
+    .add-edit-block {
         margin-bottom: 10px;
     }
 
-    .add-edit-block>label{
-        font-size:25px;
+        .add-edit-block > label {
+            font-size: 25px;
+        }
+
+    @@font-face {
+        font-family: 'Toast_icons';
+        src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    #toast_types button {
+        margin: 5px;
+        min-width: 160px;
+        max-width: 160px;
+    }
+
+    .toast-icons {
+        font-family: 'Toast_icons' !important;
+        speak: none;
+        font-size: 55px;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    #toast_type .e-toast-icon.e-icons {
+        height: auto;
+        font-size: 30px;
+    }
+
+    .bootstrap5 #toast_type .e-toast-icon.e-icons,
+    .bootstrap5-dark #toast_type .e-toast-icon.e-icons {
+        height: 25px;
+    }
+
+    .toast-icons.e-success::before {
+        content: "\e701";
+    }
+
+    #toast_types {
+        text-align: center;
     }
 </style>
 
 @code {
+    private SfToast? operationResultToast;
     private AddEditConstValidationModel tempConst = new();
     private string title = null!;
-    private string dialogContent;
+    private string? popupContent;
     private string saveButtonText = null!;
     private bool addingConstant;
-    private bool IsDialogVisible { get; set; }
+
+    [Parameter]
+    public Guid? Id { get; set; }
 
     [Parameter]
     public float? ConstantValue { get; set; }
@@ -116,9 +166,13 @@
 
     protected override void OnParametersSet()
     {
-        addingConstant = ConstantName is null || ConstantValue is null;
+        addingConstant = !Id.HasValue;
         saveButtonText = addingConstant ? "Add" : "Save";
         title = addingConstant ? "Adding constant" : "Editing constant";
+
+        tempConst.Name = ConstantName;
+        tempConst.Value = ConstantValue;
+        tempConst.Description = ConstantDescription;
     }
 
     private async Task SaveAsync()
@@ -131,20 +185,27 @@
                 Description = tempConst.Description,
                 Value = tempConst.Value.Value
             });
+            popupContent = "Constant added successfully";
             tempConst.Name = null;
             tempConst.Value = null;
             tempConst.Value = null;
-            IsDialogVisible = true;
-            dialogContent = "Constant added successfully";
+
+            await operationResultToast.ShowAsync();
         }
         else
         {
-            throw new NotImplementedException();
-        }
+            await constantAppService.UpdateAsync(Id.Value, new()
+            {
+                Name = tempConst.Name,
+                Description = tempConst.Description,
+                Value = tempConst.Value.Value
+            });
 
+            NavigateBack(new());
+        }
     }
 
-    private void NavigateBack()
+    private void NavigateBack(MouseEventArgs args)
     {
         var location = backNavigateable.GetNaivgateBackLocation();
         navigationManager.NavigateTo(location);
