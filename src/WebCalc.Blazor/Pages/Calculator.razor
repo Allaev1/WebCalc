@@ -1,3 +1,72 @@
 ﻿@page "/"
+
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
 @using WebCalc.Blazor.Components
-<Calc></Calc>
+@using WebCalc.Services;
+
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
+
+<div id="calculator-container">
+    <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
+        <span class="regular">Calculator</span>
+        <AppBarSpacer></AppBarSpacer>
+        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="NavigateToAddEditConst">
+            <span class="material-symbols-outlined">
+                add
+            </span>
+        </SfButton>
+        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                settings
+            </span>
+        </SfButton>
+    </SfAppBar>
+
+    <Calc @ref="@calc" OnNavigateToConsts="NavigateToConsts"></Calc>
+</div>
+
+<style>
+    #calculator-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    #menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+
+    .menu-button {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        background: unset;
+        border: unset;
+        outline: unset;
+    }
+
+    .material-symbols-outlined {
+        padding: 2px;
+    }
+</style>
+
+@code {
+    private Calc? calc;
+
+    private void NavigateToConsts()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo("/consts");
+    }
+
+    private void NavigateToAddEditConst()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo($"/addEditConst/{calc?.GetDisplayValue()}");
+    }
+}
