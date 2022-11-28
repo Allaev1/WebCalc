@@ -10,7 +10,7 @@
 
 <div id="calculator-container">
     <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
-        <span class="regular">Calculator</span>
+        <span id="title" class="regular">Calculator</span>
         <AppBarSpacer></AppBarSpacer>
         <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="NavigateToAddEditConst">
             <span class="material-symbols-outlined">
@@ -24,7 +24,7 @@
         </SfButton>
     </SfAppBar>
 
-    <Calc @ref="@calc" OnNavigateToConsts="NavigateToConsts"></Calc>
+    <Calc Id="calc" @ref="@calc" OnNavigateToConsts="NavigateToConsts"></Calc>
 </div>
 
 <style>
@@ -33,6 +33,10 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
+    }
+
+    #calc{
+        flex-grow: 1;
     }
 
     #menu {

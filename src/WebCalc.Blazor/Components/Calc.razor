@@ -11,7 +11,7 @@
 @inject IBinaryOperationAppService binaryOperationAppService
 @inject IInputValidationService inputValidationService
 
-<div class="container">
+<div id="@Id" class="container">
     <CalcDisplay @ref="display" OnValidOperandGenerated="binaryOperationAppService.SetOperand" OnOperationTypeChanged="binaryOperationAppService.SetOperationType"></CalcDisplay>
     <CalcKeyboard OnButtonClick="UpdateDisplayAsync" OnConstClick="NavigateToConstsAsync"></CalcKeyboard>
 </div>
@@ -26,6 +26,9 @@
 </style>
 
 @code {
+    [Parameter]
+    public string? Id { get; set; }
+
     [Parameter]
     public EventCallback OnNavigateToConsts { get; set; }
 
