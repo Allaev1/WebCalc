@@ -2,6 +2,7 @@
 
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
 @using WebCalc.Blazor.Components
 @using WebCalc.Services;
 
@@ -12,7 +13,7 @@
     <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
         <span id="title" class="regular">Calculator</span>
         <AppBarSpacer></AppBarSpacer>
-        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="NavigateToAddEditConst">
+        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="OnAddConstClick">
             <span class="material-symbols-outlined">
                 add
             </span>
@@ -25,6 +26,18 @@
     </SfAppBar>
 
     <Calc Id="calc" @ref="@calc" OnNavigateToConsts="NavigateToConsts"></Calc>
+
+    <SfDialog Target="#calculator-container" Width="500px" @bind-Visible="addConstVisible">
+        <DialogTemplates>
+            <Content>
+                Do you want to add - @calc!.GetDisplayValue(), as constant?
+            </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton IsPrimary="true" OnClick="NavigateToAddEditConst" Content="Yes"></DialogButton>
+            <DialogButton OnClick="OnCloseDialogClick" Content="No"></DialogButton>
+        </DialogButtons>
+    </SfDialog>
 </div>
 
 <style>
@@ -61,6 +74,17 @@
 
 @code {
     private Calc? calc;
+    private bool addConstVisible;
+
+    private void OnCloseDialogClick()
+    {
+        addConstVisible = false;
+    }
+
+    private void OnAddConstClick()
+    {
+        addConstVisible = true;
+    }
 
     private void NavigateToConsts()
     {
