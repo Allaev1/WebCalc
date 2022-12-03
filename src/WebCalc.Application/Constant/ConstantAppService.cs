@@ -13,9 +13,9 @@ namespace WebCalc.Application.Constant
     public class ConstantAppService : IConstantAppService
     {
         private readonly IConstantManager constantManager;
-        private readonly IConstantRepository constantRepository;
+        private readonly IRepository<Domain.Constant.Constant> constantRepository;
 
-        public ConstantAppService(IConstantManager constantManager, IConstantRepository constantRepository)
+        public ConstantAppService(IConstantManager constantManager, IRepository<Domain.Constant.Constant> constantRepository)
         {
             this.constantManager = constantManager;
             this.constantRepository = constantRepository;

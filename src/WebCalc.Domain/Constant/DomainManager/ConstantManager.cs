@@ -10,9 +10,9 @@ namespace WebCalc.Domain.Constant.DomainManager
 {
     public class ConstantManager : IConstantManager
     {
-        private readonly IConstantRepository constantRepository;
+        private readonly IRepository<Constant> constantRepository;
 
-        public ConstantManager(IConstantRepository constantRepository)
+        public ConstantManager(IRepository<Constant> constantRepository)
         {
             this.constantRepository = constantRepository;
         }
