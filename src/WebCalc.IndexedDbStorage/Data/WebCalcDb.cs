@@ -1,6 +1,5 @@
 ﻿using DnetIndexedDb;
 using Microsoft.JSInterop;
-using WebCalc.IndexedDbStorage.Constant.Model;
 
 namespace WebCalc.IndexedDbStorage.Data
 {

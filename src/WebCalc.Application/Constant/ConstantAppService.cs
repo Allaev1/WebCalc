@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Application.Contracts.Constants;
 using WebCalc.Application.Contracts.Constants.DTO;
+using WebCalc.Domain.Constant;
 using WebCalc.Domain.Constant.DomainManager;
+using WebCalc.Domain.Constant.Proxy;
 using WebCalc.Domain.Repositories;
 
 namespace WebCalc.Application.Constant
@@ -13,9 +15,9 @@ namespace WebCalc.Application.Constant
     public class ConstantAppService : IConstantAppService
     {
         private readonly IConstantManager constantManager;
-        private readonly IRepository<Domain.Constant.Constant> constantRepository;
+        private readonly IRepository<ConstantProxy> constantRepository;
 
-        public ConstantAppService(IConstantManager constantManager, IRepository<Domain.Constant.Constant> constantRepository)
+        public ConstantAppService(IConstantManager constantManager, IRepository<ConstantProxy> constantRepository)
         {
             this.constantManager = constantManager;
             this.constantRepository = constantRepository;
@@ -25,7 +27,7 @@ namespace WebCalc.Application.Constant
         {
             var constant = await constantManager.CreateConstantAsync(constantDto.Name, constantDto.Value, constantDto.Description);
 
-            await constantRepository.CreateAsync(constant);
+            await constantRepository.CreateAsync(ConstantProxy.ToProxyModel(constant));
 
             return new()
             {
@@ -45,7 +47,7 @@ namespace WebCalc.Application.Constant
         {
             var constants = await constantRepository.GetAllAsync();
 
-            return constants.Select(x=>new ConstantDto
+            return constants.Select(x => new ConstantDto
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -58,7 +60,7 @@ namespace WebCalc.Application.Constant
         {
             var constant = await constantManager.UpdateConstantAsync(id, constantDto.Name, constantDto.Value, constantDto.Description);
 
-            await constantRepository.UpdateAsync(id, constant);
+            await constantRepository.UpdateAsync(id, ConstantProxy.ToProxyModel(constant));
 
             return new()
             {
