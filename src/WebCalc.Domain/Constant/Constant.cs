@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WebCalc.Domain.Constant.Exceptions;
 
@@ -19,9 +20,10 @@ namespace WebCalc.Domain.Constant
             Id = Guid.NewGuid();
             Name = name;
             Value = value;
+            Description = description;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
 
         public string Name { get; private set; }
 
