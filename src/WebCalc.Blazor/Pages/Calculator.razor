@@ -1,3 +1,100 @@
 ﻿@page "/"
+
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Popups
 @using WebCalc.Blazor.Components
-<Calc></Calc>
+@using WebCalc.Services;
+
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
+
+<div id="calculator-container">
+    <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
+        <span id="title" class="regular">Calculator</span>
+        <AppBarSpacer></AppBarSpacer>
+        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="OnAddConstClick">
+            <span class="material-symbols-outlined">
+                add
+            </span>
+        </SfButton>
+        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                settings
+            </span>
+        </SfButton>
+    </SfAppBar>
+
+    <Calc Id="calc" @ref="@calc" OnNavigateToConsts="NavigateToConsts"></Calc>
+
+    <SfDialog Target="#calculator-container" Width="500px" @bind-Visible="addConstVisible">
+        <DialogTemplates>
+            <Content>
+                Do you want to add - @calc!.GetDisplayValue(), as constant?
+            </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton IsPrimary="true" OnClick="NavigateToAddEditConst" Content="Yes"></DialogButton>
+            <DialogButton OnClick="OnCloseDialogClick" Content="No"></DialogButton>
+        </DialogButtons>
+    </SfDialog>
+</div>
+
+<style>
+    #calculator-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    #calc{
+        flex-grow: 1;
+    }
+
+    #menu {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap: 5px;
+    }
+
+    .menu-button {
+        margin-top: 5px;
+        margin-bottom: 5px;
+        background: unset;
+        border: unset;
+        outline: unset;
+    }
+
+    .material-symbols-outlined {
+        padding: 2px;
+    }
+</style>
+
+@code {
+    private Calc? calc;
+    private bool addConstVisible;
+
+    private void OnCloseDialogClick()
+    {
+        addConstVisible = false;
+    }
+
+    private void OnAddConstClick()
+    {
+        addConstVisible = true;
+    }
+
+    private void NavigateToConsts()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo("/consts");
+    }
+
+    private void NavigateToAddEditConst()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo($"/addEditConst/{calc?.GetDisplayValue()}");
+    }
+}

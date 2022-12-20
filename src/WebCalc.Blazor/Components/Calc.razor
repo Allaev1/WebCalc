@@ -5,51 +5,18 @@
 @using WebCalc.Domain.BinaryOperation
 @using WebCalc.Domain.Shared
 @using WebCalc.Services
-@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
+
 @implements ICalc
 @inject IBinaryOperationAppService binaryOperationAppService
-@inject NavigationManager navigationManager
-@inject IBackNavigateable backNavigateable
 @inject IInputValidationService inputValidationService
 
-<div class="container">
-    <div id="menu">
-        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="NavigateToAddEditConst">
-            <span class="material-symbols-outlined">
-                add
-            </span>
-        </SfButton>
-        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true">
-            <span class="material-symbols-outlined">
-                settings
-            </span>
-        </SfButton>
-    </div>
+<div id="@Id" class="container">
     <CalcDisplay @ref="display" OnValidOperandGenerated="binaryOperationAppService.SetOperand" OnOperationTypeChanged="binaryOperationAppService.SetOperationType"></CalcDisplay>
-    <CalcKeyboard OnButtonClick="UpdateDisplayAsync" OnConstClick="NavigateToConsts"></CalcKeyboard>
+    <CalcKeyboard OnButtonClick="UpdateDisplayAsync" OnConstClick="NavigateToConstsAsync"></CalcKeyboard>
 </div>
 
 <style>
-    #menu {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        gap: 5px;
-    }
-
-    .menu-button {
-        margin-top: 5px;
-        margin-bottom: 5px;
-        background: unset;
-        border: unset;
-        outline: unset;
-    }
-
-    .material-symbols-outlined{
-        padding: 2px;
-    }
-
     .container {
         display: flex;
         flex-direction: column;
@@ -59,6 +26,17 @@
 </style>
 
 @code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public EventCallback OnNavigateToConsts { get; set; }
+
+    private async Task NavigateToConstsAsync()
+    {
+        await OnNavigateToConsts.InvokeAsync();
+    }
+
     private CalcDisplay? display;
 
     public string GetDisplayValue() => display.Value;
@@ -71,18 +49,6 @@
     public void ClearOperations()
     {
         binaryOperationAppService.ClearOperations();
-    }
-
-    private void NavigateToConsts()
-    {
-        backNavigateable.AddCurrentLocation(navigationManager.Uri);
-        navigationManager.NavigateTo("/consts");
-    }
-
-    private void NavigateToAddEditConst()
-    {
-        backNavigateable.AddCurrentLocation(navigationManager.Uri);
-        navigationManager.NavigateTo($"/addEditConst/{display.Value}");
     }
 
     private async Task UpdateDisplayAsync(char value)

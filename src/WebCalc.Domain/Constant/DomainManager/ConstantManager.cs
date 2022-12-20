@@ -4,15 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Domain.Constant.Exceptions;
+using WebCalc.Domain.Constant.Proxy;
 using WebCalc.Domain.Repositories;
 
 namespace WebCalc.Domain.Constant.DomainManager
 {
     public class ConstantManager : IConstantManager
     {
-        private readonly IConstantRepository constantRepository;
+        private readonly IRepository<ConstantProxy> constantRepository;
 
-        public ConstantManager(IConstantRepository constantRepository)
+        public ConstantManager(IRepository<ConstantProxy> constantRepository)
         {
             this.constantRepository = constantRepository;
         }
@@ -28,7 +29,8 @@ namespace WebCalc.Domain.Constant.DomainManager
 
         public async Task<Constant> UpdateConstantAsync(Guid id, string name, float value, string? description)
         {
-            var @const = await constantRepository.GetByIdAsync(id);
+            var constProxy = await constantRepository.GetByIdAsync(id);
+            var @const = constProxy.GetDomainModelEquivalent();
 
             if (@const is null)
             {

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace WebCalc.Domain.Repositories
 {
-    public interface IConstantRepository
+    public interface IRepository<T>
     {
-        public Task<IEnumerable<Constant.Constant>> GetAllAsync();
+        public Task<IEnumerable<T>> GetAllAsync();
 
-        public Task<Constant.Constant> GetByIdAsync(Guid id);
+        public Task<T> GetByIdAsync(Guid id);
 
-        public Task CreateAsync(Constant.Constant constant);
+        public Task CreateAsync(T entity);
 
         public Task DeleteAsync(Guid id);
 
-        public Task UpdateAsync(Guid id, Constant.Constant constant);
+        public Task UpdateAsync(Guid id, T entity);
     }
 }

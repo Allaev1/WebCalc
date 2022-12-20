@@ -1,100 +1,44 @@
-﻿using Blazor.IndexedDB.WebAssembly;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using WebCalc.Domain.Constant;
-using WebCalc.Domain.Constant.DomainManager;
-using WebCalc.Domain.Repositories;
-using WebCalc.IndexedDbStorage.Constant.Model;
+﻿using WebCalc.Domain.Repositories;
 using WebCalc.IndexedDbStorage.Data;
 
 namespace WebCalc.IndexedDbStorage.Constant.Repostiory
 {
-    public class IndexedDbConstantRepository : IConstantRepository
+    public class IndexedDbRepository<T> : IRepository<T>
     {
-        private readonly IIndexedDbFactory indexedDbFactory;
+        private readonly WebCalcDb webCalcDb;
+        private readonly string objectStoreName;
+        private const char PluralEnding = 's';
 
-        public IndexedDbConstantRepository(IIndexedDbFactory indexedDbFactory)
+        public IndexedDbRepository(WebCalcDb webCalcDb)
         {
-            this.indexedDbFactory = indexedDbFactory;
+            this.webCalcDb = webCalcDb;
+            objectStoreName = $"{typeof(T).Name.Replace("Proxy", string.Empty)}{PluralEnding}".ToLower();
         }
 
-        public async Task CreateAsync(Domain.Constant.Constant constant)
+        public async Task CreateAsync(T entity)
         {
-            using var db = await indexedDbFactory.Create<WebCalcDb>();
-            db.Constants.Add(new ()
-            {
-                Id = constant.Id,
-                Name = constant.Name,
-                Value = constant.Value,
-                Description = constant.Description,
-            });
-            await db.SaveChanges();
+            await webCalcDb.AddItems(objectStoreName, new List<T> { entity });
         }
 
         public async Task DeleteAsync(Guid id)
         {
-            using var db = await indexedDbFactory.Create<WebCalcDb>();
-            var constant = db.Constants.Single(x => x.Id == id);
-            db.Constants.Remove(constant);
-            await db.SaveChanges();
+            await webCalcDb.DeleteByKey<Guid>(objectStoreName, id);
         }
 
-        public async Task<IEnumerable<Domain.Constant.Constant>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            var result = new List<Domain.Constant.Constant>();
-            using var db = await indexedDbFactory.Create<WebCalcDb>();
-            var constants = db.Constants;
-
-            foreach (var constant in db.Constants)
-            {
-                var @const = Activator.CreateInstance(typeof(Domain.Constant.Constant), true)!;
-
-                SetConstant(constant, @const);
-
-                result.Add((Domain.Constant.Constant)@const);
-            }
-
-            return result;
+            await webCalcDb.OpenIndexedDb();
+            return await webCalcDb.GetAll<T>(objectStoreName);
         }
 
-        public async Task<Domain.Constant.Constant> GetByIdAsync(Guid id)
+        public async Task<T> GetByIdAsync(Guid id)
         {
-            using var db = await indexedDbFactory.Create<WebCalcDb>();
-            var constant = db.Constants.Single(x => x.Id == id);
-            var result = Activator.CreateInstance(typeof(Domain.Constant.Constant), true);
-
-            SetConstant(constant, result);
-
-            return (Domain.Constant.Constant)result;
+            return await webCalcDb.GetByKey<Guid, T>(objectStoreName, id);
         }
 
-        public async Task UpdateAsync(Guid id, Domain.Constant.Constant constant)
+        public async Task UpdateAsync(Guid id, T entity)
         {
-            using var db = await indexedDbFactory.Create<WebCalcDb>();
-            var @const = db.Constants.Single(x => x.Id == id);
-
-            @const.Name = constant.Name;
-            @const.Value = constant.Value;
-            @const.Description = constant.Description;
-
-            await db.SaveChanges();
-        }
-
-        private void SetConstant(ConstantModel constantModel, object constantDomain)
-        {
-            var idProperty = typeof(Domain.Constant.Constant).GetProperty("Id");
-            var nameProperty = typeof(Domain.Constant.Constant).GetProperty("Name");
-            var valueProperty = typeof(Domain.Constant.Constant).GetProperty("Value");
-            var descriptionProperty = typeof(Domain.Constant.Constant).GetProperty("Description");
-
-            idProperty.SetValue(constantDomain, constantModel.Id);
-            nameProperty.SetValue(constantDomain, constantModel.Name);
-            valueProperty.SetValue(constantDomain, constantModel.Value);
-            descriptionProperty?.SetValue(constantDomain, constantModel.Description);
+            await webCalcDb.UpdateItems(objectStoreName, new List<T> { entity });
         }
     }
 }

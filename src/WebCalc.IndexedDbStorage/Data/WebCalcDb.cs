@@ -1,15 +1,12 @@
-﻿using Blazor.IndexedDB.WebAssembly;
+﻿using DnetIndexedDb;
 using Microsoft.JSInterop;
-using WebCalc.IndexedDbStorage.Constant.Model;
 
 namespace WebCalc.IndexedDbStorage.Data
 {
-    public class WebCalcDb : IndexedDb
+    public class WebCalcDb : IndexedDbInterop
     {
-        public WebCalcDb(IJSRuntime jSRuntime, string name, int version) : base(jSRuntime, name, version)
+        public WebCalcDb(IJSRuntime jSRuntime, IndexedDbOptions<WebCalcDb> options) : base(jSRuntime, options)
         {
         }
-
-        public IndexedSet<ConstantModel> Constants { get; set; }
     }
 }
