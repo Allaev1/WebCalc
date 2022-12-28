@@ -21,6 +21,7 @@ using WebCalc.IndexedDbStorage.Data;
 using DnetIndexedDb.Models;
 using DnetIndexedDb.Fluent;
 using WebCalc.Domain.Constant.Proxy;
+using Blazored.LocalStorage;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -52,6 +53,7 @@ builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
     options.UseDatabase(model);
 });
 builder.Services.AddSyncfusionBlazor();
+builder.Services.AddBlazoredLocalStorage();
 
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzU4MjY3QDMyMzAyZTMzMmUzMFdjMHZpbTNYUHRRTXlUU1RZVjRiZStUQThnVEl4MWZYbm1DeDJzRGs1MmM9");
 
