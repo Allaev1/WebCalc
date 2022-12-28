@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Application.Contrac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.Application", "src\WebCalc.Application\WebCalc.Application.csproj", "{75FA26F5-9F81-4CE4-A048-B1EC7780E18B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCalc.IndexedDbStorage", "src\WebCalc.IndexedDbStorage\WebCalc.IndexedDbStorage.csproj", "{711E00D9-8736-4AD3-BCA1-BB26183F2FFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCalc.IndexedDbStorage", "src\WebCalc.IndexedDbStorage\WebCalc.IndexedDbStorage.csproj", "{711E00D9-8736-4AD3-BCA1-BB26183F2FFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
