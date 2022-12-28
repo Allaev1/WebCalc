@@ -1,6 +1,6 @@
-﻿namespace WebCalc.Blazor.Options
+﻿namespace WebCalc.Blazor.Settings
 {
-    public interface ICustomOptions
+    public interface ISettings
     {
         public Task CreateAsync<T>(string name, T value);
 

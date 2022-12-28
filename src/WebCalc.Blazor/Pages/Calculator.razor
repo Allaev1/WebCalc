@@ -18,7 +18,7 @@
                 add
             </span>
         </SfButton>
-        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true">
+        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="OnSettingsClick">
             <span class="material-symbols-outlined">
                 settings
             </span>
@@ -84,6 +84,12 @@
     private void OnAddConstClick()
     {
         addConstVisible = true;
+    }
+
+    private void OnSettingsClick()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo("/settings");
     }
 
     private void NavigateToConsts()

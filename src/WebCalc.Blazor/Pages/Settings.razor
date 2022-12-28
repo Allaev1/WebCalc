@@ -1,0 +1,34 @@
+﻿@page "/settings"
+
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Buttons
+@using WebCalc.Services;
+
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
+
+<div id="options-container">
+    <SfAppBar ColorMode="AppBarColor.Primary">
+        <SfButton id="back-button" CssClass="e-round" OnClick="NavigateBack" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                arrow_back
+            </span>
+        </SfButton>
+        <span id="title">Options</span>
+    </SfAppBar>
+</div>
+
+<style>
+    #title {
+        font-size: 25px;
+        margin-left: 5px;
+    }
+</style>
+
+@code {
+    private void NavigateBack(MouseEventArgs args)
+    {
+        var location = backNavigateable.GetNaivgateBackLocation();
+        navigationManager.NavigateTo(location);
+    }
+}

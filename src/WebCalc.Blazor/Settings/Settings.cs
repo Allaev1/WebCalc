@@ -1,12 +1,12 @@
 ﻿using Blazored.LocalStorage;
 
-namespace WebCalc.Blazor.Options
+namespace WebCalc.Blazor.Settings
 {
-    public class LocalStorageOptions : ICustomOptions
+    public class Settings : ISettings
     {
         private readonly ILocalStorageService localStorage;
 
-        public LocalStorageOptions(ILocalStorageService localStorage)
+        public Settings(ILocalStorageService localStorage)
         {
             this.localStorage = localStorage;
         }
