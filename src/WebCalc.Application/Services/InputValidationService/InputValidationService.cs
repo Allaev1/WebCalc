@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCalc.Application.Contracts.Services.InputValidationService;
-using WebCalc.Application.Contracts.Services.Settings;
 using WebCalc.Domain.BinaryOperation;
+using WebCalc.Application.Contracts.Services.Settings;
 
 namespace WebCalc.Application.Services.InputValidationService
 {
     public class InputValidationService : IInputValidationService
     {
+        private const int MaxDisplayCharsCount = 15;
         private readonly ISettings settings;
 
         public InputValidationService(
@@ -33,7 +34,7 @@ namespace WebCalc.Application.Services.InputValidationService
             => Domain.BinaryOperation.BinaryOperation.Instance().OperationState is BinaryOperationState.ResultSetted && input == Application.BinaryOperation.Constants.BACKSPACE;
 
         private bool TryToExceedMaxCountOfCharsOnDisplay(char input, string value)
-            => value.Count() == settings.MaxDisplayCharsCount && (char.IsDigit(input) || input == Application.BinaryOperation.Constants.FLOATING_POINT);
+            => value.Count() == MaxDisplayCharsCount && (char.IsDigit(input) || input == Application.BinaryOperation.Constants.FLOATING_POINT);
 
         private bool TryToBackspaceAndOperand2IsZero(char value)
             => value == Application.BinaryOperation.Constants.BACKSPACE && Domain.BinaryOperation.BinaryOperation.Instance().Operand2 is 0;

@@ -1,6 +1,7 @@
 ﻿using Blazored.LocalStorage;
+using WebCalc.Application.Contracts.Services.Settings;
 
-namespace WebCalc.Blazor.Settings
+namespace WebCalc.Application.Services.Settings
 {
     public class Settings : ISettings
     {

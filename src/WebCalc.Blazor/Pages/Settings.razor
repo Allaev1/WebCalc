@@ -2,23 +2,97 @@
 
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Buttons
+@using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Services;
 
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
+@inject ISettings settings
 
 <div id="options-container">
-    <SfAppBar ColorMode="AppBarColor.Primary">
+    <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
         <SfButton id="back-button" CssClass="e-round" OnClick="NavigateBack" IsPrimary="true">
             <span class="material-symbols-outlined">
                 arrow_back
             </span>
         </SfButton>
         <span id="title">Options</span>
+        <AppBarSpacer></AppBarSpacer>
+        <SfButton IsPrimary="true">Set default</SfButton>
     </SfAppBar>
+
+    <div id="settings">
+        <div class="setting-item">
+            <label>Delimiter of the groups of digits</label>
+            <SfSwitch @bind-Checked="@delimiterOn"></SfSwitch>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <label id="accuracy-label">Accuracy of calculations <span id="accuracy">@accuracy</span> decimal places</label>
+            <div id="accuracy-setting-buttons">
+                <SfButton id="decrement">-</SfButton>
+                <SfButton id="increment">+</SfButton>
+            </div>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <label>Round up the result?(up to specified accuracy)</label>
+            <SfSwitch @bind-Checked="@roundUp"></SfSwitch>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <p>Sample:</p>
+            <p id="sample">12345,6789</p>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <label>Buttons vibration</label>
+            <SfSwitch @bind-Checked="@vibration"></SfSwitch>
+        </div>
+    </div>
 </div>
 
 <style>
+    #increment{
+        flex-grow:2;
+    }
+
+    #decrement{
+        flex-grow:1;
+    }
+
+    #accuracy-setting-buttons{
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .setting-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+
+    #settings {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    #options-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    #menu {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
     #title {
         font-size: 25px;
         margin-left: 5px;
@@ -26,6 +100,11 @@
 </style>
 
 @code {
+    private bool vibration = true;
+    private bool roundUp = true;
+    private int accuracy;
+    private bool delimiterOn = true;
+
     private void NavigateBack(MouseEventArgs args)
     {
         var location = backNavigateable.GetNaivgateBackLocation();

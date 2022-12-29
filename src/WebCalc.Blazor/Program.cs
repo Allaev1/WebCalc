@@ -22,7 +22,6 @@ using DnetIndexedDb.Models;
 using DnetIndexedDb.Fluent;
 using WebCalc.Domain.Constant.Proxy;
 using Blazored.LocalStorage;
-using WebCalc.Blazor.Options;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -32,12 +31,11 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
-builder.Services.AddSingleton<WebCalc.Application.Contracts.Services.Settings.ISettings, FakeSettings>();
 builder.Services.AddSingleton<IInputValidationService, InputValidationService>();
 builder.Services.AddScoped<IRepository<ConstantProxy>, IndexedDbRepository<ConstantProxy>>();
 builder.Services.AddScoped<IConstantManager, ConstantManager>();
 builder.Services.AddScoped<IConstantAppService, ConstantAppService>();
-builder.Services.AddScoped<WebCalc.Blazor.Options.ISettings, LocalStorageOptions>();
+builder.Services.AddScoped<ISettings, Settings>();
 builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
 {
     var model = new IndexedDbDatabaseModel()
