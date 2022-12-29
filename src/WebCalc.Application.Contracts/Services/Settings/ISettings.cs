@@ -9,5 +9,7 @@
         public Task UpdateAsync<T>(string name, T value);
 
         public Task<T> GetAsync<T>(string name);
+
+        public Task<bool> IsSettingExistAsync(string name);
     }
 }

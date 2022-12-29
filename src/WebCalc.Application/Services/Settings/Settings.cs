@@ -32,5 +32,10 @@ namespace WebCalc.Application.Services.Settings
             await localStorage.RemoveItemAsync(name);
             await localStorage.SetItemAsync(name, value);
         }
+
+        public async Task<bool> IsSettingExistAsync(string name)
+        {
+            return await localStorage.ContainKeyAsync(name);
+        }
     }
 }
