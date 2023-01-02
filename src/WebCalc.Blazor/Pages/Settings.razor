@@ -21,7 +21,7 @@
         </SfButton>
         <span id="title">Options</span>
         <AppBarSpacer></AppBarSpacer>
-        <SfButton IsPrimary="true">Set default</SfButton>
+        <SfButton IsPrimary="true" OnClick="OnSetDefaultValues">Set default</SfButton>
     </SfAppBar>
 
     <div id="settings">
@@ -110,10 +110,10 @@
 @code {
     private const double SAMPLE = 12345.6789;
 
-    private bool vibrationOn;
+    private bool vibrationOn = true;
     private bool roundUpOn;
-    private int accuracy = 1;
-    private bool delimiterOn;
+    private int accuracy = 2;
+    private bool delimiterOn = true;
     private string sample = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -202,5 +202,19 @@
         {
             accuracy = await settings.GetAsync<int>(SettingsNames.Accuracy);
         }
+    }
+
+    private async Task OnSetDefaultValues(MouseEventArgs args)
+    {
+        vibrationOn = true;
+        accuracy = 2;
+        delimiterOn = true;
+        roundUpOn = false;
+
+        await settings.UpdateAsync(SettingsNames.ButtonVibrationOn, vibrationOn);
+        await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
+        await settings.UpdateAsync(SettingsNames.DelimiterOn, delimiterOn);
+        await settings.UpdateAsync(SettingsNames.RoundUpOn, roundUpOn);
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
     }
 }
