@@ -1,5 +1,6 @@
 ﻿@using WebCalc.Application.BinaryOperation
 @using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Application.Contracts.Services.Formater;
 @using WebCalc.Application.Contracts.Services.InputValidationService
 @using WebCalc.Contracts
 @using WebCalc.Domain.BinaryOperation
@@ -10,6 +11,7 @@
 @implements ICalc
 @inject IBinaryOperationAppService binaryOperationAppService
 @inject IInputValidationService inputValidationService
+@inject IFormater formater
 
 <div id="@Id" class="container">
     <CalcDisplay @ref="display" OnValidOperandGenerated="binaryOperationAppService.SetOperand" OnOperationTypeChanged="binaryOperationAppService.SetOperationType"></CalcDisplay>
@@ -106,7 +108,8 @@
             binaryOperationAppService.SetResult();
             var result = binaryOperationAppService.GetResult();
             await display.AppendAsync(value);
-            display.Append(result.ToString()!.ToArray());
+            var resultString = await formater.GetFormatedStringFromAsync((double)result!);
+            display.Append(resultString.ToArray());
 
             return;
         }
