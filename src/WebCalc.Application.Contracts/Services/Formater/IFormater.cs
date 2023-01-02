@@ -8,6 +8,6 @@ namespace WebCalc.Application.Contracts.Services.Formater
 {
     public interface IFormater
     {
-        public string GetFormatStringFrom(double value);
+        public Task<string> GetFormatedStringFromAsync(double value);
     }
 }
