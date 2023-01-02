@@ -3,12 +3,14 @@
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Buttons
 @using System.Globalization;
+@using WebCalc.Application.Contracts.Services.Formater;
 @using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Services;
 
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
 @inject ISettings settings
+@inject IFormater formater
 
 <div id="options-container">
     <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
@@ -107,7 +109,6 @@
 
 @code {
     private const double SAMPLE = 12345.6789;
-    private const double DEFAULT_ACCURACY = 4;
 
     private bool vibrationOn;
     private bool roundUpOn;
@@ -118,7 +119,7 @@
     protected override async Task OnInitializedAsync()
     {
         await SetupSettingsAsync();
-        SetupSample();
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
     }
 
     private async Task DecrementAccuracyAsync(MouseEventArgs args)
@@ -127,7 +128,7 @@
         {
             accuracy--;
             await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
-            SetupSample();
+            sample = await formater.GetFormatedStringFromAsync(SAMPLE);
         }
     }
 
@@ -137,14 +138,14 @@
         {
             accuracy++;
             await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
-            SetupSample();
+            sample = await formater.GetFormatedStringFromAsync(SAMPLE);
         }
     }
 
     private async Task DelimeterOnChanged(ChangeEventArgs<bool> args)
     {
         await settings.UpdateAsync(SettingsNames.DelimiterOn, delimiterOn);
-        SetupSample();
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
     }
 
     private async Task VibrationOnChanged(ChangeEventArgs<bool> args)
@@ -155,7 +156,7 @@
     private async Task RoundUpOnChanged(ChangeEventArgs<bool> args)
     {
         await settings.UpdateAsync(SettingsNames.RoundUpOn, roundUpOn);
-        SetupSample();
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
     }
 
     private void NavigateBack(MouseEventArgs args)
@@ -200,26 +201,6 @@
         else
         {
             accuracy = await settings.GetAsync<int>(SettingsNames.Accuracy);
-        }
-    }
-
-    private void SetupSample()
-    {
-        if (delimiterOn & roundUpOn)
-        {
-            sample = SAMPLE.ToString($"N{accuracy}", CultureInfo.CurrentCulture);
-        }
-        else if (delimiterOn & !roundUpOn)
-        {
-            sample = SAMPLE.ToString($"N{DEFAULT_ACCURACY}", CultureInfo.CurrentCulture);
-        }
-        else if (!delimiterOn & roundUpOn)
-        {
-            sample = string.Format($"{{0:F{accuracy}}}", SAMPLE);
-        }
-        else
-        {
-            sample = SAMPLE.ToString();
         }
     }
 }
