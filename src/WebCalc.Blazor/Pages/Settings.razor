@@ -2,6 +2,7 @@
 
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Buttons
+@using System.Globalization;
 @using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Services;
 
@@ -24,44 +25,44 @@
     <div id="settings">
         <div class="setting-item">
             <label>Delimiter of the groups of digits</label>
-            <SfSwitch @bind-Checked="@delimiterOn"></SfSwitch>
+            <SfSwitch @bind-Checked="@delimiterOn" TChecked="bool" ValueChange="DelimeterOnChanged"></SfSwitch>
         </div>
         <hr />
         <div class="setting-item">
             <label id="accuracy-label">Accuracy of calculations <span id="accuracy">@accuracy</span> decimal places</label>
             <div id="accuracy-setting-buttons">
-                <SfButton id="decrement">-</SfButton>
-                <SfButton id="increment">+</SfButton>
+                <SfButton id="decrement" OnClick="DecrementAccuracyAsync">-</SfButton>
+                <SfButton id="increment" OnClick="IncrementAccuracyAsync">+</SfButton>
             </div>
         </div>
         <hr />
         <div class="setting-item">
             <label>Round up the result?(up to specified accuracy)</label>
-            <SfSwitch @bind-Checked="@roundUp"></SfSwitch>
+            <SfSwitch @bind-Checked="@roundUpOn" TChecked="bool" ValueChange="RoundUpOnChanged"></SfSwitch>
         </div>
         <hr />
         <div class="setting-item">
             <p>Sample:</p>
-            <p id="sample">12345,6789</p>
+            <p id="sample">@sample</p>
         </div>
         <hr />
         <div class="setting-item">
             <label>Buttons vibration</label>
-            <SfSwitch @bind-Checked="@vibration"></SfSwitch>
+            <SfSwitch @bind-Checked="@vibrationOn" TChecked="bool" ValueChange="VibrationOnChanged"></SfSwitch>
         </div>
     </div>
 </div>
 
 <style>
-    #increment{
-        flex-grow:2;
+    #increment {
+        flex-grow: 2;
     }
 
-    #decrement{
-        flex-grow:1;
+    #decrement {
+        flex-grow: 1;
     }
 
-    #accuracy-setting-buttons{
+    #accuracy-setting-buttons {
         display: flex;
         flex-direction: row;
         gap: 5px;
@@ -87,6 +88,11 @@
         height: 100%;
     }
 
+    #accuracy{
+        font-weight: bold;
+        font-size: 20px;
+    }
+
     #menu {
         display: flex;
         flex-direction: row;
@@ -100,14 +106,120 @@
 </style>
 
 @code {
-    private bool vibration = true;
-    private bool roundUp = true;
-    private int accuracy;
-    private bool delimiterOn = true;
+    private const double SAMPLE = 12345.6789;
+    private const double DEFAULT_ACCURACY = 4;
+
+    private bool vibrationOn;
+    private bool roundUpOn;
+    private int accuracy = 1;
+    private bool delimiterOn;
+    private string sample = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SetupSettingsAsync();
+        SetupSample();
+    }
+
+    private async Task DecrementAccuracyAsync(MouseEventArgs args)
+    {
+        if (accuracy - 1 >= 0)
+        {
+            accuracy--;
+            await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
+            SetupSample();
+        }
+    }
+
+    private async Task IncrementAccuracyAsync(MouseEventArgs args)
+    {
+        if (accuracy + 1 <= 4)
+        {
+            accuracy++;
+            await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
+            SetupSample();
+        }
+    }
+
+    private async Task DelimeterOnChanged(ChangeEventArgs<bool> args)
+    {
+        await settings.UpdateAsync(SettingsNames.DelimiterOn, delimiterOn);
+        SetupSample();
+    }
+
+    private async Task VibrationOnChanged(ChangeEventArgs<bool> args)
+    {
+        await settings.UpdateAsync(SettingsNames.ButtonVibrationOn, vibrationOn);
+    }
+
+    private async Task RoundUpOnChanged(ChangeEventArgs<bool> args)
+    {
+        await settings.UpdateAsync(SettingsNames.RoundUpOn, roundUpOn);
+        SetupSample();
+    }
 
     private void NavigateBack(MouseEventArgs args)
     {
         var location = backNavigateable.GetNaivgateBackLocation();
         navigationManager.NavigateTo(location);
+    }
+
+    private async Task SetupSettingsAsync()
+    {
+        if (!(await settings.IsSettingExistAsync(SettingsNames.ButtonVibrationOn)))
+        {
+            await settings.CreateAsync(SettingsNames.ButtonVibrationOn, vibrationOn);
+        }
+        else
+        {
+            vibrationOn = await settings.GetAsync<bool>(SettingsNames.ButtonVibrationOn);
+        }
+
+        if (!(await settings.IsSettingExistAsync(SettingsNames.RoundUpOn)))
+        {
+            await settings.CreateAsync(SettingsNames.RoundUpOn, roundUpOn);
+        }
+        else
+        {
+            roundUpOn = await settings.GetAsync<bool>(SettingsNames.RoundUpOn);
+        }
+
+        if (!(await settings.IsSettingExistAsync(SettingsNames.DelimiterOn)))
+        {
+            await settings.CreateAsync(SettingsNames.DelimiterOn, delimiterOn);
+        }
+        else
+        {
+            delimiterOn = await settings.GetAsync<bool>(SettingsNames.DelimiterOn);
+        }
+
+        if (!(await settings.IsSettingExistAsync(SettingsNames.Accuracy)))
+        {
+            await settings.CreateAsync(SettingsNames.Accuracy, accuracy);
+        }
+        else
+        {
+            accuracy = await settings.GetAsync<int>(SettingsNames.Accuracy);
+        }
+    }
+
+    private void SetupSample()
+    {
+        if (delimiterOn & roundUpOn)
+        {
+            sample = SAMPLE.ToString($"N{accuracy}", CultureInfo.CurrentCulture);
+        }
+        else if (delimiterOn & !roundUpOn)
+        {
+            sample = SAMPLE.ToString($"N{DEFAULT_ACCURACY}", CultureInfo.CurrentCulture);
+        }
+        else if (!delimiterOn & roundUpOn)
+        {
+            sample = string.Format($"{{0:F{accuracy}}}", SAMPLE);
+        }
+        else
+        {
+            sample = SAMPLE.ToString();
+        }
     }
 }

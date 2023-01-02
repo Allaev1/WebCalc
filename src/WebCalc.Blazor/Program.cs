@@ -35,7 +35,7 @@ builder.Services.AddSingleton<IInputValidationService, InputValidationService>()
 builder.Services.AddScoped<IRepository<ConstantProxy>, IndexedDbRepository<ConstantProxy>>();
 builder.Services.AddScoped<IConstantManager, ConstantManager>();
 builder.Services.AddScoped<IConstantAppService, ConstantAppService>();
-builder.Services.AddScoped<ISettings, Settings>();
+builder.Services.AddSingleton<ISettings, Settings>();
 builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
 {
     var model = new IndexedDbDatabaseModel()
@@ -53,7 +53,7 @@ builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
     options.UseDatabase(model);
 });
 builder.Services.AddSyncfusionBlazor();
-builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzU4MjY3QDMyMzAyZTMzMmUzMFdjMHZpbTNYUHRRTXlUU1RZVjRiZStUQThnVEl4MWZYbm1DeDJzRGs1MmM9");
 
