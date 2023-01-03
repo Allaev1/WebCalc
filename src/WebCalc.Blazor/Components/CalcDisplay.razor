@@ -12,6 +12,7 @@
             <span id="memory-capture">Memory:</span>
             <span id="memory-value">@memory</span>
         </p>
+        <p id="rounding-paragraph">Rounding</p>
     </div>
     <div id="value" class="display-component">
         <p id="value-holder">@value</p>
@@ -22,18 +23,33 @@
 </div>
 
 <style>
+    #memory {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    #rounding-paragraph {
+        background: red;
+        color: white;
+        visibility: @roundingVisibility;
+        margin-right: 5px;
+        margin-top: 5px;
+        font-size: 22px;
+    }
+
     #display {
         background: white;
         margin-top: 10px;
         margin-bottom: 10px;
     }
 
-    .display-component>p{
+    .display-component > p {
         margin-bottom: 0; /*Overwrite display's margin-bottom rule*/
     }
 
     #memory-paragraph {
-        visibility:@visibilityValue;
+        visibility: @visibilityValue;
         margin-left: 5px;
     }
 
@@ -92,21 +108,20 @@
 
 @code {
     private const string INITIAL_STRING = "0";
+    private const string HIDDEN = "hidden";
+    private const string VISIBLE = "visible";
+
     private string value = INITIAL_STRING;
     private string expression = string.Empty;
     private string memory = string.Empty;
     private bool memoryRead;
-    private const string HIDDEN = "hidden";
-    private const string NONE = "none";
     private string visibilityValue = HIDDEN;
+    private string roundingVisibility = HIDDEN;
 
     public bool PercentageOff { get; private set; }
 
     [Parameter]
     public int MaxDisplayCharsCount { get; set; } = 15;
-
-    [Parameter]
-    public int MaxFractionalDigitsCount { get; set; } = 9;
 
     [Parameter]
     public EventCallback<float> OnValidOperandGenerated { get; set; }
@@ -123,12 +138,21 @@
     [Parameter]
     public Color ValueColor { get; set; } = Color.Black;
 
+    [Parameter]
+    public Color RoundingLabelColor { get; set; } = Color.Red;
+
+    public void SetRoundingFlag(bool isRounding)
+    {
+        roundingVisibility = isRounding ? VISIBLE : HIDDEN;
+        StateHasChanged();        
+    }
+
     public void SetMemory(string memory)
     {
         if (memory == "0") return;
 
         this.memory = memory;
-        visibilityValue = NONE;
+        visibilityValue = VISIBLE;
 
         StateHasChanged();
     }

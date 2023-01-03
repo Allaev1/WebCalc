@@ -34,6 +34,9 @@
     [Parameter]
     public EventCallback OnNavigateToConsts { get; set; }
 
+    [Parameter]
+    public bool IsRounding { get; set; }
+
     private async Task NavigateToConstsAsync()
     {
         await OnNavigateToConsts.InvokeAsync();
@@ -51,6 +54,11 @@
     public void ClearOperations()
     {
         binaryOperationAppService.ClearOperations();
+    }
+
+    public void SetRoundingFlag(bool isRounding)
+    {
+        display.SetRoundingFlag(isRounding);
     }
 
     private async Task UpdateDisplayAsync(char value)
