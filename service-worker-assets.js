@@ -105,8 +105,12 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-VGhVWUaMETv5EaOvE8qU6SYApxO4\/G51qKZTL06fcO0=",
+      "hash": "sha256-3jc0xU6sbGkF9lzUJFT2mzVybOL5ZIhZNw56a6AAIKw=",
       "url": "_framework\/blazor.boot.json"
+    },
+    {
+      "hash": "sha256-Jq\/dS58mO5wtL2d0x\/FeAdDZ1bUTpTzPODJpBZUre\/4=",
+      "url": "_framework\/Blazored.LocalStorage.dll"
     },
     {
       "hash": "sha256-Q7whEyXn1N2yyznvxll7xLHKDdD3Ukh6rrJf23yusOU=",
@@ -177,7 +181,7 @@
       "url": "_framework\/Microsoft.Extensions.Primitives.dll"
     },
     {
-      "hash": "sha256-r5Gn6aCXz+MN7KVt2yRW0KtuccUjlKtCHIwi84Iivj0=",
+      "hash": "sha256-o3wl4hXvCYYvO705R9AARJIsP50+zWeUErPzFvr7tLU=",
       "url": "_framework\/Microsoft.JSInterop.dll"
     },
     {
@@ -321,7 +325,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-nTnkGlME3gYFvpkzEHFn8KxcTZjYHkgzql8eNn6VFR8=",
+      "hash": "sha256-VUXVxLVFHQdGNhSqAt2AvFID84OZ\/GC6iuSa5vEcfSo=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -361,7 +365,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-98D5MSdplzFw6mqjQ+pAI03kIPCfXLEuAbRt5brZKCQ=",
+      "hash": "sha256-ClaeWOONopUogUcQHd2booKZV4LSmSW1LYcpkaqGRCU=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -393,7 +397,7 @@
       "url": "_framework\/System.Text.Json.dll"
     },
     {
-      "hash": "sha256-yRSjvnNDMv2i5O2vZP6muNf7YteHnq68FvAQDrU7Vrc=",
+      "hash": "sha256-bUSgXdQfAYdBnEVIz5dV3Wn1blWR6p2yUzVfBTyk+H4=",
       "url": "_framework\/System.Text.RegularExpressions.dll"
     },
     {
@@ -409,15 +413,15 @@
       "url": "_framework\/System.Web.HttpUtility.dll"
     },
     {
-      "hash": "sha256-FEFs\/wMrjoEGBlLUOuW9XxoC9LFfWIn4SqhZglskNp8=",
+      "hash": "sha256-rPlGHA4UTAH2wSC3Bh3P4LdBOpYx0qtcdPmN5SI5eeE=",
       "url": "_framework\/WebCalc.Application.Contracts.dll"
     },
     {
-      "hash": "sha256-M1u+f5UBmJfhCdrhJzWxrB+0y1Na0abChd+XC\/Fz0JE=",
+      "hash": "sha256-ZHB9HkmD5\/qVpe630HsoGFm3egO8\/qotK8YITi39yq0=",
       "url": "_framework\/WebCalc.Application.dll"
     },
     {
-      "hash": "sha256-DEbhzzXxOG0EMA6gEt0q3c+qm5EMQLYKGNYL+m1h0yo=",
+      "hash": "sha256-oHo2c\/NZpgDOTPqAIAIK\/EVX9UCai2V3k\/mZNdyZ8bc=",
       "url": "_framework\/WebCalc.Blazor.dll"
     },
     {
@@ -673,5 +677,5 @@
       "url": "_content\/Syncfusion.Blazor.Themes\/tailwind.css"
     }
   ],
-  "version": "pNaqBLlF"
+  "version": "t+U0CIVj"
 };
