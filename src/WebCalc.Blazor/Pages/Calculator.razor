@@ -3,11 +3,13 @@
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Popups
+@using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Blazor.Components
 @using WebCalc.Services;
 
 @inject NavigationManager navigationManager
 @inject IBackNavigateable backNavigateable
+@inject ISettings settings
 
 <div id="calculator-container">
     <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
@@ -18,14 +20,14 @@
                 add
             </span>
         </SfButton>
-        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true">
+        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="OnSettingsClick">
             <span class="material-symbols-outlined">
                 settings
             </span>
         </SfButton>
     </SfAppBar>
 
-    <Calc Id="calc" @ref="@calc" OnNavigateToConsts="NavigateToConsts"></Calc>
+    <Calc Id="calc" @ref="@calc" OnNavigateToConsts="NavigateToConsts" IsRounding="true"></Calc>
 
     <SfDialog Target="#calculator-container" Width="500px" @bind-Visible="addConstVisible">
         <DialogTemplates>
@@ -75,6 +77,13 @@
 @code {
     private Calc? calc;
     private bool addConstVisible;
+    private bool isRounding = true;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        isRounding = await settings.GetAsync<bool>(SettingsNames.RoundUpOn);
+        calc.SetRoundingFlag(isRounding);
+    }
 
     private void OnCloseDialogClick()
     {
@@ -84,6 +93,12 @@
     private void OnAddConstClick()
     {
         addConstVisible = true;
+    }
+
+    private void OnSettingsClick()
+    {
+        backNavigateable.AddCurrentLocation(navigationManager.Uri);
+        navigationManager.NavigateTo("/settings");
     }
 
     private void NavigateToConsts()

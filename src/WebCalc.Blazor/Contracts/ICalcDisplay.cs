@@ -10,9 +10,6 @@ namespace WebCalc.Contracts
         public int MaxDisplayCharsCount { get; set; }
 
         [Parameter]
-        public int MaxFractionalDigitsCount { get; set; }
-
-        [Parameter]
         public EventCallback<float> OnValidOperandGenerated { get; set; }
 
         [Parameter]

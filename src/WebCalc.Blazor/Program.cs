@@ -21,6 +21,9 @@ using WebCalc.IndexedDbStorage.Data;
 using DnetIndexedDb.Models;
 using DnetIndexedDb.Fluent;
 using WebCalc.Domain.Constant.Proxy;
+using Blazored.LocalStorage;
+using WebCalc.Application.Contracts.Services.Formater;
+using WebCalc.Application.Services.Formater;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -30,11 +33,12 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
-builder.Services.AddSingleton<ISettings, FakeSettings>();
 builder.Services.AddSingleton<IInputValidationService, InputValidationService>();
 builder.Services.AddScoped<IRepository<ConstantProxy>, IndexedDbRepository<ConstantProxy>>();
 builder.Services.AddScoped<IConstantManager, ConstantManager>();
 builder.Services.AddScoped<IConstantAppService, ConstantAppService>();
+builder.Services.AddSingleton<ISettings, Settings>();
+builder.Services.AddSingleton<IFormater, Formater>();
 builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
 {
     var model = new IndexedDbDatabaseModel()
@@ -52,6 +56,7 @@ builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
     options.UseDatabase(model);
 });
 builder.Services.AddSyncfusionBlazor();
+builder.Services.AddBlazoredLocalStorageAsSingleton();
 
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzU4MjY3QDMyMzAyZTMzMmUzMFdjMHZpbTNYUHRRTXlUU1RZVjRiZStUQThnVEl4MWZYbm1DeDJzRGs1MmM9");
 

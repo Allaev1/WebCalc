@@ -1,0 +1,220 @@
+﻿@page "/settings"
+
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Buttons
+@using System.Globalization;
+@using WebCalc.Application.Contracts.Services.Formater;
+@using WebCalc.Application.Contracts.Services.Settings;
+@using WebCalc.Services;
+
+@inject NavigationManager navigationManager
+@inject IBackNavigateable backNavigateable
+@inject ISettings settings
+@inject IFormater formater
+
+<div id="options-container">
+    <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
+        <SfButton id="back-button" CssClass="e-round" OnClick="NavigateBack" IsPrimary="true">
+            <span class="material-symbols-outlined">
+                arrow_back
+            </span>
+        </SfButton>
+        <span id="title">Options</span>
+        <AppBarSpacer></AppBarSpacer>
+        <SfButton IsPrimary="true" OnClick="OnSetDefaultValues">Set default</SfButton>
+    </SfAppBar>
+
+    <div id="settings">
+        <div class="setting-item">
+            <label>Delimiter of the groups of digits</label>
+            <SfSwitch @bind-Checked="@delimiterOn" TChecked="bool" ValueChange="DelimeterOnChanged"></SfSwitch>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <label id="accuracy-label">Accuracy of calculations <span id="accuracy">@accuracy</span> decimal places</label>
+            <div id="accuracy-setting-buttons">
+                <SfButton id="decrement" OnClick="DecrementAccuracyAsync">-</SfButton>
+                <SfButton id="increment" OnClick="IncrementAccuracyAsync">+</SfButton>
+            </div>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <label>Round up the result?(up to specified accuracy)</label>
+            <SfSwitch @bind-Checked="@roundUpOn" TChecked="bool" ValueChange="RoundUpOnChanged"></SfSwitch>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <p>Sample:</p>
+            <p id="sample">@sample</p>
+        </div>
+        <hr />
+        <div class="setting-item">
+            <label>Buttons vibration</label>
+            <SfSwitch @bind-Checked="@vibrationOn" TChecked="bool" ValueChange="VibrationOnChanged"></SfSwitch>
+        </div>
+    </div>
+</div>
+
+<style>
+    #increment {
+        flex-grow: 2;
+    }
+
+    #decrement {
+        flex-grow: 1;
+    }
+
+    #accuracy-setting-buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    .setting-item {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+
+    #settings {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 5px;
+    }
+
+    #options-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    #accuracy{
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    #menu {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+
+    #title {
+        font-size: 25px;
+        margin-left: 5px;
+    }
+</style>
+
+@code {
+    private const double SAMPLE = 12345.6789;
+
+    private bool vibrationOn = true;
+    private bool roundUpOn;
+    private int accuracy = 2;
+    private bool delimiterOn = true;
+    private string sample = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await SetupSettingsAsync();
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
+    }
+
+    private async Task DecrementAccuracyAsync(MouseEventArgs args)
+    {
+        if (accuracy - 1 >= 0)
+        {
+            accuracy--;
+            await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
+            sample = await formater.GetFormatedStringFromAsync(SAMPLE);
+        }
+    }
+
+    private async Task IncrementAccuracyAsync(MouseEventArgs args)
+    {
+        if (accuracy + 1 <= 4)
+        {
+            accuracy++;
+            await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
+            sample = await formater.GetFormatedStringFromAsync(SAMPLE);
+        }
+    }
+
+    private async Task DelimeterOnChanged(ChangeEventArgs<bool> args)
+    {
+        await settings.UpdateAsync(SettingsNames.DelimiterOn, delimiterOn);
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
+    }
+
+    private async Task VibrationOnChanged(ChangeEventArgs<bool> args)
+    {
+        await settings.UpdateAsync(SettingsNames.ButtonVibrationOn, vibrationOn);
+    }
+
+    private async Task RoundUpOnChanged(ChangeEventArgs<bool> args)
+    {
+        await settings.UpdateAsync(SettingsNames.RoundUpOn, roundUpOn);
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
+    }
+
+    private void NavigateBack(MouseEventArgs args)
+    {
+        var location = backNavigateable.GetNaivgateBackLocation();
+        navigationManager.NavigateTo(location);
+    }
+
+    private async Task SetupSettingsAsync()
+    {
+        if (!(await settings.IsSettingExistAsync(SettingsNames.ButtonVibrationOn)))
+        {
+            await settings.CreateAsync(SettingsNames.ButtonVibrationOn, vibrationOn);
+        }
+        else
+        {
+            vibrationOn = await settings.GetAsync<bool>(SettingsNames.ButtonVibrationOn);
+        }
+
+        if (!(await settings.IsSettingExistAsync(SettingsNames.RoundUpOn)))
+        {
+            await settings.CreateAsync(SettingsNames.RoundUpOn, roundUpOn);
+        }
+        else
+        {
+            roundUpOn = await settings.GetAsync<bool>(SettingsNames.RoundUpOn);
+        }
+
+        if (!(await settings.IsSettingExistAsync(SettingsNames.DelimiterOn)))
+        {
+            await settings.CreateAsync(SettingsNames.DelimiterOn, delimiterOn);
+        }
+        else
+        {
+            delimiterOn = await settings.GetAsync<bool>(SettingsNames.DelimiterOn);
+        }
+
+        if (!(await settings.IsSettingExistAsync(SettingsNames.Accuracy)))
+        {
+            await settings.CreateAsync(SettingsNames.Accuracy, accuracy);
+        }
+        else
+        {
+            accuracy = await settings.GetAsync<int>(SettingsNames.Accuracy);
+        }
+    }
+
+    private async Task OnSetDefaultValues(MouseEventArgs args)
+    {
+        vibrationOn = true;
+        accuracy = 2;
+        delimiterOn = true;
+        roundUpOn = false;
+
+        await settings.UpdateAsync(SettingsNames.ButtonVibrationOn, vibrationOn);
+        await settings.UpdateAsync(SettingsNames.Accuracy, accuracy);
+        await settings.UpdateAsync(SettingsNames.DelimiterOn, delimiterOn);
+        await settings.UpdateAsync(SettingsNames.RoundUpOn, roundUpOn);
+        sample = await formater.GetFormatedStringFromAsync(SAMPLE);
+    }
+}
