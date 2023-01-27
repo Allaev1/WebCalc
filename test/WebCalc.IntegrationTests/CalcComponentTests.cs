@@ -10,18 +10,31 @@ using FluentAssertions;
 using WebCalc.Blazor.Components;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
-using WebCalc.Contracts;
 using WebCalc.Services;
 using WebCalc.Application.Contracts.Services.InputValidationService;
 using WebCalc.Application.Contracts.Services.Settings;
 using WebCalc.Application.Services.InputValidationService;
 using WebCalc.Application.Services.Settings;
 using WebCalc.Domain.UnaryOperation;
+using WebCalc.Blazor.Components.Calc;
+using WebCalc.Blazor.ViewModels.CalcDisplay;
+using WebCalc.Blazor.ViewModels.Calc;
+using WebCalc.Application.Contracts.Services.Formater;
+using WebCalc.Application.Services.Formater;
+using Blazored.LocalStorage;
+using NSubstitute;
 
 namespace WebCalc.IntegrationTests
 {
     public class CalcComponentTests
     {
+        private readonly ILocalStorageService localStorageService;
+
+        public CalcComponentTests()
+        {
+            localStorageService = Substitute.For<ILocalStorageService>();
+        }
+
         [Theory]
         [InlineData(new char[] { '1', '+', '2', '=' }, "3")]
         [InlineData(new char[] { '2', '+', '1', '=' }, "3")]
@@ -69,8 +82,14 @@ namespace WebCalc.IntegrationTests
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
             context.Services.AddTransient<IBinaryOperationAppService, BinaryOperationAppService>();
+            context.Services.AddSingleton<ILocalStorageService>(localStorageService);
             context.Services.AddSingleton<ISettings, Settings>();
+            context.Services.AddSingleton<IFormater, Formater>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
+            context.Services.AddSingleton<ICalcDisplayViewModel, CalcDisplayViewModel>();
+            context.Services.AddSingleton<ICalcViewModel, CalcViewModel>();
+
+            localStorageService.GetItemAsync<bool>(Arg.Is("delimeterOn")).Returns(false);
 
             var calcComponent = context.RenderComponent<Calc>();
             var buttons = calcComponent.FindAll("button");
@@ -82,7 +101,8 @@ namespace WebCalc.IntegrationTests
             }
 
             calc.GetDisplayValue().Should().Be(expected);
-            calc.ClearOperations();
+            calc.ViewModel.Should().NotBeNull();
+            calc.ViewModel!.ClearOperations();
         }
 
         [Theory]
@@ -133,8 +153,14 @@ namespace WebCalc.IntegrationTests
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
+            context.Services.AddSingleton<ILocalStorageService>(localStorageService);
             context.Services.AddSingleton<ISettings, Settings>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
+            context.Services.AddSingleton<IFormater, Formater>();
+            context.Services.AddSingleton<ICalcDisplayViewModel, CalcDisplayViewModel>();
+            context.Services.AddSingleton<ICalcViewModel, CalcViewModel>();
+
+            localStorageService.GetItemAsync<bool>(Arg.Is("delimeterOn")).Returns(false);
 
             var calcComponent = context.RenderComponent<Calc>();
             ICalc calc = calcComponent.Instance;
@@ -146,11 +172,12 @@ namespace WebCalc.IntegrationTests
             }
 
             calc.GetDisplayExpression().Should().Be(expected);
-            calc.ClearOperations();
+            calc.ViewModel.Should().NotBeNull();
+            calc.ViewModel!.ClearOperations();
         }
 
         [Theory]
-        [InlineData(new char[] { Constants.MEMORY_ADD }, "")]
+        [InlineData(new char[] { Constants.MEMORY_ADD }, "0")]
         [InlineData(new char[] { '1', Constants.MEMORY_ADD }, "1")]
         [InlineData(new char[] { '1', Constants.MEMORY_ADD, '1', Constants.MEMORY_ADD }, "12")]
         public void TestMemory(char[] values, string expected)
@@ -158,8 +185,14 @@ namespace WebCalc.IntegrationTests
             using var context = new TestContext();
             context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
+            context.Services.AddSingleton<ILocalStorageService>(localStorageService);
             context.Services.AddSingleton<ISettings, Settings>();
+            context.Services.AddSingleton<IFormater, Formater>();
             context.Services.AddSingleton<IInputValidationService, InputValidationService>();
+            context.Services.AddSingleton<ICalcDisplayViewModel, CalcDisplayViewModel>();
+            context.Services.AddSingleton<ICalcViewModel, CalcViewModel>();
+
+            localStorageService.GetItemAsync<bool>(Arg.Is("delimeterOn")).Returns(false);
 
             var calcComponent = context.RenderComponent<Calc>();
             var calc = calcComponent.Instance;
@@ -171,7 +204,8 @@ namespace WebCalc.IntegrationTests
             }
 
             calc.GetDisplayMemory().Should().Be(expected);
-            calc.ClearOperations();
+            calc.ViewModel.Should().NotBeNull();
+            calc.ViewModel!.ClearOperations();
         }
     }
 }

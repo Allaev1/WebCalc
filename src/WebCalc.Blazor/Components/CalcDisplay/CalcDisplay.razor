@@ -1,0 +1,201 @@
+﻿@using System.Drawing
+@using WebCalc.Application.BinaryOperation
+@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Blazor.ViewModels.CalcDisplay;
+@using WebCalc.Domain.BinaryOperation
+@using WebCalc.Domain.Shared
+
+@implements ICalcDisplay
+
+<div id="display">
+    <div id="memory" class="display-component">
+        <p id="memory-paragraph">
+            <span id="memory-capture">Memory:</span>
+            <span id="memory-value">@ViewModel?.Memory</span>
+        </p>
+        <p id="rounding-paragraph">Rounding</p>
+    </div>
+    <div id="value" class="display-component">
+        <p id="value-holder">@ViewModel?.Value</p>
+    </div>
+    <div id="expression" class="display-component">
+        <p id="expression-value">@ViewModel?.Expression</p>
+    </div>
+</div>
+
+<style>
+    #memory {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    #rounding-paragraph {
+        background: red;
+        color: white;
+        visibility: @roundingVisibility;
+        margin-right: 5px;
+        margin-top: 5px;
+        font-size: 22px;
+    }
+
+    #display {
+        background: white;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .display-component > p {
+        margin-bottom: 0; /*Overwrite display's margin-bottom rule*/
+    }
+
+    #memory-paragraph {
+        visibility: @memoryVisibility;
+        margin-left: 5px;
+    }
+
+    #memory-capture {
+        background: @MemoryColor.Name;
+        color: white;
+    }
+
+    #memory-value {
+        color: @MemoryColor.Name;
+    }
+
+    #value-holder {
+        text-align: right;
+        color: @ValueColor.Name;
+    }
+
+    #expression-value {
+        text-align: right;
+        color: @ExpressionColor.Name;
+    }
+
+    #expression-value:empty::before {
+        content: "";
+        display: inline-block;
+    }
+
+    @@media (max-width:280px) {
+        #memory-paragraph {
+            font-size: 16px;
+        }
+
+        #value-holder {
+            font-size: 22px;
+        }
+
+        #expression-value {
+            font-size: 16px;
+        }
+    }
+
+    @@media (min-width:281px) {
+        #memory-paragraph {
+            font-size: 22px;
+        }
+
+        #value-holder {
+            font-size: 32px;
+        }
+
+        #expression-value {
+            font-size: 22px;
+        }
+    }
+</style>
+
+@code {
+    private const string HIDDEN = "hidden";
+    private const string VISIBLE = "visible";
+
+    private string memoryVisibility = HIDDEN;
+    private string roundingVisibility = HIDDEN;
+
+    [Parameter]
+    public int MaxDisplayCharsCount { get; set; } = 15;
+
+    [Parameter]
+    public EventCallback<float> OnValidOperandGenerated { get; set; }
+
+    [Parameter]
+    public EventCallback<OperationType> OnOperationTypeChanged { get; set; }
+
+    [Parameter]
+    public Color MemoryColor { get; set; } = Color.Green;
+
+    [Parameter]
+    public Color ExpressionColor { get; set; } = Color.Red;
+
+    [Parameter]
+    public Color ValueColor { get; set; } = Color.Black;
+
+    [Parameter]
+    public Color RoundingLabelColor { get; set; } = Color.Red;
+
+    [CascadingParameter]
+    public ICalcDisplayViewModel? ViewModel { get; set; }
+
+    public void SetRoundingFlag(bool isRounding)
+    {
+        roundingVisibility = isRounding ? VISIBLE : HIDDEN;
+        StateHasChanged();        
+    }
+
+    protected override void OnInitialized()
+    {
+        if (ViewModel is null)
+        {
+            throw new ArgumentNullException(nameof(ViewModel));
+        }
+
+        ViewModel.PropertyChanged += OnViewModelPropertyChanged;
+        ViewModel.OnValidOperandGenerated += OnValidOperandGeneratedHandler;
+        ViewModel.OnOperationTypeChanged += OnOperationTypeChangedHandler;
+        ViewModel.MemorySetted += OnMemorySetted;
+        ViewModel.MemoryCleared += OnMemoryCleared;
+    }
+
+    public void Dispose()
+    {
+        if (ViewModel is null)
+        {
+            throw new ArgumentNullException(nameof(ViewModel));
+        }
+
+        ViewModel.PropertyChanged -= OnViewModelPropertyChanged;
+        ViewModel.OnOperationTypeChanged -= OnOperationTypeChangedHandler;
+        ViewModel.OnValidOperandGenerated -= OnValidOperandGeneratedHandler;
+        ViewModel.MemorySetted -= OnMemorySetted;
+        ViewModel.MemoryCleared -= OnMemoryCleared;
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, EventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    private async void OnOperationTypeChangedHandler(object? sender, OperationType operationType)
+    {
+        await OnOperationTypeChanged.InvokeAsync(operationType);
+    }
+
+    private async void OnValidOperandGeneratedHandler(object? sender, float operand)
+    {
+        await OnValidOperandGenerated.InvokeAsync(operand);
+    }
+
+    private void OnMemorySetted(object? sender, EventArgs args)
+    {
+        memoryVisibility = VISIBLE;
+        StateHasChanged();
+    }
+
+    private void OnMemoryCleared(object? sender, EventArgs args)
+    {
+        memoryVisibility = HIDDEN;
+        StateHasChanged();
+    }
+}

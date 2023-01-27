@@ -1,0 +1,105 @@
+﻿@using WebCalc.Application.BinaryOperation
+@using WebCalc.Application.Contracts.BinaryOperation
+@using WebCalc.Application.Contracts.Services.Formater;
+@using WebCalc.Application.Contracts.Services.InputValidationService
+@using WebCalc.Blazor.ViewModels.Calc;
+@using WebCalc.Domain.BinaryOperation
+@using WebCalc.Domain.Shared
+@using WebCalc.Services
+@using WebCalc.Blazor.Components.CalcDisplay
+@using WebCalc.Blazor.Components.CalcKeyboard
+@using Syncfusion.Blazor.Navigations
+
+@implements ICalc
+@inject ICalcViewModel viewModel
+
+<div id="@Id" class="container">
+    <CascadingValue Value="viewModel.DisplayViewModel">
+        <CalcDisplay @ref="display" OnValidOperandGenerated="viewModel.OnValidOperandGenerated" OnOperationTypeChanged="viewModel.OnOperationTypeChanged"></CalcDisplay>
+    </CascadingValue>
+    <CalcKeyboard OnButtonClick="viewModel.UpdateDisplayAsync" OnConstClick="NavigateToConstsAsync"></CalcKeyboard>
+</div>
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background: lightgray;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    [Parameter]
+    public EventCallback OnNavigateToConsts { get; set; }
+
+    [Parameter]
+    public bool IsRounding { get; set; }
+
+    public ICalcViewModel? ViewModel 
+    {
+        get => viewModel;
+    }
+
+    private async Task NavigateToConstsAsync()
+    {
+        await OnNavigateToConsts.InvokeAsync();
+    }
+
+    private CalcDisplay? display;
+
+    public string GetDisplayValue()
+    {
+        if (display is null)
+        {
+            throw new ArgumentNullException(nameof(display));
+        }
+        if (display.ViewModel is null)
+        {
+            throw new ArgumentNullException(nameof(display.ViewModel));
+        }
+
+        return display.ViewModel.Value;
+    }
+
+    public string GetDisplayMemory()
+    {
+        if (display is null)
+        {
+            throw new ArgumentNullException(nameof(display));
+        }
+        if (display.ViewModel is null)
+        {
+            throw new ArgumentNullException(nameof(display.ViewModel));
+        }
+
+        return display.ViewModel.Memory;
+    }
+
+    public string GetDisplayExpression() 
+    {
+        if (display is null)
+        {
+            throw new ArgumentNullException(nameof(display));
+        }
+        if (display.ViewModel is null)
+        {
+            throw new ArgumentNullException(nameof(display.ViewModel));
+        }
+
+        return display.ViewModel.Expression;
+    }
+
+    public void SetRoundingFlag(bool isRounding)
+    {
+        if (display is null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        display.SetRoundingFlag(isRounding);
+    }
+}

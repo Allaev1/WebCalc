@@ -24,6 +24,8 @@ using WebCalc.Domain.Constant.Proxy;
 using Blazored.LocalStorage;
 using WebCalc.Application.Contracts.Services.Formater;
 using WebCalc.Application.Services.Formater;
+using WebCalc.Blazor.ViewModels.CalcDisplay;
+using WebCalc.Blazor.ViewModels.Calc;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -39,6 +41,8 @@ builder.Services.AddScoped<IConstantManager, ConstantManager>();
 builder.Services.AddScoped<IConstantAppService, ConstantAppService>();
 builder.Services.AddSingleton<ISettings, Settings>();
 builder.Services.AddSingleton<IFormater, Formater>();
+builder.Services.AddSingleton<ICalcDisplayViewModel, CalcDisplayViewModel>();
+builder.Services.AddSingleton<ICalcViewModel, CalcViewModel>();
 builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
 {
     var model = new IndexedDbDatabaseModel()

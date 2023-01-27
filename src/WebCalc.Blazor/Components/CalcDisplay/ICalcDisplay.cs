@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Drawing;
+using WebCalc.Blazor.ViewModels.CalcDisplay;
 using WebCalc.Domain.Shared;
 
-namespace WebCalc.Contracts
+namespace WebCalc.Blazor.Components.CalcDisplay
 {
-    public interface ICalcDisplay
+    public interface ICalcDisplay : IDisposable
     {
         [Parameter]
         public int MaxDisplayCharsCount { get; set; }
@@ -24,20 +25,7 @@ namespace WebCalc.Contracts
         [Parameter]
         public Color ValueColor { get; set; }
 
-        public string Value { get; }
-
-        public string Expression { get; }
-
-        public string Memory { get; }
-
-        public void SetMemory(string memory);
-
-        public void ClearMemory();
-
-        public void ReadMemory();
-
-        public Task AppendAsync(char @char);
-
-        public void Append(char[] chars);
+        [CascadingParameter]
+        public ICalcDisplayViewModel? ViewModel { get; set; }
     }
 }
