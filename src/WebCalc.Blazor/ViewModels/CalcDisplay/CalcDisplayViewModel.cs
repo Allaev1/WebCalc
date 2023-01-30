@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using WebCalc.Application.BinaryOperation;
+using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Blazor.ViewModels.Base;
 using WebCalc.Domain.Shared;
 
@@ -11,6 +12,13 @@ namespace WebCalc.Blazor.ViewModels.CalcDisplay
         private const string INITIAL_STRING = "0";
 
         private bool memoryRead;
+
+        private readonly IBinaryOperationAppService binaryOperationAppService;
+
+        public CalcDisplayViewModel(IBinaryOperationAppService binaryOperationAppService)
+        {
+            this.binaryOperationAppService = binaryOperationAppService;
+        }
 
         public event EventHandler<float>? OnValidOperandGenerated;
         public event EventHandler<OperationType>? OnOperationTypeChanged;
@@ -76,7 +84,10 @@ namespace WebCalc.Blazor.ViewModels.CalcDisplay
         public void ReadMemory()
         {
             memoryRead = true;
-            Value = Memory;
+            if (!string.IsNullOrWhiteSpace(Memory))
+            {
+                Value = Memory;
+            }
         }
 
         public void Clear()
@@ -152,7 +163,7 @@ namespace WebCalc.Blazor.ViewModels.CalcDisplay
                 if (PercentageOff)
                 {
                     PercentageOff = false;
-                    return expression = $"{firstOperand}-{firstOperand}*0,{secondOperand}=";
+                    return expression = $"{firstOperand}-{firstOperand}*0{Constants.FLOATING_POINT}{secondOperand}=";
                 }
                 else
                 {
@@ -187,17 +198,15 @@ namespace WebCalc.Blazor.ViewModels.CalcDisplay
             }
             else
             {
-                if (@char == Constants.BACKSPACE)
+                var operand2 = binaryOperationAppService.GetOperand2();
+
+                if (operand2 >= 0)
                 {
-                    secondOperand = GetValidOperand(GetBackspaced(string.IsNullOrWhiteSpace(secondOperand) ? "0" : secondOperand));
-                }
-                else if (@char == Constants.NEGATION_OPERATION_SIGN)
-                {
-                    secondOperand = secondOperand!.Contains('-') ? secondOperand.Trim('(', ')', '-') : $"(-{secondOperand})";
+                    secondOperand = Value;
                 }
                 else
                 {
-                    secondOperand = GetValidOperand(string.IsNullOrWhiteSpace(secondOperand) ? "0" : secondOperand, @char);
+                    secondOperand = $"({Value})";
                 }
             }
 
@@ -234,7 +243,6 @@ namespace WebCalc.Blazor.ViewModels.CalcDisplay
                 operands = expression.Split(new[] { '+', '-', '*', '/' }, 2);
                 operationTypeIndex = expression.IndexOfAny(new[] { '+', '-', '*', '/' });
             }
-
 
             if (operands.ElementAtOrDefault(1) is string secondOperand)
             {
