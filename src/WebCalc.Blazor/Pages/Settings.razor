@@ -48,7 +48,7 @@
             <p id="sample">@viewModel.Sample</p>
         </div>
         <hr />
-        <div class="setting-item">
+        <div id="vibration-setting" class="setting-item">
             <label>Buttons vibration</label>
             <SfSwitch @bind-Checked="@viewModel.VibrationOn" TChecked="bool" ValueChange="viewModel.VibrationOnChangedAsync"></SfSwitch>
         </div>
@@ -104,6 +104,10 @@
     #title {
         font-size: 25px;
         margin-left: 5px;
+    }
+
+    #vibration-setting{
+        visibility: hidden;
     }
 </style>
 
