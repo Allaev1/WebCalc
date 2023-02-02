@@ -18,8 +18,6 @@ global using WebCalc.Application.Services.InputValidationService;
 global using WebCalc.Application.Services.Settings;
 global using WebCalc.Domain.UnaryOperation;
 global using WebCalc.Blazor.Components.Calc;
-global using WebCalc.Blazor.ViewModels.CalcDisplay;
-global using WebCalc.Blazor.ViewModels.Calc;
 global using WebCalc.Application.Contracts.Services.Formater;
 global using WebCalc.Application.Services.Formater;
 global using Blazored.LocalStorage;

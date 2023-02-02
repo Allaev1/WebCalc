@@ -6,11 +6,11 @@ using WebCalc.Application.Contracts.Services.InputValidationService;
 using WebCalc.Application.Services.Formater;
 using WebCalc.Application.Services.InputValidationService;
 using WebCalc.Blazor.ViewModels.Base;
-using WebCalc.Blazor.ViewModels.CalcDisplay;
+using WebCalc.Blazor.ViewModels.Components.CalcDisplay;
 using WebCalc.Domain.BinaryOperation;
 using WebCalc.Domain.Shared;
 
-namespace WebCalc.Blazor.ViewModels.Calc
+namespace WebCalc.Blazor.ViewModels.Components.Calc
 {
     public class CalcViewModel : ViewModelBase, ICalcViewModel
     {
@@ -20,8 +20,8 @@ namespace WebCalc.Blazor.ViewModels.Calc
         private readonly ICalcDisplayViewModel displayViewModel;
 
         public CalcViewModel(
-            IBinaryOperationAppService binaryOperationAppService, 
-            IInputValidationService inputValidationService, 
+            IBinaryOperationAppService binaryOperationAppService,
+            IInputValidationService inputValidationService,
             IFormater formater,
             ICalcDisplayViewModel displayViewModel)
         {
@@ -31,9 +31,9 @@ namespace WebCalc.Blazor.ViewModels.Calc
             this.displayViewModel = displayViewModel;
         }
 
-        public ICalcDisplayViewModel? DisplayViewModel 
-        { 
-            get => displayViewModel; 
+        public ICalcDisplayViewModel? DisplayViewModel
+        {
+            get => displayViewModel;
         }
 
         public void OnOperationTypeChanged(OperationType operationType)

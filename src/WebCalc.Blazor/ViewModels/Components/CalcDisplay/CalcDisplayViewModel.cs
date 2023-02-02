@@ -5,7 +5,7 @@ using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Blazor.ViewModels.Base;
 using WebCalc.Domain.Shared;
 
-namespace WebCalc.Blazor.ViewModels.CalcDisplay
+namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
 {
     public class CalcDisplayViewModel : ViewModelBase, ICalcDisplayViewModel
     {

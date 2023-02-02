@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Drawing;
-using WebCalc.Blazor.ViewModels.CalcDisplay;
+using WebCalc.Blazor.ViewModels.Components.CalcDisplay;
 using WebCalc.Domain.Shared;
 
 namespace WebCalc.Blazor.Components.CalcDisplay

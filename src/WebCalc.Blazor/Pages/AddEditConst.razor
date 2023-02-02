@@ -8,43 +8,47 @@
 @using Syncfusion.Blazor.Notifications
 @using WebCalc.Application.Contracts.Constants
 @using WebCalc.Blazor.Validation
+@using WebCalc.Blazor.ViewModels.Pages;
+@using WebCalc.Blazor.ViewModels.Pages.AddEditConst;
 @using WebCalc.Domain.Constant.DomainManager
 @using WebCalc.Services
-@inject NavigationManager navigationManager
-@inject IBackNavigateable backNavigateable
-@inject IConstantAppService constantAppService
+
+@using EventArgs = System.EventArgs
+
+@implements IDisposable
+@inject IAddEditConstViewModel viewModel
 
 <div id="add-edit-const-container">
     <SfAppBar id="add-edit-const-app-bar" ColorMode="AppBarColor.Primary">
-        <SfButton id="back-button" CssClass="e-round" OnClick="NavigateBack" IsPrimary="true">
+        <SfButton id="back-button" CssClass="e-round" OnClick="viewModel.NavigateBack" IsPrimary="true">
             <span class="material-symbols-outlined">
                 arrow_back
             </span>
         </SfButton>
-        <span id="title">@title</span>
+        <span id="title">@viewModel.Title</span>
     </SfAppBar>
 
-    <EditForm Model="@tempConst" OnValidSubmit="SaveAsync">
+    <EditForm Model="@viewModel.ValidationModel" OnValidSubmit="viewModel.SaveAsync">
         <DataAnnotationsValidator />
         <div class="add-edit-block">
             <label for="name-input">Name:</label>
-            <SfTextBox ID="name-input" @bind-Value="tempConst.Name" Placeholder="Electricity price"></SfTextBox>
-            <ValidationMessage For="@(()=>tempConst.Name)"></ValidationMessage>
+            <SfTextBox ID="name-input" @bind-Value="viewModel.ValidationModel.Name" Placeholder="Electricity price"></SfTextBox>
+            <ValidationMessage For="@(()=>viewModel.ValidationModel.Name)"></ValidationMessage>
         </div>
 
         <div class="add-edit-block">
             <label for="value-input">Value:</label>
-            <SfNumericTextBox ID="value-input" @bind-Value="tempConst.Value" Placeholder="123.45"></SfNumericTextBox>
-            <ValidationMessage For="@(()=>tempConst.Value)"></ValidationMessage>
+            <SfNumericTextBox ID="value-input" @bind-Value="viewModel.ValidationModel.Value" Placeholder="123.45"></SfNumericTextBox>
+            <ValidationMessage For="@(()=>viewModel.ValidationModel.Value)"></ValidationMessage>
         </div>
 
         <div class="add-edit-block">
             <label for="description-value">Description</label>
-            <SfTextBox ID="description-value" @bind-Value="tempConst.Description" Placeholder="Electricity price in Uzbekistan"></SfTextBox>
+            <SfTextBox ID="description-value" @bind-Value="viewModel.ValidationModel.Description" Placeholder="Electricity price in Uzbekistan"></SfTextBox>
         </div>
 
         <div id="save-back-container">
-            <SfButton id="save-button" class="save-back-container-button">@saveButtonText</SfButton>
+            <SfButton id="save-button" class="save-back-container-button">@viewModel.SaveButtonText</SfButton>
         </div>
     </EditForm>
 
@@ -146,11 +150,7 @@
 
 @code {
     private SfToast? operationResultToast;
-    private AddEditConstValidationModel tempConst = new();
-    private string title = null!;
     private string? popupContent;
-    private string saveButtonText = null!;
-    private bool addingConstant;
 
     [Parameter]
     public Guid? Id { get; set; }
@@ -164,50 +164,41 @@
     [Parameter]
     public string? ConstantDescription { get; set; }
 
+    protected override void OnInitialized()
+    {
+        viewModel.PropertyChanged += OnViewModelPropertyChanged;
+        viewModel.ConstantAddedUpdated += OnConstantAddedUpdated;
+    }
+
+    public void Dispose()
+    {
+        viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+        viewModel.ConstantAddedUpdated -= OnConstantAddedUpdated;
+    }
+
     protected override void OnParametersSet()
     {
-        addingConstant = !Id.HasValue;
-        saveButtonText = addingConstant ? "Add" : "Save";
-        title = addingConstant ? "Adding constant" : "Editing constant";
+        viewModel.ConstId = Id;
 
-        tempConst.Name = ConstantName;
-        tempConst.Value = ConstantValue;
-        tempConst.Description = ConstantDescription;
+        viewModel.ConstName = ConstantName;
+        viewModel.ConstValue = ConstantValue;
+        viewModel.ConstDescription = ConstantDescription;
     }
 
-    private async Task SaveAsync()
+    private void OnViewModelPropertyChanged(object? sender, EventArgs e)
     {
-        if (addingConstant)
-        {
-            await constantAppService.CreateAsync(new()
-            {
-                Name = tempConst.Name,
-                Description = tempConst.Description,
-                Value = tempConst.Value.Value
-            });
-            popupContent = "Constant added successfully";
-            tempConst.Name = null;
-            tempConst.Value = null;
-            tempConst.Value = null;
-
-            await operationResultToast.ShowAsync();
-        }
-        else
-        {
-            await constantAppService.UpdateAsync(Id.Value, new()
-            {
-                Name = tempConst.Name,
-                Description = tempConst.Description,
-                Value = tempConst.Value.Value
-            });
-
-            NavigateBack(new());
-        }
+        StateHasChanged();
     }
 
-    private void NavigateBack(MouseEventArgs args)
+    private async void OnConstantAddedUpdated(object? sender, string message)
     {
-        var location = backNavigateable.GetNaivgateBackLocation();
-        navigationManager.NavigateTo(location);
+        popupContent = message;
+
+        if (operationResultToast is null)
+        {
+            throw new ArgumentNullException(nameof(operationResultToast));
+        }
+
+        await operationResultToast.ShowAsync();
     }
 }

@@ -1,4 +1,4 @@
-﻿using WebCalc.Blazor.ViewModels.Calc;
+﻿using WebCalc.Blazor.ViewModels.Components.Calc;
 
 namespace WebCalc.Blazor.Components.Calc
 {

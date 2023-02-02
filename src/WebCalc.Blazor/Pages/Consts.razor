@@ -3,30 +3,32 @@
 @using System.Collections.ObjectModel;
 @using WebCalc.Application.Contracts.Constants
 @using WebCalc.Application.Contracts.Constants.DTO
+@using WebCalc.Blazor.ViewModels.Pages.Consts;
 @using WebCalc.Services
 @using Syncfusion.Blazor.Lists
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Popups
-@inject NavigationManager navigationManager
-@inject IBackNavigateable backNavigateable
-@inject IConstantAppService constantAppService
+@using EventArgs = System.EventArgs;
+
+@implements IDisposable
+@inject IConstsViewModel viewModel
 
 <div id="consts-container">
     <SfAppBar id="consts-app-bar" ColorMode="AppBarColor.Primary">
-        <SfButton id="back-button" CssClass="e-round" OnClick="NavigateBack" IsPrimary="true">
+        <SfButton id="back-button" CssClass="e-round" OnClick="viewModel.NavigateBack" IsPrimary="true">
             <span class="material-symbols-outlined">
                 arrow_back
             </span>
         </SfButton>
         <span id="page-title" class="regular">Constants</span>
         <AppBarSpacer></AppBarSpacer>
-        <SfButton CssClass="e-round" IsPrimary="true" OnClick="@OnAddButtonClick">
+        <SfButton CssClass="e-round" IsPrimary="true" OnClick="viewModel.NavigateToAddEditConst">
             <span class="material-symbols-outlined">
                 add
             </span>
         </SfButton>
-        <SfButton CssClass="e-round" IsPrimary="true" Disabled="@editButtonDisabled" OnClick="@OnEditButtonClick">
+        <SfButton CssClass="e-round" IsPrimary="true" Disabled="@editButtonDisabled" OnClick="viewModel.NavigateToAddEditConst">
             <span class="material-symbols-outlined">
                 edit
             </span>
@@ -37,7 +39,7 @@
             </span>
         </SfButton>
     </SfAppBar>
-    <SfListView ID="list-view" DataSource="@constants" CssClass="e-list-template" TValue="ConstantDto">
+    <SfListView ID="list-view" DataSource="@viewModel.Constants" CssClass="e-list-template" TValue="ConstantDto">
         <ListViewFieldSettings TValue="ConstantDto" Id="Id"></ListViewFieldSettings>
         <ListViewEvents TValue="ConstantDto" Clicked="@OnListViewItemSelected"></ListViewEvents>
         <ListViewTemplates TValue="ConstantDto">
@@ -55,7 +57,7 @@
         <DialogTemplates>
             <Header>Delete dialog</Header>
             <Content>
-                Delete constant - @selectedConstant.Name?
+                Delete constant - @viewModel.SelectedConstant?.Name
             </Content>
         </DialogTemplates>
         <DialogButtons>
@@ -125,64 +127,44 @@
     private bool deleteButtonDisabled = true;
     private bool editButtonDisabled = true;
     private bool deleteDialogVisible;
-    private ObservableCollection<ConstantDto> constants = new();
-    private ConstantDto? selectedConstant;
-
 
     private void CloseDeleteDialog()
     {
         deleteDialogVisible = false;
-        selectedConstant = null;
     }
 
     private async Task DeleteConstantAsync()
     {
         deleteDialogVisible = false;
-        constants.Remove(selectedConstant);
-        await constantAppService.DeleteAsync(selectedConstant.Id);
-
-        selectedConstant = null;
         deleteButtonDisabled = true;
         editButtonDisabled = true;
+
+        await viewModel.DeleteConstantAsync();
     }
 
     private void OnListViewItemSelected(ClickEventArgs<ConstantDto> args)
     {
         deleteButtonDisabled = false;
         editButtonDisabled = false;
-        selectedConstant = constants.Single(x => x.Id == args.ItemData.Id);
-    }
 
-    private void OnEditButtonClick(MouseEventArgs args)
-    {
-        backNavigateable.AddCurrentLocation("/consts");
-        navigationManager.NavigateTo($"/addEditConst/{selectedConstant.Id}/{selectedConstant.Name}/{selectedConstant.Value}/{selectedConstant.Description}");
-    }
-
-    private void OnAddButtonClick(MouseEventArgs args)
-    {
-        backNavigateable.AddCurrentLocation("/consts");
-        navigationManager.NavigateTo("/addEditConst");
+        viewModel.SelectedConstant = viewModel.Constants.Single(x => x.Id == args.ItemData.Id);
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var consts = await constantAppService.GetAllAsync();
+        viewModel.Constants.Clear();
+        await viewModel.SetConstantsAsync();
 
-        if (constants.Count() != 0)
-        {
-            constants.Clear();
-        }
-
-        foreach (var constant in consts)
-        {
-            constants.Add(constant);
-        }
+        viewModel.PropertyChanged += OnViewModelPropertyChanged;
     }
 
-    private void NavigateBack()
+    public void Dispose()
     {
-        var location = backNavigateable.GetNaivgateBackLocation();
-        navigationManager.NavigateTo(location);
+        viewModel.PropertyChanged -= OnViewModelPropertyChanged;
+    }
+
+    private void OnViewModelPropertyChanged(object? sender, EventArgs e)
+    {
+        StateHasChanged();
     }
 }

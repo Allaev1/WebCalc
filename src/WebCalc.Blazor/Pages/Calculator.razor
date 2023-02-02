@@ -5,12 +5,13 @@
 @using Syncfusion.Blazor.Popups
 @using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Blazor.Components
+@using WebCalc.Blazor.ViewModels.Pages.Calculator;
 @using WebCalc.Services;
 @using WebCalc.Blazor.Components.Calc
+@using EventArgs = System.EventArgs;
 
-@inject NavigationManager navigationManager
-@inject IBackNavigateable backNavigateable
-@inject ISettings settings
+@implements IDisposable
+@inject ICalculatorViewModel viewModel
 
 <div id="calculator-container">
     <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
@@ -21,23 +22,23 @@
                 add
             </span>
         </SfButton>
-        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="OnSettingsClick">
+        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="viewModel.NavigateToSettings">
             <span class="material-symbols-outlined">
                 settings
             </span>
         </SfButton>
     </SfAppBar>
 
-    <Calc Id="calc" @ref="@calc" OnNavigateToConsts="NavigateToConsts" IsRounding="true"></Calc>
+    <Calc Id="calc" @ref="@calc" OnNavigateToConsts="viewModel.NavigateToConstants" IsRounding="true"></Calc>
 
     <SfDialog Target="#calculator-container" Width="500px" @bind-Visible="addConstVisible">
         <DialogTemplates>
             <Content>
-                Do you want to add - @calc!.GetDisplayValue(), as constant?
+                Do you want to add - @calc?.GetDisplayValue(), as constant?
             </Content>
         </DialogTemplates>
         <DialogButtons>
-            <DialogButton IsPrimary="true" OnClick="NavigateToAddEditConst" Content="Yes"></DialogButton>
+            <DialogButton IsPrimary="true" OnClick="@(()=>viewModel.NavigateToAddingNewConstant(calc?.GetDisplayValue()!))" Content="Yes"></DialogButton>
             <DialogButton OnClick="OnCloseDialogClick" Content="No"></DialogButton>
         </DialogButtons>
     </SfDialog>
@@ -78,12 +79,22 @@
 @code {
     private Calc? calc;
     private bool addConstVisible;
-    private bool isRounding = true;
+
+    protected override void OnInitialized()
+    {
+        viewModel.PropertyChanged += OnViewModelPropertyChanged;
+    }
 
     protected override async Task OnParametersSetAsync()
     {
-        isRounding = await settings.GetAsync<bool>(SettingsNames.RoundUpOn);
-        calc.SetRoundingFlag(isRounding);
+        await viewModel.SetRoundingFlagAsync();
+
+        if (calc is null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        calc.SetRoundingFlag(viewModel.IsRounding);
     }
 
     private void OnCloseDialogClick()
@@ -96,21 +107,13 @@
         addConstVisible = true;
     }
 
-    private void OnSettingsClick()
+    public void Dispose()
     {
-        backNavigateable.AddCurrentLocation(navigationManager.Uri);
-        navigationManager.NavigateTo("/settings");
+        viewModel.PropertyChanged -= OnViewModelPropertyChanged;
     }
 
-    private void NavigateToConsts()
+    private void OnViewModelPropertyChanged(object? sender, EventArgs e)
     {
-        backNavigateable.AddCurrentLocation(navigationManager.Uri);
-        navigationManager.NavigateTo("/consts");
-    }
-
-    private void NavigateToAddEditConst()
-    {
-        backNavigateable.AddCurrentLocation(navigationManager.Uri);
-        navigationManager.NavigateTo($"/addEditConst/{calc?.GetDisplayValue()}");
+        StateHasChanged();
     }
 }

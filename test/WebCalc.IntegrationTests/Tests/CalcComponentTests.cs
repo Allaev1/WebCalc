@@ -1,4 +1,7 @@
-﻿namespace WebCalc.IntegrationTests.Tests
+﻿using WebCalc.Blazor.ViewModels.Components.Calc;
+using WebCalc.Blazor.ViewModels.Components.CalcDisplay;
+
+namespace WebCalc.IntegrationTests.Tests
 {
     public class CalcComponentTests
     {

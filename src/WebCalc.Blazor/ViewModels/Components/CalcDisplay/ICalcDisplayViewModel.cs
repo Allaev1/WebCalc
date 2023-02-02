@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using WebCalc.Domain.Shared;
 
-namespace WebCalc.Blazor.ViewModels.CalcDisplay
+namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
 {
     public interface ICalcDisplayViewModel : INotifyPropertyChanged
     {

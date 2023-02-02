@@ -1,7 +1,7 @@
-﻿using WebCalc.Blazor.ViewModels.CalcDisplay;
+﻿using WebCalc.Blazor.ViewModels.Components.CalcDisplay;
 using WebCalc.Domain.Shared;
 
-namespace WebCalc.Blazor.ViewModels.Calc
+namespace WebCalc.Blazor.ViewModels.Components.Calc
 {
     public interface ICalcViewModel
     {
