@@ -1,5 +1,5 @@
-/* /Components/CalcKeyboard.razor.rz.scp.css */
-button[b-27uufemxgg] {
+/* /Components/CalcKeyboard/CalcKeyboard.razor.rz.scp.css */
+button[b-patrak7xx5] {
     color: aliceblue;
     height: 100%;
     width: 100%;
@@ -8,7 +8,7 @@ button[b-27uufemxgg] {
 }
 
 @media(max-width:280px) {
-    .child > button[b-27uufemxgg] {
+    .child > button[b-patrak7xx5] {
         font-size: 12px;
     }
 }
