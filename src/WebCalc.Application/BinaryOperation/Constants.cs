@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace WebCalc.Application.BinaryOperation
 
         public const char CLEAR = 'C';
 
-        public const char FLOATING_POINT = ',';
+        public static char FLOATING_POINT { get; } = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.Single();
 
         public const char NEGATION_OPERATION_SIGN = '±';
 

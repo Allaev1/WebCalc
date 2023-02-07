@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Drawing;
 
-namespace WebCalc.Contracts
+namespace WebCalc.Blazor.Components.CalcKeyboard
 {
     public interface ICalcKeyboard
     {
@@ -17,7 +17,7 @@ namespace WebCalc.Contracts
         [Parameter]
         public Color ConstColor { get; set; }
 
-        [Parameter] 
+        [Parameter]
         public Color OperationTypeColor { get; set; }
 
         [Parameter]

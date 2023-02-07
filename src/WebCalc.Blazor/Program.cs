@@ -24,6 +24,12 @@ using WebCalc.Domain.Constant.Proxy;
 using Blazored.LocalStorage;
 using WebCalc.Application.Contracts.Services.Formater;
 using WebCalc.Application.Services.Formater;
+using WebCalc.Blazor.ViewModels.Components.Calc;
+using WebCalc.Blazor.ViewModels.Components.CalcDisplay;
+using WebCalc.Blazor.ViewModels.Pages.AddEditConst;
+using WebCalc.Blazor.ViewModels.Pages.Calculator;
+using WebCalc.Blazor.ViewModels.Pages.Consts;
+using WebCalc.Blazor.ViewModels.Pages.Settings;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -34,11 +40,17 @@ builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppServ
 builder.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<IInputValidationService, InputValidationService>();
-builder.Services.AddScoped<IRepository<ConstantProxy>, IndexedDbRepository<ConstantProxy>>();
-builder.Services.AddScoped<IConstantManager, ConstantManager>();
-builder.Services.AddScoped<IConstantAppService, ConstantAppService>();
+builder.Services.AddSingleton<IRepository<ConstantProxy>, IndexedDbRepository<ConstantProxy>>();
+builder.Services.AddSingleton<IConstantManager, ConstantManager>();
+builder.Services.AddSingleton<IConstantAppService, ConstantAppService>();
 builder.Services.AddSingleton<ISettings, Settings>();
 builder.Services.AddSingleton<IFormater, Formater>();
+builder.Services.AddSingleton<ICalcDisplayViewModel, CalcDisplayViewModel>();
+builder.Services.AddSingleton<ICalcViewModel, CalcViewModel>();
+builder.Services.AddSingleton<IAddEditConstViewModel, AddEditConstViewModel>();
+builder.Services.AddSingleton<ICalculatorViewModel, CalculatorViewModel>();
+builder.Services.AddSingleton<IConstsViewModel, ConstsViewModel>();
+builder.Services.AddSingleton<ISettingsViewModel, SettingsViewModel>();
 builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
 {
     var model = new IndexedDbDatabaseModel()
@@ -54,7 +66,7 @@ builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
         .AddIndex("description");
 
     options.UseDatabase(model);
-});
+}, ServiceLifetime.Singleton);
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddBlazoredLocalStorageAsSingleton();
 
