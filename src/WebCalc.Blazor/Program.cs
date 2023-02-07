@@ -30,6 +30,7 @@ using WebCalc.Blazor.ViewModels.Pages.AddEditConst;
 using WebCalc.Blazor.ViewModels.Pages.Calculator;
 using WebCalc.Blazor.ViewModels.Pages.Consts;
 using WebCalc.Blazor.ViewModels.Pages.Settings;
+using WebCalc.Blazor.AppState;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -37,7 +38,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
-builder.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+builder.Services.AddSingleton<IBackNavigateable, AppState>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<IInputValidationService, InputValidationService>();
 builder.Services.AddSingleton<IRepository<ConstantProxy>, IndexedDbRepository<ConstantProxy>>();

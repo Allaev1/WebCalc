@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
+using WebCalc.Services;
 
-namespace WebCalc.Services
+namespace WebCalc.Blazor.AppState
 {
-    public class NavigationHistoryStorage : IBackNavigateable
+    public class AppState : IBackNavigateable
     {
         private Stack<string> locationsStack = new();
 
