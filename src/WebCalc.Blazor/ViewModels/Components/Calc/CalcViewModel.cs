@@ -93,19 +93,27 @@ namespace WebCalc.Blazor.ViewModels.Components.Calc
             }
             else if (value == '=' && displayViewModel.PercentageOff)
             {
-                var result = binaryOperationAppService.GetNumberWithoutPercentage(int.Parse(displayViewModel.Value));
                 displayViewModel.Append(value);
+                var result = binaryOperationAppService.GetNumberWithoutPercentage();
                 displayViewModel.Append(result.ToString()!.ToArray());
+                displayViewModel.PercentageOff = false;
 
                 return;
             }
             else if (value == '=')
             {
+                displayViewModel.Append(value);
                 binaryOperationAppService.SetResult();
                 var result = binaryOperationAppService.GetResult();
-                displayViewModel.Append(value);
                 var resultString = await formater.GetFormatedStringFromAsync((double)result!);
                 displayViewModel.Append(resultString.ToArray());
+
+                return;
+            }
+            else if (value == '%')
+            {
+                displayViewModel.Append('-');
+                displayViewModel.PercentageOff = true;
 
                 return;
             }

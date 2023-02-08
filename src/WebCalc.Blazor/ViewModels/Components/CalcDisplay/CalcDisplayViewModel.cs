@@ -4,6 +4,7 @@ using WebCalc.Application.BinaryOperation;
 using WebCalc.Application.Contracts.BinaryOperation;
 using WebCalc.Blazor.ViewModels.Base;
 using WebCalc.Domain.Shared;
+using WebCalc.Domain.BinaryOperation;
 
 namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
 {
@@ -67,7 +68,7 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
         }
         private string expression = string.Empty;
 
-        public bool PercentageOff { get; private set; }
+        public bool PercentageOff { get; set; }
 
         public void SetMemory(string memory)
         {
@@ -124,8 +125,12 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
             {
                 OnValidOperandGenerated?.Invoke(this, float.Parse(Value));
             }
+            if (GetOperationTypeEnum(@char) is OperationType operationType)
+            {
+                OnOperationTypeChanged?.Invoke(this, operationType);
+            }
 
-            Expression = GetValidExpression(Expression, @char);
+            Expression = GetValidExpression(@char);
 
             if (@char == '=')
             {
@@ -146,116 +151,63 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
 
         private void ClearValueIfNeeded(char @char)
         {
-            (string? firstOperand, char? operationType, string? secondOperand) = GetExpressionComponents(expression);
-
-            if (operationType is not null && string.IsNullOrWhiteSpace(secondOperand) && (char.IsDigit(@char) || @char == Constants.FLOATING_POINT))
+            if (binaryOperationAppService.GetState() is BinaryOperationState.Operand1Setted && (char.IsDigit(@char) || @char == Constants.FLOATING_POINT))
             {
                 Value = INITIAL_STRING;
             }
         }
 
-        private string GetValidExpression(string expression, char @char)
+        private string GetValidExpression(char @char)
         {
-            (string? firstOperand, char? operationType, string? secondOperand) = GetExpressionComponents(expression);
+            string? firstOperand = null;
+            char? operationType = null;
+            string? secondOperand = null;
+            char? equationSign = null;
 
-            if (@char == '=')
-            {
-                if (PercentageOff)
-                {
-                    PercentageOff = false;
-                    return expression = $"{firstOperand}-{firstOperand}*0{Constants.FLOATING_POINT}{secondOperand}=";
-                }
-                else
-                {
-                    return expression += @char;
-                }
-            }
-            else if (firstOperand is not null && @char == Constants.PERCENTAGE_OFF)
-            {
-                OnOperationTypeChanged?.Invoke(this, OperationType.Subtraction);
-                operationType = '-';
-                PercentageOff = true;
-            }
-            else if (firstOperand is not null && string.IsNullOrWhiteSpace(secondOperand) && (@char == '+' || @char == '-' || @char == '/' || @char == '*'))
-            {
-                OnOperationTypeChanged?.Invoke(this, GetOperationType(@char));
-                operationType = @char;
-            }
-            else if (operationType is null)
-            {
-                if (@char == Constants.BACKSPACE)
-                {
-                    firstOperand = GetValidOperand(GetBackspaced(string.IsNullOrWhiteSpace(firstOperand) ? "0" : firstOperand));
-                }
-                else if (@char == Constants.NEGATION_OPERATION_SIGN)
-                {
-                    firstOperand = firstOperand!.Contains('-') ? firstOperand.Trim('(', ')', '-') : $"(-{firstOperand})";
-                }
-                else
-                {
-                    firstOperand = GetValidOperand(string.IsNullOrWhiteSpace(firstOperand) ? "0" : firstOperand, @char);
-                }
-            }
-            else
-            {
-                var operand2 = binaryOperationAppService.GetOperand2();
+            var binaryOperationState = binaryOperationAppService.GetState();
 
-                if (operand2 >= 0)
-                {
-                    secondOperand = Value;
-                }
-                else
-                {
-                    secondOperand = $"({Value})";
-                }
+            if (binaryOperationState is BinaryOperationState.ResultSetted)
+            {
+                return Expression;
             }
 
-            return string.Concat(firstOperand, operationType, secondOperand);
-        }
-
-        private (string?, char?, string?) GetExpressionComponents(string expression)
-        {
-            var operands = new string[2];
-            var operationTypeIndex = 0;
-            if (expression.FirstOrDefault() == '(')
+            switch (binaryOperationAppService.GetState())
             {
-                operands = expression.Split(new[] { ")-", ")+", ")/", ")*" }, 2, StringSplitOptions.RemoveEmptyEntries);
+                case BinaryOperationState.Start:
+                    firstOperand = Value;
+                    break;
+                case BinaryOperationState.SettingOperand1:
+                    firstOperand = binaryOperationAppService.GetOperand1() >= 0 ? Value : $"({Value})";
+                    break;
+                case BinaryOperationState.Operand1Setted:
+                    firstOperand = GetFirstOperandString();
+                    operationType = GetOperationTypeChar();
+                    break;
+                case BinaryOperationState.OperationTypeSetted when PercentageOff && @char == '=':
+                    firstOperand = GetFirstOperandString();
+                    operationType = GetOperationTypeChar();
+                    secondOperand = $"{binaryOperationAppService.GetOperand1()}*0{Constants.FLOATING_POINT}{Value}";
+                    equationSign = '=';
+                    break;
+                case BinaryOperationState.OperationTypeSetted when PercentageOff:
+                    firstOperand = GetFirstOperandString();
+                    operationType = GetOperationTypeChar();
+                    secondOperand = $"{binaryOperationAppService.GetOperand1()}*0{Constants.FLOATING_POINT}{Value}";
+                    break;
+                case BinaryOperationState.OperationTypeSetted when @char == '=':
+                    firstOperand = GetFirstOperandString();
+                    operationType = GetOperationTypeChar();
+                    secondOperand = GetSecondOperandString();
+                    equationSign = '=';
+                    break;
+                case BinaryOperationState.OperationTypeSetted:
+                    firstOperand = GetFirstOperandString();
+                    operationType = GetOperationTypeChar();
+                    secondOperand = binaryOperationAppService.GetOperand2() >= 0 ? Value : $"({Value})";
+                    break;
+            }
 
-                if (operands[0].Last() != ')')
-                {
-                    operands[0] = $"{operands[0]})";
-                }
-
-                var tempIndex = expression.IndexOf(')') + 1;
-                var operationType = expression.ElementAtOrDefault(tempIndex);
-
-                if (operationType == default)
-                {
-                    operationTypeIndex = -1;
-                }
-                else
-                {
-                    operationTypeIndex = tempIndex;
-                }
-            }
-            else
-            {
-                operands = expression.Split(new[] { '+', '-', '*', '/' }, 2);
-                operationTypeIndex = expression.IndexOfAny(new[] { '+', '-', '*', '/' });
-            }
-
-            if (operands.ElementAtOrDefault(1) is string secondOperand)
-            {
-                return (operands[0], expression[operationTypeIndex], secondOperand);
-            }
-            else if (operationTypeIndex > 0)
-            {
-                return (operands[0], expression[operationTypeIndex], null);
-            }
-            else
-            {
-                return (operands[0], null, null);
-            }
+            return string.Concat(firstOperand, operationType, secondOperand, equationSign);
         }
 
         private string GetValidOperand(string source, char? @char = null)
@@ -291,7 +243,7 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
             return result;
         }
 
-        private OperationType GetOperationType(char value)
+        private OperationType? GetOperationTypeEnum(char value)
         {
             switch (value)
             {
@@ -304,8 +256,32 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
                 case '/':
                     return OperationType.Division;
                 default:
-                    throw new ArgumentException();
+                    return null;
             }
         }
+
+        private char? GetOperationTypeChar()
+        {
+            switch (binaryOperationAppService.GetOperationType())
+            {
+                case OperationType.Addition:
+                    return '+';
+                case OperationType.Subtraction:
+                    return '-';
+                case OperationType.Multiplication:
+                    return '*';
+                case OperationType.Division: return '/';
+                default:
+                    return null;
+            }
+        }
+
+        private string? GetFirstOperandString() => binaryOperationAppService.GetOperand1() >= 0 ? 
+            binaryOperationAppService.GetOperand1().ToString() : 
+            $"({binaryOperationAppService.GetOperand1()})";
+
+        private string? GetSecondOperandString() => binaryOperationAppService.GetOperand2() >= 0 ?
+            binaryOperationAppService.GetOperand2().ToString() : 
+            $"({binaryOperationAppService.GetOperand2()})";
     }
 }

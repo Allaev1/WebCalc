@@ -13,7 +13,7 @@ namespace WebCalc.Application.Contracts.BinaryOperation
 
         public float GetUpdatedMemory(float increase, float current);
 
-        public float GetNumberWithoutPercentage(int percentageOff);
+        public float GetNumberWithoutPercentage();
 
         public float? GetOperand1();
 
