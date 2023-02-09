@@ -83,9 +83,9 @@
       "System.Threading.dll": "sha256-b0CD93XDCoq3IpE9zVS9VCFirqrwTrcx4MOcSqgHL38=",
       "System.Threading.Thread.dll": "sha256-yL\/RyrSTP89bw3YK4ozUQkBfWiR\/xLq48gr8Ir7Efzo=",
       "System.Web.HttpUtility.dll": "sha256-LcgIH20tEfKnzAjBP9rmT5HrYhA05DllSNJtBHY2A0s=",
-      "WebCalc.Application.Contracts.dll": "sha256-mVTRp7RzThZ3JxWIdHlqtjnDhDz69bMRlq8bxAn2Ljk=",
-      "WebCalc.Application.dll": "sha256-4BewsWSwWVSz+pKf4sL8UcsIuHhsWtL32+CnPGp3eRY=",
-      "WebCalc.Blazor.dll": "sha256-71GFFoNZIzPrFhnKiE1a2nX8OKNmbFXxQEhIHBofAlY=",
+      "WebCalc.Application.Contracts.dll": "sha256-Y\/jMSQWWFUH11OssqzeFf4d4uB1r4KIfrZW\/NBUYZl8=",
+      "WebCalc.Application.dll": "sha256-NIlw\/1Kelow\/8Q4cbTSDE1r2omYj90zUUWOjnf5wXi4=",
+      "WebCalc.Blazor.dll": "sha256-JZhr+YPvx\/Oc5rdxPzVoaF+9fdJ+cK5E92P+mzjZzNQ=",
       "WebCalc.Domain.dll": "sha256-i8+ZCxskiif7wQLf\/SQUh6beXBxiInlGkQX+gzpQ23I=",
       "WebCalc.Domain.Shared.dll": "sha256-PPLCKBAb\/wAJRg8QXw1oP92VfAWs7One8ssxdJWrHyQ=",
       "WebCalc.IndexedDbStorage.dll": "sha256-JxiRk6ZTmjZxiumxd7FpisX3qAIeCMXcieDFVRSj8FM="

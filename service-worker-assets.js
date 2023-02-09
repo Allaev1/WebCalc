@@ -61,7 +61,7 @@
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-Xatb1UWDis3+P2a+G3pvvH+LrbCkHgdOkUfzIZsiyGM=",
+      "hash": "sha256-jt+OFCEKpj\/WKnyqkWA9a\/VLVQdvBNXfirxaV4USTPw=",
       "url": "index.html"
     },
     {
@@ -105,7 +105,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-4FK6qmiYOxfQv4sLP2A3UnGCxj8tqy6Ru9H1YVXUKUw=",
+      "hash": "sha256-W6PonAGHn1BHaCnghG2TIMJa6uCir4VcOtTQG+FnI\/w=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -413,15 +413,15 @@
       "url": "_framework\/System.Web.HttpUtility.dll"
     },
     {
-      "hash": "sha256-mVTRp7RzThZ3JxWIdHlqtjnDhDz69bMRlq8bxAn2Ljk=",
+      "hash": "sha256-Y\/jMSQWWFUH11OssqzeFf4d4uB1r4KIfrZW\/NBUYZl8=",
       "url": "_framework\/WebCalc.Application.Contracts.dll"
     },
     {
-      "hash": "sha256-4BewsWSwWVSz+pKf4sL8UcsIuHhsWtL32+CnPGp3eRY=",
+      "hash": "sha256-NIlw\/1Kelow\/8Q4cbTSDE1r2omYj90zUUWOjnf5wXi4=",
       "url": "_framework\/WebCalc.Application.dll"
     },
     {
-      "hash": "sha256-71GFFoNZIzPrFhnKiE1a2nX8OKNmbFXxQEhIHBofAlY=",
+      "hash": "sha256-JZhr+YPvx\/Oc5rdxPzVoaF+9fdJ+cK5E92P+mzjZzNQ=",
       "url": "_framework\/WebCalc.Blazor.dll"
     },
     {
@@ -677,5 +677,5 @@
       "url": "_content\/Syncfusion.Blazor.Themes\/tailwind.css"
     }
   ],
-  "version": "tLNNJhBq"
+  "version": "u3WaICC+"
 };
