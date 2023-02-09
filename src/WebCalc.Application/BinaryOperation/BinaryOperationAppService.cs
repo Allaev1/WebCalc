@@ -41,11 +41,11 @@ namespace WebCalc.Application.BinaryOperation
 
         public float GetUpdatedMemory(float increase, float current) => increase + current;
 
-        public float GetNumberWithoutPercentage(int percentageOff)
+        public float GetNumberWithoutPercentage()
         {
-            Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().SetOperand(percentageOff);
-            Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().SetResult();
-            var percentage = Domain.UnaryOperation.UnaryOperation.GetPercentageOperation().Result;
+            UnaryOperation.GetPercentageOperation().SetOperand(Domain.BinaryOperation.BinaryOperation.Instance().Operand2!.Value);
+            UnaryOperation.GetPercentageOperation().SetResult();
+            var percentage = UnaryOperation.GetPercentageOperation().Result;
 
             var temp = Domain.BinaryOperation.BinaryOperation.Instance().Operand1;
             Domain.BinaryOperation.BinaryOperation.Instance().Clear();

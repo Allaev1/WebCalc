@@ -32,19 +32,19 @@ namespace WebCalc.Blazor.ViewModels.Pages.Calculator
         public void NavigateToAddingNewConstant(string constantValue)
         {
             backNavigateable.AddCurrentLocation(navigationManager.Uri);
-            navigationManager.NavigateTo($"/addEditConst/{constantValue}");
+            navigationManager.NavigateTo($"addEditConst/{constantValue}");
         }
 
         public void NavigateToConstants()
         {
             backNavigateable.AddCurrentLocation(navigationManager.Uri);
-            navigationManager.NavigateTo("/consts");
+            navigationManager.NavigateTo("consts");
         }
 
         public void NavigateToSettings()
         {
             backNavigateable.AddCurrentLocation(navigationManager.Uri);
-            navigationManager.NavigateTo("/settings");
+            navigationManager.NavigateTo("settings");
         }
     }
 }

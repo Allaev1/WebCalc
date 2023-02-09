@@ -23,7 +23,7 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
 
         public string Expression { get; }
 
-        public bool PercentageOff { get; }
+        public bool PercentageOff { get; set; }
 
         public event EventHandler<float>? OnValidOperandGenerated;
         public event EventHandler<OperationType>? OnOperationTypeChanged;

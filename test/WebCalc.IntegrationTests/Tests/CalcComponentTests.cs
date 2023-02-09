@@ -1,4 +1,5 @@
-﻿using WebCalc.Blazor.ViewModels.Components.Calc;
+﻿using WebCalc.Blazor.AppState;
+using WebCalc.Blazor.ViewModels.Components.Calc;
 using WebCalc.Blazor.ViewModels.Components.CalcDisplay;
 
 namespace WebCalc.IntegrationTests.Tests
@@ -17,7 +18,7 @@ namespace WebCalc.IntegrationTests.Tests
         public void TestValue(char[] values, string expected)
         {
             using var context = new TestContext();
-            context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+            context.Services.AddSingleton<IBackNavigateable, AppState>();
             context.Services.AddTransient<IBinaryOperationAppService, BinaryOperationAppService>();
             context.Services.AddSingleton(localStorageService);
             context.Services.AddSingleton<ISettings, Settings>();
@@ -47,7 +48,7 @@ namespace WebCalc.IntegrationTests.Tests
         public void TestExpression(char[] values, string expected)
         {
             using var context = new TestContext();
-            context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+            context.Services.AddSingleton<IBackNavigateable, AppState>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
             context.Services.AddSingleton(localStorageService);
             context.Services.AddSingleton<ISettings, Settings>();
@@ -80,7 +81,7 @@ namespace WebCalc.IntegrationTests.Tests
         public void TestMemory(char[] values, string expected)
         {
             using var context = new TestContext();
-            context.Services.AddSingleton<IBackNavigateable, NavigationHistoryStorage>();
+            context.Services.AddSingleton<IBackNavigateable, AppState>();
             context.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
             context.Services.AddSingleton(localStorageService);
             context.Services.AddSingleton<ISettings, Settings>();
