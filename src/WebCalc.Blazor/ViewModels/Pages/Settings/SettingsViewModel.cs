@@ -46,8 +46,17 @@ namespace WebCalc.Blazor.ViewModels.Pages.Settings
 
         public bool RoundUpOn
         {
-            get; set;
+            get 
+            {
+                return roundUpOn;
+            }
+            set
+            {
+                roundUpOn = value;
+                OnPropertyChanged();
+            }
         }
+        private bool roundUpOn;
 
         public bool DelimiterOn { get; set; }
 
