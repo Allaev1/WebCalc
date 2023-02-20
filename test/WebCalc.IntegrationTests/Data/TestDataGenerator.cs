@@ -100,6 +100,7 @@ namespace WebCalc.IntegrationTests.Data
             yield return new object[] { new char[] { '1', '0', Constants.PERCENTAGE_OFF }, "10-" };
             yield return new object[] { new char[] { '1', '0', Constants.PERCENTAGE_OFF, '2', '5', '=' }, $"10-10*0{Constants.FLOATING_POINT}25=" };
             yield return new object[] { new char[] { '1', '+', '2', Constants.NEGATION_OPERATION_SIGN, '3' }, "1+(-23)" };
+            yield return new object[] { new char[] { '-' }, string.Empty };
         }
     }
 }
