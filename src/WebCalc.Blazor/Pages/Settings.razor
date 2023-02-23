@@ -3,6 +3,7 @@
 @using Syncfusion.Blazor.Navigations
 @using Syncfusion.Blazor.Buttons
 @using System.Globalization;
+@using System.ComponentModel;
 @using WebCalc.Application.Contracts.Services.Formater;
 @using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Blazor.ViewModels.Pages.Settings;
@@ -31,18 +32,18 @@
         </div>
         <hr />
         <div class="setting-item">
+            <label>Round up the result?(up to specified accuracy)</label>
+            <SfSwitch @bind-Checked="@viewModel.RoundUpOn" TChecked="bool" ValueChange="viewModel.RoundUpChangedAsync"></SfSwitch>
+        </div>
+        <hr />
+        <div id="accuracy-setting-item" class="setting-item">
             <label id="accuracy-label">Accuracy of calculations <span id="accuracy">@viewModel.Accuracy</span> decimal places</label>
             <div id="accuracy-setting-buttons">
                 <SfButton id="decrement" OnClick="viewModel.DecrementAccuracyAsync">-</SfButton>
                 <SfButton id="increment" OnClick="viewModel.IncrementAccuracyAsync">+</SfButton>
             </div>
         </div>
-        <hr />
-        <div class="setting-item">
-            <label>Round up the result?(up to specified accuracy)</label>
-            <SfSwitch @bind-Checked="@viewModel.RoundUpOn" TChecked="bool" ValueChange="viewModel.RoundUpChangedAsync"></SfSwitch>
-        </div>
-        <hr />
+        <hr id="accuracy-setting-item-hr" />
         <div class="setting-item">
             <p>Sample:</p>
             <p id="sample">@viewModel.Sample</p>
@@ -109,14 +110,27 @@
     #vibration-setting{
         visibility: hidden;
     }
+
+    #accuracy-setting-item{
+        display: @accuracySettingDisplay;
+    }
+
+    #accuracy-setting-item-hr{
+        display: @accuracySettingDisplay;
+    }
 </style>
 
 @code {
+    private const string NONE = "none";
+    private const string FLEX = "flex";
+    private string accuracySettingDisplay = string.Empty;
+
     protected override async Task OnInitializedAsync()
     {
         viewModel.PropertyChanged += OnViewModelPropertyChanged;
-
         await viewModel.SetupSettingsAsync();
+
+        accuracySettingDisplay = viewModel.RoundUpOn ? FLEX : NONE;
     }
 
     public void Dispose()
@@ -124,8 +138,13 @@
         viewModel.PropertyChanged -= OnViewModelPropertyChanged;
     }
 
-    private void OnViewModelPropertyChanged(object? sender, EventArgs e)
+    private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == nameof(viewModel.RoundUpOn))
+        {
+            accuracySettingDisplay = viewModel.RoundUpOn ? FLEX : NONE;
+        }
+
         StateHasChanged();
     }
 }

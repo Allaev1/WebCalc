@@ -42,6 +42,17 @@
             <DialogButton OnClick="OnCloseDialogClick" Content="No"></DialogButton>
         </DialogButtons>
     </SfDialog>
+
+    <SfDialog Target="#calculator-container" Width="500px" @bind-Visible="addConstWarningDialogVisible">
+        <DialogTemplates>
+            <Content>
+                You cannot constant value with negative or zero value. Constant should be positive and non zero
+            </Content>
+        </DialogTemplates>
+        <DialogButtons>
+            <DialogButton IsPrimary="true" Content="OK" OnClick="@(()=>addConstWarningDialogVisible=false)"></DialogButton>
+        </DialogButtons>
+    </SfDialog>
 </div>
 
 <style>
@@ -52,7 +63,7 @@
         height: 100%;
     }
 
-    #calc{
+    #calc {
         flex-grow: 1;
     }
 
@@ -79,6 +90,7 @@
 @code {
     private Calc? calc;
     private bool addConstVisible;
+    private bool addConstWarningDialogVisible;
 
     protected override void OnInitialized()
     {
@@ -104,7 +116,15 @@
 
     private void OnAddConstClick()
     {
-        addConstVisible = true;
+        if (viewModel.GetIsPossibleToAddNewConstant())
+        {
+            addConstVisible = true;
+        }
+        else
+        {
+            addConstWarningDialogVisible = true;
+        }
+
     }
 
     public void Dispose()

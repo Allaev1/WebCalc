@@ -13,5 +13,7 @@ namespace WebCalc.Blazor.ViewModels.Pages.Calculator
         void NavigateToSettings();
 
         void NavigateToAddingNewConstant(string constantValue);
+
+        bool GetIsPossibleToAddNewConstant();
     }
 }

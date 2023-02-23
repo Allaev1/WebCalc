@@ -125,7 +125,9 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
             {
                 OnValidOperandGenerated?.Invoke(this, float.Parse(Value));
             }
-            if (GetOperationTypeEnum(@char) is OperationType operationType)
+            if (GetOperationTypeEnum(@char) is OperationType operationType && 
+                (binaryOperationAppService.GetState() is BinaryOperationState.SettingOperand1 || 
+                binaryOperationAppService.GetState() is BinaryOperationState.Operand1Setted))
             {
                 OnOperationTypeChanged?.Invoke(this, operationType);
             }
@@ -174,10 +176,11 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
             switch (binaryOperationAppService.GetState())
             {
                 case BinaryOperationState.Start:
-                    firstOperand = Value;
+                    // firstOperand = Value;
+                    firstOperand = binaryOperationAppService.GetOperand1() is null ? Expression : Value;
                     break;
                 case BinaryOperationState.SettingOperand1:
-                    firstOperand = binaryOperationAppService.GetOperand1() >= 0 ? Value : $"({Value})";
+                    firstOperand = binaryOperationAppService.GetOperand1() >= 0 || binaryOperationAppService.GetOperand1() is null ? Value : $"({Value})";
                     break;
                 case BinaryOperationState.Operand1Setted:
                     firstOperand = GetFirstOperandString();
@@ -264,24 +267,20 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
         {
             switch (binaryOperationAppService.GetOperationType())
             {
-                case OperationType.Addition:
-                    return '+';
-                case OperationType.Subtraction:
-                    return '-';
-                case OperationType.Multiplication:
-                    return '*';
+                case OperationType.Addition: return '+';
+                case OperationType.Subtraction: return '-';
+                case OperationType.Multiplication: return '*';
                 case OperationType.Division: return '/';
-                default:
-                    return null;
+                default: return null;
             }
         }
 
-        private string? GetFirstOperandString() => binaryOperationAppService.GetOperand1() >= 0 ? 
-            binaryOperationAppService.GetOperand1().ToString() : 
+        private string? GetFirstOperandString() => binaryOperationAppService.GetOperand1() >= 0 ?
+            binaryOperationAppService.GetOperand1().ToString() :
             $"({binaryOperationAppService.GetOperand1()})";
 
         private string? GetSecondOperandString() => binaryOperationAppService.GetOperand2() >= 0 ?
-            binaryOperationAppService.GetOperand2().ToString() : 
+            binaryOperationAppService.GetOperand2().ToString() :
             $"({binaryOperationAppService.GetOperand2()})";
     }
 }
