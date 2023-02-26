@@ -176,8 +176,7 @@ namespace WebCalc.Blazor.ViewModels.Components.CalcDisplay
             switch (binaryOperationAppService.GetState())
             {
                 case BinaryOperationState.Start:
-                    // firstOperand = Value;
-                    firstOperand = binaryOperationAppService.GetOperand1() is null ? Expression : Value;
+                    firstOperand = Value;
                     break;
                 case BinaryOperationState.SettingOperand1:
                     firstOperand = binaryOperationAppService.GetOperand1() >= 0 || binaryOperationAppService.GetOperand1() is null ? Value : $"({Value})";

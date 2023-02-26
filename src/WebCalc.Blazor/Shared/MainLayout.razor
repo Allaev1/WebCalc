@@ -1,9 +1,14 @@
-﻿@inherits LayoutComponentBase
+﻿@using BlazorCurrentDevice;
+@inherits LayoutComponentBase
+@inject IBlazorCurrentDeviceService currentDeviceServcie
 
-<div class="page">
+<div class="page container-fluid">
     <main>
-        <article>
+        <article id="root">
             @Body
+        </article>
+        <article id="error">
+            <p>Sorry but currently we do not have desktop version of this application</p>
         </article>
     </main>
 </div>
@@ -15,4 +20,31 @@
         margin-left: 0;
         margin-right: 0;
     }
+
+    #error{
+        display: @errorDisplayValue;
+    }
+
+    #root{
+        display: @rootDisplayValue;
+    }
 </style>
+
+@code{
+    private const string NONE = "none";
+    private const string FLEX = "flex";
+    private string rootDisplayValue = FLEX;
+    private string errorDisplayValue = NONE;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var isAndroid = await currentDeviceServcie.Android();
+        var isIOS = await currentDeviceServcie.iOS();
+
+        if (!isAndroid && !isIOS)
+        {
+            rootDisplayValue = NONE;
+            errorDisplayValue = FLEX;
+        }
+    }
+}
