@@ -95,6 +95,8 @@
     protected override void OnInitialized()
     {
         viewModel.PropertyChanged += OnViewModelPropertyChanged;
+
+        throw new Exception("hello");
     }
 
     protected override async Task OnParametersSetAsync()

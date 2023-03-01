@@ -1,50 +1,63 @@
-﻿@using BlazorCurrentDevice;
-@inherits LayoutComponentBase
-@inject IBlazorCurrentDeviceService currentDeviceServcie
+﻿@using BlazorPro.BlazorSize
 
-<div class="page container-fluid">
-    <main>
-        <article id="root">
-            @Body
-        </article>
-        <article id="error">
-            <p>Sorry but currently we do not have desktop version of this application</p>
-        </article>
-    </main>
-</div>
+@inherits LayoutComponentBase
+
+<MediaQueryList>
+    <div class="container">
+        <main>
+            @if (isBetweenMediumDownAndXSmallDown)
+            {
+                <article id="root">
+                    <ErrorBoundary>
+                        <ChildContent>
+                            @Body
+                        </ChildContent>
+                        <ErrorContent>
+                            <div class="card text-center h-25 position-absolute top-50 start-50 translate-middle">
+                                <div class="card-header">
+                                    Error
+                                </div>
+                                <div class="card-body">
+                                    Some error has occured, update application. You can open issue in our repository
+                                </div>
+                            </div>
+                        </ErrorContent>
+                    </ErrorBoundary>
+                </article>
+            }
+            else
+            {
+                <article id="error">
+                    <p>Sorry but currently we do not have version for current dimensions</p>
+                </article>
+            }
+
+            <MediaQuery Media="@Breakpoints.Between(Breakpoints.MediumDown, Breakpoints.XSmallDown)" @bind-Matches="isBetweenMediumDownAndXSmallDown" />
+        </main>
+    </div>
+</MediaQueryList>
 
 <style>
-    main>article{
+    .article-with-error {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .blazor-error-boundary {
+        display: flex;
+        justify-content: center;
+    }
+
+    main > article {
         display: flex;
         height: 100vh;
         margin-left: 0;
         margin-right: 0;
     }
-
-    #error{
-        display: @errorDisplayValue;
-    }
-
-    #root{
-        display: @rootDisplayValue;
-    }
 </style>
 
-@code{
-    private const string NONE = "none";
-    private const string FLEX = "flex";
-    private string rootDisplayValue = FLEX;
-    private string errorDisplayValue = NONE;
-
-    protected async override Task OnInitializedAsync()
-    {
-        var isAndroid = await currentDeviceServcie.Android();
-        var isIOS = await currentDeviceServcie.iOS();
-
-        if (!isAndroid && !isIOS)
-        {
-            rootDisplayValue = NONE;
-            errorDisplayValue = FLEX;
-        }
-    }
+@code {
+    bool isBetweenMediumDownAndXSmallDown;
 }
