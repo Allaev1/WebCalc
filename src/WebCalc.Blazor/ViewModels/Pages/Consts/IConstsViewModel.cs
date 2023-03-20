@@ -10,6 +10,10 @@ namespace WebCalc.Blazor.ViewModels.Pages.Consts
 
         ConstantDto? SelectedConstant { get; set; }
 
+        bool DeleteDisabled { get; set; }
+
+        bool EditDisabled { get; set; }
+
         Task DeleteConstantAsync();
 
         Task SetConstantsAsync();

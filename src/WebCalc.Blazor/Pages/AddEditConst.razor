@@ -2,10 +2,6 @@
 @page "/addEditConst/{constantValue:float}"
 @page "/addEditConst"
 
-@using Syncfusion.Blazor.Inputs
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Notifications
 @using WebCalc.Application.Contracts.Constants
 @using WebCalc.Blazor.Validation
 @using WebCalc.Blazor.ViewModels.Pages;
@@ -13,48 +9,40 @@
 @using WebCalc.Domain.Constant.DomainManager
 @using WebCalc.Services
 
-@using EventArgs = System.EventArgs
-
 @implements IDisposable
 @inject IAddEditConstViewModel viewModel
 
 <div id="add-edit-const-container">
-    <SfAppBar id="add-edit-const-app-bar" ColorMode="AppBarColor.Primary">
-        <SfButton id="back-button" CssClass="e-round" OnClick="viewModel.NavigateBack" IsPrimary="true">
-            <span class="material-symbols-outlined">
-                arrow_back
-            </span>
-        </SfButton>
-        <span id="title">@viewModel.Title</span>
-    </SfAppBar>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid justify-content-start ">
+            <button class="btn btn-primary" @onclick="viewModel.NavigateBack">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-2">@viewModel.Title</a>
+        </div>
+    </nav>
 
-    <EditForm Model="@viewModel.ValidationModel" OnValidSubmit="viewModel.SaveAsync">
+    <EditForm class="m-2" Model="@viewModel.ValidationModel" OnValidSubmit="viewModel.SaveAsync">
         <DataAnnotationsValidator />
-        <div class="add-edit-block">
-            <label for="name-input">Name:</label>
-            <SfTextBox ID="name-input" @bind-Value="viewModel.ValidationModel.Name" Placeholder="Electricity price"></SfTextBox>
+        <div class="add-edit-block mb-3">
+            <label for="name-input" class="form-label">Name:</label>
+            <InputText id="name-input" class="form-control" @bind-Value="viewModel.ValidationModel.Name"></InputText>
             <ValidationMessage For="@(()=>viewModel.ValidationModel.Name)"></ValidationMessage>
         </div>
 
-        <div class="add-edit-block">
-            <label for="value-input">Value:</label>
-            <SfNumericTextBox ID="value-input" @bind-Value="viewModel.ValidationModel.Value" Placeholder="123.45"></SfNumericTextBox>
+        <div class="add-edit-block mb-3">
+            <label for="value-input" class="form-label">Value:</label>
+            <InputNumber id="value-input" class="form-control" @bind-Value="viewModel.ValidationModel.Value"></InputNumber>
             <ValidationMessage For="@(()=>viewModel.ValidationModel.Value)"></ValidationMessage>
         </div>
 
-        <div class="add-edit-block">
-            <label for="description-value">Description</label>
-            <SfTextBox ID="description-value" @bind-Value="viewModel.ValidationModel.Description" Placeholder="Electricity price in Uzbekistan"></SfTextBox>
+        <div class="add-edit-block mb-3">
+            <label for="description-value" class="form-label">Description</label>
+            <InputText id="description-value" class="form-control" @bind-Value="viewModel.ValidationModel.Description"></InputText>
         </div>
 
-        <div id="save-back-container">
-            <SfButton id="save-button" class="save-back-container-button">@viewModel.SaveButtonText</SfButton>
-        </div>
+        <button type="submit" class="btn btn-primary">@viewModel.SaveButtonText</button>
     </EditForm>
-
-    <SfToast ID="operation-result-toast" @ref="@operationResultToast" Title="Success" CssClass="e-toast-success" Icon="e-success toast-icons" Content="@popupContent" Timeout="5000">
-        <ToastPosition X="Right"></ToastPosition>
-    </SfToast>
 </div>
 
 <style>
@@ -95,13 +83,9 @@
         row-gap: 20px;
     }
 
-    .add-edit-block {
-        margin-bottom: 10px;
+    .add-edit-block > label {
+        font-size: 25px;
     }
-
-        .add-edit-block > label {
-            font-size: 25px;
-        }
 
     @@font-face {
         font-family: 'Toast_icons';
@@ -149,9 +133,6 @@
 </style>
 
 @code {
-    private SfToast? operationResultToast;
-    private string? popupContent;
-
     [Parameter]
     public Guid? Id { get; set; }
 
@@ -167,13 +148,11 @@
     protected override void OnInitialized()
     {
         viewModel.PropertyChanged += OnViewModelPropertyChanged;
-        viewModel.ConstantAddedUpdated += OnConstantAddedUpdated;
     }
 
     public void Dispose()
     {
         viewModel.PropertyChanged -= OnViewModelPropertyChanged;
-        viewModel.ConstantAddedUpdated -= OnConstantAddedUpdated;
     }
 
     protected override void OnParametersSet()
@@ -188,17 +167,5 @@
     private void OnViewModelPropertyChanged(object? sender, EventArgs e)
     {
         StateHasChanged();
-    }
-
-    private async void OnConstantAddedUpdated(object? sender, string message)
-    {
-        popupContent = message;
-
-        if (operationResultToast is null)
-        {
-            throw new ArgumentNullException(nameof(operationResultToast));
-        }
-
-        await operationResultToast.ShowAsync();
     }
 }

@@ -1,64 +1,92 @@
 ﻿@page "/settings"
 
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Buttons
 @using System.Globalization;
 @using System.ComponentModel;
 @using WebCalc.Application.Contracts.Services.Formater;
 @using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Blazor.ViewModels.Pages.Settings;
 @using WebCalc.Services;
-@using EventArgs = System.EventArgs;
 
 @implements IDisposable 
 @inject ISettingsViewModel viewModel
 
 <div id="options-container">
-    <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
-        <SfButton id="back-button" CssClass="e-round" OnClick="@viewModel.NavigateBack" IsPrimary="true">
-            <span class="material-symbols-outlined">
-                arrow_back
-            </span>
-        </SfButton>
-        <span id="title">Options</span>
-        <AppBarSpacer></AppBarSpacer>
-        <SfButton IsPrimary="true" OnClick="@viewModel.SetDefaultSettingAsync">Set default</SfButton>
-    </SfAppBar>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid justify-content-start">
+            <button class="btn btn-primary" @onclick=viewModel.NavigateBack>
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-2">Settings</a>
 
-    <div id="settings">
-        <div class="setting-item">
-            <label>Delimiter of the groups of digits</label>
-            <SfSwitch @bind-Checked="@viewModel.DelimiterOn" TChecked="bool" ValueChange="viewModel.DelimeterOnChangedAsync"></SfSwitch>
-        </div>
-        <hr />
-        <div class="setting-item">
-            <label>Round up the result?(up to specified accuracy)</label>
-            <SfSwitch @bind-Checked="@viewModel.RoundUpOn" TChecked="bool" ValueChange="viewModel.RoundUpChangedAsync"></SfSwitch>
-        </div>
-        <hr />
-        <div id="accuracy-setting-item" class="setting-item">
-            <label id="accuracy-label">Accuracy of calculations <span id="accuracy">@viewModel.Accuracy</span> decimal places</label>
-            <div id="accuracy-setting-buttons">
-                <SfButton id="decrement" OnClick="viewModel.DecrementAccuracyAsync">-</SfButton>
-                <SfButton id="increment" OnClick="viewModel.IncrementAccuracyAsync">+</SfButton>
+            <div id="menu-buttons" class="d-flex gap-2">
+                <button id="add-constant-button" class="btn btn-primary" type="button" @onclick="viewModel.SetDefaultSettingAsync">
+                    Set default
+                </button>
             </div>
         </div>
-        <hr id="accuracy-setting-item-hr" />
-        <div class="setting-item">
-            <p>Sample:</p>
-            <p id="sample">@viewModel.Sample</p>
+    </nav>
+
+    <form class="mx-2 my-2">
+        <div class="row">
+            <div class="col">
+                <label class="form-check-label">Delimiter of the groups of digits</label>
+            </div>
+            <div class="form-check form-switch col-auto">
+                <input class="form-check-input" type="checkbox" @bind:after="viewModel.DelimeterOnChangedAsync" @bind="viewModel.DelimiterOn">
+            </div>
         </div>
+
         <hr />
-        <div id="vibration-setting" class="setting-item">
-            <label>Buttons vibration</label>
-            <SfSwitch @bind-Checked="@viewModel.VibrationOn" TChecked="bool" ValueChange="viewModel.VibrationOnChangedAsync"></SfSwitch>
+
+        <div class="row">
+            <div class="col">
+                <label class="form-check-label">Round up the result?(up to specified accuracy)</label>
+            </div>
+            <div class="form-check form-switch col-auto">
+                <input class="form-check-input" type="checkbox" @bind:after="viewModel.RoundUpChangedAsync" @bind="viewModel.RoundUpOn">
+            </div>
         </div>
-    </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col">
+                <label class="form-check-label">Accuracy of calculations <span id="accuracy">@viewModel.Accuracy</span> decimal places</label>
+            </div>
+            <div class="col-auto">
+                <div class="d-flex gap-1">
+                    <button class="btn btn-primary" @onclick="viewModel.IncrementAccuracyAsync" type="button">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                    <button class="btn btn-secondary" @onclick="viewModel.DecrementAccuracyAsync" type="button">
+                        <i class="bi bi-dash-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row">
+            <div class="col">
+                <p class="form-check-label">
+                    Sample:
+                </p>
+                <p id="sample" class="form-check-label">
+                    @viewModel.Sample
+                </p>
+            </div>
+        </div>
+    </form>
 </div>
 
 <style>
     #increment {
         flex-grow: 2;
+    }
+
+    #menu-buttons{
+        margin-left: auto;
     }
 
     #decrement {

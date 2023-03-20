@@ -1,21 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <!--<DebugType>full</DebugType>-->
+    <DefineConstants>$(DefineConstants);PDB file, portable across platforms.</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <!--<DebugType>full</DebugType>-->
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="BlazorPro.BlazorSize" Version="6.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" PrivateAssets="all" />
-    <PackageReference Include="Syncfusion.Blazor.Buttons" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Blazor.Lists" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Blazor.Notifications" Version="20.3.0.57" />
-    <PackageReference Include="Syncfusion.Blazor.Themes" Version="20.3.0.57" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.4" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
