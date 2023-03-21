@@ -35,6 +35,10 @@ namespace WebCalc.Blazor.ViewModels.Pages.Consts
             }
         }
 
+        public bool DeleteDisabled { get; set; } = true;
+
+        public bool EditDisabled { get; set; } = true;
+
         public ObservableCollection<ConstantDto> Constants { get; } = new();
 
         public ConstantDto? SelectedConstant
@@ -43,6 +47,18 @@ namespace WebCalc.Blazor.ViewModels.Pages.Consts
             set
             {
                 selectedConstant = value;
+
+                if (value is not null)
+                {
+                    DeleteDisabled = false;
+                    EditDisabled = false;
+                }
+                else
+                {
+                    DeleteDisabled = true;
+                    EditDisabled = true;
+                }
+
                 OnPropertyChanged();
             }
         }
@@ -65,14 +81,14 @@ namespace WebCalc.Blazor.ViewModels.Pages.Consts
         {
             if (SelectedConstant is null)
             {
-                backNavigateable.AddCurrentLocation("consts");
                 navigationManager.NavigateTo("addEditConst");
             }
             else
             {
-                backNavigateable.AddCurrentLocation("consts");
                 navigationManager.NavigateTo($"addEditConst/{SelectedConstant.Id}/{SelectedConstant.Name}/{SelectedConstant.Value}/{SelectedConstant.Description}");
             }
+
+            SelectedConstant = null;
         }
 
         public void NavigateBack()

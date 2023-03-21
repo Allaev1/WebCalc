@@ -3,78 +3,64 @@
 @using System.Collections.ObjectModel;
 @using WebCalc.Application.Contracts.Constants
 @using WebCalc.Application.Contracts.Constants.DTO
+@using WebCalc.Blazor.Components.Dialogs
 @using WebCalc.Blazor.ViewModels.Pages.Consts;
 @using WebCalc.Services
-@using Syncfusion.Blazor.Lists
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Popups
 @using EventArgs = System.EventArgs;
 
 @implements IDisposable
 @inject IConstsViewModel viewModel
 
 <div id="consts-container">
-    <SfAppBar id="consts-app-bar" ColorMode="AppBarColor.Primary">
-        <SfButton id="back-button" CssClass="e-round" OnClick="viewModel.NavigateBack" IsPrimary="true">
-            <span class="material-symbols-outlined">
-                arrow_back
-            </span>
-        </SfButton>
-        <span id="page-title" class="regular">Constants</span>
-        <AppBarSpacer></AppBarSpacer>
-        <SfButton CssClass="e-round" IsPrimary="true" OnClick="viewModel.NavigateToAddEditConst">
-            <span class="material-symbols-outlined">
-                add
-            </span>
-        </SfButton>
-        <SfButton CssClass="e-round" IsPrimary="true" Disabled="@editButtonDisabled" OnClick="viewModel.NavigateToAddEditConst">
-            <span class="material-symbols-outlined">
-                edit
-            </span>
-        </SfButton>
-        <SfButton CssClass="e-round" IsPrimary="true" Disabled="@deleteButtonDisabled" OnClick="@(e => deleteDialogVisible = true)">
-            <span class="material-symbols-outlined">
-                delete
-            </span>
-        </SfButton>
-    </SfAppBar>
-    <SfListView ID="list-view" DataSource="@viewModel.Constants" CssClass="e-list-template" TValue="ConstantDto">
-        <ListViewFieldSettings TValue="ConstantDto" Id="Id"></ListViewFieldSettings>
-        <ListViewEvents TValue="ConstantDto" Clicked="@OnListViewItemSelected"></ListViewEvents>
-        <ListViewTemplates TValue="ConstantDto">
-            <Template>
-                <div id="constant-template">
-                    <p id="constant-name">@context.Name</p>
-                    <p id="constant-value">@context.Value</p>
-                    <p id="constant-description">@context.Description</p>
-                </div>
-            </Template>
-        </ListViewTemplates>
-    </SfListView>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid justify-content-start">
+            <button class="btn btn-primary" @onclick="viewModel.NavigateBack">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <a class="navbar-brand mx-2">Constants</a>
 
-    <SfDialog Target="#consts-container" Width="500px" @bind-Visible="deleteDialogVisible">
-        <DialogTemplates>
-            <Header>Delete dialog</Header>
-            <Content>
-                Delete constant - @viewModel.SelectedConstant?.Name
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton IsPrimary="true" OnClick="DeleteConstantAsync" Content="Delete"></DialogButton>
-            <DialogButton OnClick="CloseDeleteDialog" Content="Cancel"></DialogButton>
-        </DialogButtons>
-    </SfDialog>
+            <div id="menu-buttons" class="d-flex gap-2">
+                <button id="add-constant-button" class="btn btn-primary" type="button" @onclick="viewModel.NavigateToAddEditConst">
+                    <i class="bi bi-plus"></i>
+                </button>
+                <button class="btn btn-primary" type="button" disabled=@viewModel.EditDisabled @onclick="viewModel.NavigateToAddEditConst">
+                    <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-primary" type="button" disabled=@viewModel.DeleteDisabled @onclick="ShowDeleteDialog">
+                    <i class="bi bi-trash-fill"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="list-group mx-2 my-1">
+        @foreach (var constant in viewModel.Constants)
+        {
+            <a class="list-group-item list-group-item-action @(viewModel.SelectedConstant?.Id == constant.Id ? "active" : string.Empty)" @onclick="@(e => OnListViewItemSelected(constant.Id))" aria-current="@(()=>viewModel.SelectedConstant?.Id==constant.Id)">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">@constant.Name</h5>
+                </div>
+                <p class="mb-1">@constant.Value</p>
+                <small>@constant.Description</small>
+            </a>
+        }
+    </div>
+
+    <Bootstrap5Dialog @ref="deleteConstantDialog" YesNoDialog="true" OnYesClick="DeleteConstantAsync"></Bootstrap5Dialog>
 </div>
 
 <style>
-    #page-title{
+    #page-title {
         font-size: 25px;
         margin-left: 5px;
     }
 
     #consts-app-bar {
         margin: 0;
+    }
+
+    #menu-buttons{
+        margin-left: auto;
     }
 
     .e-round {
@@ -95,9 +81,9 @@
         flex-direction: column;
     }
 
-    #constant-template > p {
-        margin-bottom: 0;
-    }
+        #constant-template > p {
+            margin-bottom: 0;
+        }
 
     #constant-name {
         font-size: 36px;
@@ -124,8 +110,7 @@
 </style>
 
 @code {
-    private bool deleteButtonDisabled = true;
-    private bool editButtonDisabled = true;
+    private Bootstrap5Dialog? deleteConstantDialog;
     private bool deleteDialogVisible;
 
     private void CloseDeleteDialog()
@@ -133,21 +118,28 @@
         deleteDialogVisible = false;
     }
 
+    private void ShowDeleteDialog()
+    {
+        if (deleteConstantDialog is null)
+        {
+            throw new ArgumentNullException();
+        }
+
+        deleteConstantDialog.Title = "Delete dialog";
+        deleteConstantDialog.Content = $"Delete constant - {viewModel.SelectedConstant?.Name}";
+        deleteConstantDialog.Open();
+    }
+
     private async Task DeleteConstantAsync()
     {
         deleteDialogVisible = false;
-        deleteButtonDisabled = true;
-        editButtonDisabled = true;
 
         await viewModel.DeleteConstantAsync();
     }
 
-    private void OnListViewItemSelected(ClickEventArgs<ConstantDto> args)
+    private void OnListViewItemSelected(Guid id)
     {
-        deleteButtonDisabled = false;
-        editButtonDisabled = false;
-
-        viewModel.SelectedConstant = viewModel.Constants.Single(x => x.Id == args.ItemData.Id);
+        viewModel.SelectedConstant = viewModel.Constants.Single(x => x.Id == id);
     }
 
     protected override async Task OnInitializedAsync()

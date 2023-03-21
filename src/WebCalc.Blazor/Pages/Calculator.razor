@@ -1,10 +1,8 @@
 ﻿@page "/"
 
-@using Syncfusion.Blazor.Buttons
-@using Syncfusion.Blazor.Navigations
-@using Syncfusion.Blazor.Popups
 @using WebCalc.Application.Contracts.Services.Settings;
 @using WebCalc.Blazor.Components
+@using WebCalc.Blazor.Components.Dialogs
 @using WebCalc.Blazor.ViewModels.Pages.Calculator;
 @using WebCalc.Services;
 @using WebCalc.Blazor.Components.Calc
@@ -14,45 +12,25 @@
 @inject ICalculatorViewModel viewModel
 
 <div id="calculator-container">
-    <SfAppBar id="menu" ColorMode="AppBarColor.Primary">
-        <span id="title" class="regular">Calculator</span>
-        <AppBarSpacer></AppBarSpacer>
-        <SfButton id="add-constant-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="OnAddConstClick">
-            <span class="material-symbols-outlined">
-                add
-            </span>
-        </SfButton>
-        <SfButton id="settings-button" CssClass="menu-button e-round" IsPrimary="true" OnClick="viewModel.NavigateToSettings">
-            <span class="material-symbols-outlined">
-                settings
-            </span>
-        </SfButton>
-    </SfAppBar>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand">Calculator</a>
+            <div class="d-flex gap-2">
+                <button id="add-constant-button" class="btn btn-primary" type="button" @onclick="OnAddConstClick">
+                    <i class="bi bi-plus-lg"></i>
+                </button>
+                <button id="settings-button" class="btn btn-primary" type="button" @onclick="viewModel.NavigateToSettings">
+                    <i class="bi bi-person-gear"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
     <Calc Id="calc" @ref="@calc" OnNavigateToConsts="viewModel.NavigateToConstants" IsRounding="true"></Calc>
 
-    <SfDialog Target="#calculator-container" Width="500px" @bind-Visible="addConstVisible">
-        <DialogTemplates>
-            <Content>
-                Do you want to add - @calc?.GetDisplayValue(), as constant?
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton IsPrimary="true" OnClick="@(()=>viewModel.NavigateToAddingNewConstant(calc?.GetDisplayValue()!))" Content="Yes"></DialogButton>
-            <DialogButton OnClick="OnCloseDialogClick" Content="No"></DialogButton>
-        </DialogButtons>
-    </SfDialog>
+    <Bootstrap5Dialog @ref="addingNewConstantDialog" YesNoDialog="true" OnYesClick="@(()=>viewModel.NavigateToAddingNewConstant(calc?.GetDisplayValue()!))"></Bootstrap5Dialog>
 
-    <SfDialog Target="#calculator-container" Width="500px" @bind-Visible="addConstWarningDialogVisible">
-        <DialogTemplates>
-            <Content>
-                You cannot constant value with negative or zero value. Constant should be positive and non zero
-            </Content>
-        </DialogTemplates>
-        <DialogButtons>
-            <DialogButton IsPrimary="true" Content="OK" OnClick="@(()=>addConstWarningDialogVisible=false)"></DialogButton>
-        </DialogButtons>
-    </SfDialog>
+    <Bootstrap5Dialog @ref="cannotAddZeroAsConstantDialog" YesNoDialog="false"></Bootstrap5Dialog>
 </div>
 
 <style>
@@ -81,16 +59,12 @@
         border: unset;
         outline: unset;
     }
-
-    .material-symbols-outlined {
-        padding: 2px;
-    }
 </style>
 
 @code {
     private Calc? calc;
-    private bool addConstVisible;
-    private bool addConstWarningDialogVisible;
+    private Bootstrap5Dialog? addingNewConstantDialog;
+    private Bootstrap5Dialog? cannotAddZeroAsConstantDialog;
 
     protected override void OnInitialized()
     {
@@ -109,20 +83,29 @@
         calc.SetRoundingFlag(viewModel.IsRounding);
     }
 
-    private void OnCloseDialogClick()
-    {
-        addConstVisible = false;
-    }
-
     private void OnAddConstClick()
     {
         if (viewModel.GetIsPossibleToAddNewConstant())
         {
-            addConstVisible = true;
+            if (addingNewConstantDialog is null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            addingNewConstantDialog.Title = "Adding new constant";
+            addingNewConstantDialog.Content = $"Do you want to add - {@calc?.GetDisplayValue()}, as constant ?";
+            addingNewConstantDialog.Open();
         }
         else
         {
-            addConstWarningDialogVisible = true;
+            if (cannotAddZeroAsConstantDialog is null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            cannotAddZeroAsConstantDialog.Title = "Adding new constant denied";
+            cannotAddZeroAsConstantDialog.Content = "You cannot add constant value with negative or zero value. Constant should be positive and non zero";
+            cannotAddZeroAsConstantDialog.Open();
         }
 
     }

@@ -14,7 +14,6 @@ using WebCalc.Domain.Repositories;
 using WebCalc.Domain.Constant.DomainManager;
 using WebCalc.Application.Contracts.Constants;
 using WebCalc.Application.Constant;
-using Syncfusion.Blazor;
 using WebCalc.IndexedDbStorage.Constant.Repostiory;
 using DnetIndexedDb;
 using WebCalc.IndexedDbStorage.Data;
@@ -31,12 +30,14 @@ using WebCalc.Blazor.ViewModels.Pages.Calculator;
 using WebCalc.Blazor.ViewModels.Pages.Consts;
 using WebCalc.Blazor.ViewModels.Pages.Settings;
 using WebCalc.Blazor.AppState;
+using BlazorPro.BlazorSize;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+builder.Services.AddMediaQueryService();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
 builder.Services.AddSingleton<IBackNavigateable, AppState>();
 builder.Services.AddSingleton<IBinaryOperationAppService, BinaryOperationAppService>();
@@ -68,9 +69,6 @@ builder.Services.AddIndexedDbDatabase<WebCalcDb>(options =>
 
     options.UseDatabase(model);
 }, ServiceLifetime.Singleton);
-builder.Services.AddSyncfusionBlazor();
 builder.Services.AddBlazoredLocalStorageAsSingleton();
-
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NzU4MjY3QDMyMzAyZTMzMmUzMFdjMHZpbTNYUHRRTXlUU1RZVjRiZStUQThnVEl4MWZYbm1DeDJzRGs1MmM9");
 
 await builder.Build().RunAsync();

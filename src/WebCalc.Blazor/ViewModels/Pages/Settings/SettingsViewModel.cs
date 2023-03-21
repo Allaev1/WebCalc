@@ -46,7 +46,7 @@ namespace WebCalc.Blazor.ViewModels.Pages.Settings
 
         public bool RoundUpOn
         {
-            get 
+            get
             {
                 return roundUpOn;
             }
@@ -116,7 +116,7 @@ namespace WebCalc.Blazor.ViewModels.Pages.Settings
 
         public async Task SetupSettingsAsync()
         {
-            if (!(await settings.IsSettingExistAsync(SettingsNames.ButtonVibrationOn)))
+            if (!await settings.IsSettingExistAsync(SettingsNames.ButtonVibrationOn))
             {
                 await settings.CreateAsync(SettingsNames.ButtonVibrationOn, VibrationOn);
             }

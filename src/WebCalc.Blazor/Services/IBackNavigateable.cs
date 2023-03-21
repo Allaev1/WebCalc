@@ -1,9 +1,7 @@
 ﻿namespace WebCalc.Services
 {
-    public interface IBackNavigateable 
+    public interface IBackNavigateable : IDisposable 
     {
         string GetNaivgateBackLocation();
-
-        void AddCurrentLocation(string location);
     }
 }
