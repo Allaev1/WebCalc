@@ -81,12 +81,10 @@ namespace WebCalc.Blazor.ViewModels.Pages.Consts
         {
             if (SelectedConstant is null)
             {
-                backNavigateable.AddCurrentLocation("consts");
                 navigationManager.NavigateTo("addEditConst");
             }
             else
             {
-                backNavigateable.AddCurrentLocation("consts");
                 navigationManager.NavigateTo($"addEditConst/{SelectedConstant.Id}/{SelectedConstant.Name}/{SelectedConstant.Value}/{SelectedConstant.Description}");
             }
 
